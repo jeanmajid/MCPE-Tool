@@ -1,0 +1,24 @@
+{
+    "name": "mcpe-tool",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "esbuild ./src/main.js --bundle --outfile=./dist/main.js --platform=node --target=esnext && npm link"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bin": {
+        "mc": "./dist/main.js"
+    },
+    "dependencies": {
+        "chokidar": "^3.6.0",
+        "commander": "^12.1.0",
+        "fs-extra": "^11.2.0",
+        "uuid": "^10.0.0"
+    },
+    "devDependencies": {
+        "esbuild": "^0.23.0"
+    }
+}
