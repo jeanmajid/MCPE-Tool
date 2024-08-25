@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
-const { ColorLogger } = require("./colorLogger");
+const { ColorLogger } = require("../cli/colorLogger");
 
 /**
  * Represents a file handler that performs file operations such as copying, deleting, and refreshing directories.

@@ -1,6 +1,6 @@
 const chokidar = require("chokidar");
 const { FileHandler } = require("./fileHandler");
-const { ColorLogger } = require("./colorLogger");
+const { ColorLogger } = require("../cli/colorLogger");
 const fs = require("fs-extra");
 
 /**
