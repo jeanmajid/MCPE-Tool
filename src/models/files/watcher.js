@@ -1,34 +1,27 @@
 const chokidar = require("chokidar");
-const { FileHandler} = require("./fileHandler");
+const { FileHandler } = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
 const fs = require("fs-extra");
 
-/**
- * Represents a file watcher that monitors changes in a source directory and performs corresponding actions.
- */
 class Watcher {
-    /**
-     * Creates a new instance of the Watcher class.
-     * @param {string} sourceDir - The source directory to watch for file changes.
-     * @param {string} destDirBP - The destination directory for BP files.
-     * @param {string} destDirRP - The destination directory for RP files.
-     */
     constructor(sourceDir, destDirBP, destDirRP) {
         this.watcher = null;
         this.fileHandler = new FileHandler(sourceDir, destDirBP, destDirRP);
+        this.modules = [];
     }
 
     /**
-     * Initializes the watcher by refreshing the source directory and starting the file watching process.
-     * @returns {Promise<void>} A promise that resolves when the watcher is initialized.
+     * Registers a module to the watcher.
+     * @param {Object} module - The module to register.
      */
+    registerModule(module) {
+        this.modules.push(module);
+    }
+
     async refresh() {
         await this.fileHandler.refreshDir();
     }
 
-    /**
-     * Starts watching for file changes in the source directory.
-     */
     startWatching() {
         this.refresh();
 
@@ -50,12 +43,32 @@ class Watcher {
             return;
         }
 
-        this.watcher = chokidar.watch(watchFolders, { ignored: ["**/node_modules/**", "**/.git/**", "**/.vscode/**", "**/.gitignore", "**/package.json", "**/package-lock.json", "**/*.md"] });
+        this.watcher = chokidar.watch(watchFolders, {
+            ignored: ["**/node_modules/**", "**/.git/**", "**/.vscode/**", "**/.gitignore", "**/package.json", "**/package-lock.json", "**/*.md"],
+        });
+
+        const handleFileEvent = async (filePath, event) => {
+            for (const module of this.modules) {
+                if (module.activate(filePath)) {
+                    const cancel = await module.handleFile(filePath);
+                    if (cancel) {
+                        ColorLogger.info(`File transfer cancelled by module for: ${filePath}`);
+                        return;
+                    }
+                }
+            }
+            
+            if (event === "add" || event === "change") {
+                await this.fileHandler.copyFile(filePath);
+            } else if (event === "unlink") {
+                await this.fileHandler.deleteFile(filePath);
+            }
+        };
 
         this.watcher
-            .on("add", (filePath) => this.fileHandler.copyFile(filePath))
-            .on("change", (filePath) => this.fileHandler.copyFile(filePath))
-            .on("unlink", (filePath) => this.fileHandler.deleteFile(filePath))
+            .on("add", (filePath) => handleFileEvent(filePath, "add"))
+            .on("change", (filePath) => handleFileEvent(filePath, "change"))
+            .on("unlink", (filePath) => handleFileEvent(filePath, "unlink"))
             .on("error", (error) => console.error(`Watcher error: ${error}`));
 
         ColorLogger.info("Watching for file changes...");
@@ -70,9 +83,6 @@ class Watcher {
         process.on("uncaughtException", cleanUp);
     }
 
-    /**
-     * Stops watching for file changes in the source directory.
-     */
     stopWatching() {
         if (this.watcher) {
             try {
@@ -88,5 +98,5 @@ class Watcher {
 }
 
 module.exports = {
-    Watcher
+    Watcher,
 };

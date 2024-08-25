@@ -1,7 +1,16 @@
 const readline  = require("readline");
 const { Color } = require("./color.js");
 
+/**
+ * Class representing a Questioner.
+ * @class
+ */
 class Questioner {
+    /**
+     * Prompts the user with a series of questions and returns the answers.
+     * @param {Array} questions - An array of question objects.
+     * @returns {Promise<Object>} - A promise that resolves to an object containing the user's answers.
+     */
     static async prompt(questions = []) {
         const answers = {};
         const rl = readline.createInterface({
