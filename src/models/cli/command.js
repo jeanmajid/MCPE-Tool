@@ -1,4 +1,4 @@
-export class Command {
+class Command {
     constructor() {
         this.commands = {};
     }
@@ -46,4 +46,8 @@ export class Command {
             this.execute(commandName);
         }
     }
+}
+
+module.exports = {
+    Command
 }

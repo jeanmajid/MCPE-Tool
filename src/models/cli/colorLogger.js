@@ -67,5 +67,5 @@ class ColorLogger {
 }
 
 module.exports = {
-    ColorLogger,
+    ColorLogger
 };

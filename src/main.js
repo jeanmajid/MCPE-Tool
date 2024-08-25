@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import { Command } from "./models/cli/command.js";
-export const program = new Command();
+const { Command } = require("./models/cli/command");
+const program = new Command();
+module.exports.program = program
 
-import "./commands/init.js";
-import "./commands/watch.js";
+require("./commands/init");
+require("./commands/watch");
 
 program.parse(process.argv);

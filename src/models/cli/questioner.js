@@ -1,5 +1,5 @@
-const readline = require("readline");
-const { Color } = require("./color");
+const readline  = require("readline");
+const { Color } = require("./color.js");
 
 class Questioner {
     static async prompt(questions = []) {
@@ -34,5 +34,5 @@ class Questioner {
 }
 
 module.exports = {
-    Questioner,
-};
+    Questioner
+}

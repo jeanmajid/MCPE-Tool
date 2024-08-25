@@ -34,14 +34,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/models/cli/command.js
-var command_exports = {};
-__export(command_exports, {
-  Command: () => Command
-});
-var Command;
-var init_command = __esm({
-  "src/models/cli/command.js"() {
-    Command = class {
+var require_command = __commonJS({
+  "src/models/cli/command.js"(exports2, module2) {
+    var Command = class {
       constructor() {
         this.commands = {};
       }
@@ -84,6 +79,9 @@ var init_command = __esm({
         }
       }
     };
+    module2.exports = {
+      Command
+    };
   }
 });
 
@@ -104,7 +102,9 @@ var require_color = __commonJS({
         return `\x1B[35m${message}\x1B[0m`;
       }
     };
-    module2.exports = { Color };
+    module2.exports = {
+      Color
+    };
   }
 });
 
@@ -2928,12 +2928,12 @@ var require_lib = __commonJS({
 // src/commands/init.js
 var require_init = __commonJS({
   "src/commands/init.js"() {
-    var { program: program2 } = (init_main(), __toCommonJS(main_exports));
+    var { program } = require_main();
     var { Questioner } = require_questioner();
     var { ManifestGenerator } = require_manifestGenerator();
     var { ColorLogger } = require_colorLogger();
     var fs = require_lib();
-    program2.command("init").description("Initialize the project with interactive prompts").action(async () => {
+    program.command("init").description("Initialize the project with interactive prompts").action(async () => {
       const answers = await Questioner.prompt([
         {
           type: "input",
@@ -2973,7 +2973,7 @@ var require_init = __commonJS({
         fs.mkdirSync("BP", { recursive: true });
         const generatorBP = new ManifestGenerator(answers.projectName, answers.projectDescription);
         generatorBP.addModule("data");
-        generatorBP.addModule("script", "javascript", "scripts/index.js");
+        generatorBP.addModule("script", "javascript", "scripts/index");
         generatorBP.addAuthor("jeanmajid");
         generatorBP.addDependency("@minecraft/server", "1.12.0-beta");
         generatorBP.addDependency("@minecraft/server-ui", "1.2.0-beta");
@@ -8090,67 +8090,54 @@ var require_fileHandler = __commonJS({
     var path = require("path");
     var { ColorLogger } = require_colorLogger();
     var FileHandler = class {
-      /**
-       * Creates a new instance of the FileHandler class.
-       * @param {string} sourceDir - The source directory.
-       * @param {string} destDirBP - The destination directory for BP files.
-       * @param {string} destDirRP - The destination directory for RP files.
-       */
       constructor(sourceDir, destDirBP, destDirRP) {
         this.sourceDir = sourceDir;
         this.destDirBP = destDirBP;
         this.destDirRP = destDirRP;
       }
-      /**
-       * Copies a file from the source directory to the destination directory.
-       * @param {string} filePath - The path of the file to be copied.
-       */
       async copyFile(filePath) {
         const isBP = filePath.includes("BP\\");
         const relativePath = path.relative(this.sourceDir, filePath);
         const destPath = path.join(isBP ? this.destDirBP : this.destDirRP, relativePath.slice(3));
         try {
-          await fs.copy(filePath, destPath);
+          await fs.promises.copyFile(filePath, destPath);
           ColorLogger.success(`Copied: ${filePath} \u2794 ${destPath}`);
         } catch (err) {
           ColorLogger.error(`Copy failed: ${filePath} \u2794 ${destPath} | ${err}`);
         }
       }
-      /**
-       * Deletes a file from the destination directory.
-       * @param {string} filePath - The path of the file to be deleted.
-       */
       async deleteFile(filePath) {
         const isBP = filePath.includes("BP\\");
         const relativePath = path.relative(this.sourceDir, filePath);
         const destPath = path.join(isBP ? this.destDirBP : this.destDirRP, relativePath.slice(3));
         try {
-          await fs.remove(destPath);
+          await fs.promises.unlink(destPath);
           ColorLogger.delete(`Removed: ${destPath}`);
         } catch (err) {
           ColorLogger.error(`Remove failed: ${destPath} | ${err}`);
         }
       }
-      /**
-       * Refreshes the destination directories by clearing them and copying files from the source directory.
-       */
       async refreshDir() {
         try {
           this.removeDestinationDirectories();
           ColorLogger.info(`Cleared: ${this.destDirBP} & ${this.destDirRP}`);
-          await fs.ensureDir(this.destDirBP);
-          await fs.ensureDir(this.destDirRP);
+          await fs.promises.mkdir(this.destDirBP, { recursive: true });
+          await fs.promises.mkdir(this.destDirRP, { recursive: true });
           ColorLogger.info(`Recreated: ${this.destDirBP} & ${this.destDirRP}`);
-          await fs.copy(this.sourceDir + "/BP", this.destDirBP);
-          await fs.copy(this.sourceDir + "/RP", this.destDirRP);
+          await fs.promises.copyFile(this.sourceDir + "/BP", this.destDirBP);
+          await fs.promises.copyFile(this.sourceDir + "/RP", this.destDirRP);
           ColorLogger.success(`Refreshed: ${this.sourceDir} \u2794 ${this.destDirBP} & ${this.destDirRP}`);
         } catch (err) {
           ColorLogger.error(`Refresh failed | ${err}`);
         }
       }
       removeDestinationDirectories() {
-        fs.removeSync(this.destDirBP, { recursive: true });
-        fs.removeSync(this.destDirRP, { recursive: true });
+        if (fs.existsSync(this.destDirBP)) {
+          fs.rmSync(this.destDirBP, { recursive: true, force: true });
+        }
+        if (fs.existsSync(this.destDirRP)) {
+          fs.rmSync(this.destDirRP, { recursive: true, force: true });
+        }
       }
     };
     module2.exports = {
@@ -8252,32 +8239,30 @@ var require_config = __commonJS({
 });
 
 // src/constants/paths.js
-var paths_exports = {};
-__export(paths_exports, {
-  COM_MOJANG_PATH: () => COM_MOJANG_PATH
-});
-var COM_MOJANG_PATH;
-var init_paths = __esm({
-  "src/constants/paths.js"() {
-    COM_MOJANG_PATH = "C:/Users/jeanh/AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang/";
+var require_paths = __commonJS({
+  "src/constants/paths.js"(exports2, module2) {
+    var COM_MOJANG_PATH = "C:/Users/jeanh/AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang/";
+    module2.exports = {
+      COM_MOJANG_PATH
+    };
   }
 });
 
 // src/commands/watch.js
 var require_watch = __commonJS({
   "src/commands/watch.js"() {
-    var { program: program2 } = (init_main(), __toCommonJS(main_exports));
+    var { program } = require_main();
     var { Watcher } = require_watcher();
     var { readConfig } = require_config();
-    var { COM_MOJANG_PATH: COM_MOJANG_PATH2 } = (init_paths(), __toCommonJS(paths_exports));
-    program2.command("watch").description("Watch the current directory and copy files to the destination").action(async () => {
+    var { COM_MOJANG_PATH } = require_paths();
+    program.command("watch").description("Watch the current directory and copy files to the destination").action(async () => {
       const config = readConfig();
       if (!config.name) {
         console.error("No config file found. Run 'mc init' first.");
         return;
       }
-      const bpPath = COM_MOJANG_PATH2 + "development_behavior_packs/" + config.name + "BP";
-      const rpPath = COM_MOJANG_PATH2 + "development_resource_packs/" + config.name + "RP";
+      const bpPath = COM_MOJANG_PATH + "development_behavior_packs/" + config.name + "BP";
+      const rpPath = COM_MOJANG_PATH + "development_resource_packs/" + config.name + "RP";
       const watcher = new Watcher(".", bpPath, rpPath);
       watcher.startWatching();
     });
@@ -8285,26 +8270,17 @@ var require_watch = __commonJS({
 });
 
 // src/main.js
-var main_exports = {};
-__export(main_exports, {
-  program: () => program
-});
-module.exports = __toCommonJS(main_exports);
-var Command2, program;
-var init_main = __esm({
-  "src/main.js"() {
-    ({ Command: Command2 } = (init_command(), __toCommonJS(command_exports)));
-    program = new Command2();
+var require_main = __commonJS({
+  "src/main.js"(exports2, module2) {
+    var { Command } = require_command();
+    var program = new Command();
+    module2.exports.program = program;
     require_init();
     require_watch();
     program.parse(process.argv);
   }
 });
-init_main();
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  program
-});
+module.exports = require_main();
 /*! Bundled license information:
 
 normalize-path/index.js:

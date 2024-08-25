@@ -1,5 +1,5 @@
 const chokidar = require("chokidar");
-const { FileHandler } = require("./fileHandler");
+const { FileHandler} = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
 const fs = require("fs-extra");
 
@@ -88,5 +88,5 @@ class Watcher {
 }
 
 module.exports = {
-    Watcher,
+    Watcher
 };

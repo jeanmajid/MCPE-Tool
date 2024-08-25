@@ -1,8 +1,8 @@
-import { program } from "../main.js";
-import { Questioner } from "../models/cli/questioner.js";
-import { ManifestGenerator } from "../models/generators/manifestGenerator.js";
-import { ColorLogger } from "../models/cli/colorLogger.js";
-import fs from "fs-extra";
+const { program } = require("../main");
+const { Questioner } = require("../models/cli/questioner");
+const { ManifestGenerator } = require("../models/generators/manifestGenerator");
+const { ColorLogger } = require("../models/cli/colorLogger");
+const fs = require("fs-extra");
 
 program
     .command("init")
@@ -48,7 +48,7 @@ program
 
             const generatorBP = new ManifestGenerator(answers.projectName, answers.projectDescription);
             generatorBP.addModule("data");
-            generatorBP.addModule("script", "javascript", "scripts/index.js");
+            generatorBP.addModule("script", "javascript", "scripts/index");
             generatorBP.addAuthor("jeanmajid");
             generatorBP.addDependency("@minecraft/server", "1.12.0-beta");
             generatorBP.addDependency("@minecraft/server-ui", "1.2.0-beta");

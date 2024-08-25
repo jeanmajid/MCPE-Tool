@@ -90,8 +90,8 @@ class ManifestGenerator {
     generateString() {
         return JSON.stringify(this.manifest, null, 4);
     }
-};
+}
 
 module.exports = {
     ManifestGenerator
-}
+};
