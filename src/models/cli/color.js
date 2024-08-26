@@ -1,10 +1,21 @@
+/**
+ * Provides color functions for console output.
+ */
 class Color {
-    static green(message) {
-        return `\x1b[32m${message}\x1b[0m`;
+    static black(message) {
+        return `\x1b[30m${message}\x1b[0m`;
     }
 
     static red(message) {
         return `\x1b[31m${message}\x1b[0m`;
+    }
+
+    static green(message) {
+        return `\x1b[32m${message}\x1b[0m`;
+    }
+
+    static yellow(message) {
+        return `\x1b[33m${message}\x1b[0m`;
     }
 
     static blue(message) {
@@ -14,8 +25,16 @@ class Color {
     static magenta(message) {
         return `\x1b[35m${message}\x1b[0m`;
     }
+
+    static cyan(message) {
+        return `\x1b[36m${message}\x1b[0m`;
+    }
+
+    static white(message) {
+        return `\x1b[37m${message}\x1b[0m`;
+    }
 }
 
 module.exports = {
-    Color
+    Color,
 };

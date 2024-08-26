@@ -52,7 +52,7 @@ class Command {
      */
     async execute(commandName) {
         if (this.commands[commandName] && this.commands[commandName].action) {
-            await this.commands[commandName].action();
+            await this.commands[commandName].action(process.argv.splice(3));
         } else {
             console.log(`Command "${commandName}" not found.`);
         }

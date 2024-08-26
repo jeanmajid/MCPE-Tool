@@ -64,6 +64,10 @@ class ColorLogger {
     static delete(message) {
         this.logMessage(message, Color.magenta);
     }
+
+    static moduleLog(message) {
+        this.logMessage(message, Color.cyan);
+    }
 }
 
 module.exports = {

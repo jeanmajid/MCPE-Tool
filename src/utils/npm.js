@@ -16,7 +16,7 @@ async function getPackageVersions(packageName) {
 
 /**
  * Retrieves the latest version of a mcpe package.
- * @param {string} packageName - The name of the package.
+ * @param {"@minecraft/server" | "@minecraft/server-ui"} packageName - The name of the package.
  * @returns {Promise<{ version: string, package: string }>} - A promise that resolves to an object containing the latest version and package name.
  */
 async function getLatestPackageVersion(packageName) {

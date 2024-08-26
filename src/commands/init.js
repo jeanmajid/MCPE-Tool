@@ -2,7 +2,7 @@ const { program } = require("../main");
 const { Questioner } = require("../models/cli/questioner");
 const { ManifestGenerator } = require("../models/generators/manifestGenerator");
 const { ColorLogger } = require("../models/cli/colorLogger");
-const fs = require("fs-extra");
+const fs = require("fs");
 
 program
     .command("init")
@@ -32,16 +32,9 @@ program
                 name: "resourcePack",
                 message: "Resource pack?",
                 default: () => false,
-            },
-            {
-                type: "confirm",
-                name: "typescript",
-                message: "Use TypeScript?",
-                default: () => false,
-            },
+            }
         ]);
         ColorLogger.info(`Initializing project: ${answers.projectName}`);
-        console.log(answers);
         if (answers.behaviourPack) {
             ColorLogger.info("Creating behaviour pack...");
             fs.mkdirSync("BP", { recursive: true });

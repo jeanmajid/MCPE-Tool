@@ -1,13 +1,13 @@
 const chokidar = require("chokidar");
 const { FileHandler } = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
-const fs = require("fs-extra");
+const { ModuleManager } = require("./moduleManager");
+const fs = require("fs");
 
 class Watcher {
     constructor(sourceDir, destDirBP, destDirRP) {
         this.watcher = null;
         this.fileHandler = new FileHandler(sourceDir, destDirBP, destDirRP);
-        this.modules = [];
     }
 
     /**
@@ -48,20 +48,17 @@ class Watcher {
         });
 
         const handleFileEvent = async (filePath, event) => {
-            for (const module of this.modules) {
-                if (module.activate(filePath)) {
-                    const cancel = await module.handleFile(filePath);
-                    if (cancel) {
-                        ColorLogger.info(`File transfer cancelled by module for: ${filePath}`);
-                        return;
-                    }
-                }
+            if (event === "unlink") {
+                await this.fileHandler.deleteFile(filePath);
+                return;
             }
-            
+
+            const shouldCancel = await ModuleManager.processFile(filePath, this.fileHandler);
+
+            if (shouldCancel) return;
+
             if (event === "add" || event === "change") {
                 await this.fileHandler.copyFile(filePath);
-            } else if (event === "unlink") {
-                await this.fileHandler.deleteFile(filePath);
             }
         };
 
@@ -74,13 +71,14 @@ class Watcher {
         ColorLogger.info("Watching for file changes...");
 
         const cleanUp = () => {
+            ColorLogger.delete("Cleaning up...");
             this.fileHandler.removeDestinationDirectories();
             process.exit(0);
         };
 
-        process.on("exit", cleanUp);
-        process.on("SIGINT", cleanUp);
-        process.on("uncaughtException", cleanUp);
+        // process.on("exit", cleanUp);
+        // process.on("SIGINT", cleanUp);
+        // process.on("uncaughtException", cleanUp);
     }
 
     stopWatching() {

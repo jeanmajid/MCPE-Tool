@@ -1,6 +1,8 @@
-const fs = require("fs-extra");
+const fs = require("fs");
 const path = require("path");
 const { ColorLogger } = require("../cli/colorLogger");
+const { ModuleManager } = require("./moduleManager");
+const { ensureDirSync, removeSync } = require("../../utils/files");
 
 /**
  * Represents a file handler that performs file operations such as copying, deleting, and refreshing directories.
@@ -27,10 +29,29 @@ class FileHandler {
         const relativePath = path.relative(this.sourceDir, filePath);
         const destPath = path.join(isBP ? this.destDirBP : this.destDirRP, relativePath.slice(3));
         try {
-            await fs.copy(filePath, destPath);
+            ensureDirSync(path.dirname(destPath));
+            fs.copyFileSync(filePath, destPath);
             ColorLogger.success(`Copied: ${filePath} ➔ ${destPath}`);
         } catch (err) {
             ColorLogger.error(`Copy failed: ${filePath} ➔ ${destPath} | ${err}`);
+        }
+    }
+
+    /**
+     * Writes a new file to the destination directory.
+     * @param {string} filePath - The path of the file to be written.
+     * @param {string} newFile - The new file content.
+     */
+    async writeFile(filePath, newFile) {
+        const isBP = filePath.includes("BP\\");
+        const relativePath = path.relative(this.sourceDir, filePath);
+        const destPath = path.join(isBP ? this.destDirBP : this.destDirRP, relativePath.slice(3));
+        try {
+            ensureDirSync(path.dirname(destPath));
+            fs.writeFileSync(destPath, newFile);
+            ColorLogger.success(`Updated: ${destPath}`);
+        } catch (err) {
+            ColorLogger.error(`Update failed: ${destPath} | ${err}`);
         }
     }
 
@@ -43,7 +64,7 @@ class FileHandler {
         const relativePath = path.relative(this.sourceDir, filePath);
         const destPath = path.join(isBP ? this.destDirBP : this.destDirRP, relativePath.slice(3));
         try {
-            await fs.remove(destPath);
+            removeSync(destPath);
             ColorLogger.delete(`Removed: ${destPath}`);
         } catch (err) {
             ColorLogger.error(`Remove failed: ${destPath} | ${err}`);
@@ -57,11 +78,15 @@ class FileHandler {
         try {
             this.removeDestinationDirectories();
             ColorLogger.info(`Cleared: ${this.destDirBP} & ${this.destDirRP}`);
-            await fs.ensureDir(this.destDirBP);
-            await fs.ensureDir(this.destDirRP);
+            ensureDirSync(this.destDirBP);
+            ensureDirSync(this.destDirRP);
             ColorLogger.info(`Recreated: ${this.destDirBP} & ${this.destDirRP}`);
-            await fs.copy(this.sourceDir + "/BP", this.destDirBP);
-            await fs.copy(this.sourceDir + "/RP", this.destDirRP);
+            for (const file of fs.readdirSync(this.sourceDir)) {
+                if (file === "config.json" || file === "BP" || file === "RP") continue;
+                const shouldCancel = await ModuleManager.processFile(file, this.fileHandler);
+                if (shouldCancel) continue;
+                this.copyFile(file);
+            }
             ColorLogger.success(`Refreshed: ${this.sourceDir} ➔ ${this.destDirBP} & ${this.destDirRP}`);
         } catch (err) {
             ColorLogger.error(`Refresh failed | ${err}`);
@@ -69,11 +94,11 @@ class FileHandler {
     }
 
     removeDestinationDirectories() {
-        fs.removeSync(this.destDirBP, { recursive: true });
-        fs.removeSync(this.destDirRP, { recursive: true });
+        removeSync(this.destDirBP, { recursive: true });
+        removeSync(this.destDirRP, { recursive: true });
     }
 }
 
 module.exports = {
     FileHandler,
-}
+};
