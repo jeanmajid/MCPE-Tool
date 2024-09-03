@@ -15,21 +15,15 @@ program
             return;
         }
 
+        if (!config.id) {
+            console.error("No project ID found. Run 'mc init' first.");
+            return;
+        }
+
         if (!config.modules || config.modules.length === 0) {
             ModuleManager.modules = [];
         } else {
-            ModuleManager.modules = ModuleManager.modules.filter(module => config.modules.includes(module.name));
-            for (const module of ModuleManager.modules) {
-                if (module.onLaunch) {
-                    await module.onLaunch();
-                }
-                if (!module.handleFile) {
-                    ModuleManager.modules = ModuleManager.modules.filter(m => m.name !== module.name);
-                } else if (module.handleFile && !module.activator) {
-                    throw new Error(`Module '${module.name}' must have an activator function.`);
-                }
-                
-            }
+            await ModuleManager.filterModules(config.modules);
         }
 
         const bpPath = COM_MOJANG_PATH + "development_behavior_packs/" + config.name + "BP";

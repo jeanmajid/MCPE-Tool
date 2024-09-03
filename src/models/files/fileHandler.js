@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const { ColorLogger } = require("../cli/colorLogger");
 const { ModuleManager } = require("./moduleManager");
 const { ensureDirSync, removeSync } = require("../../utils/files");

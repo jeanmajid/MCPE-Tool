@@ -14,11 +14,18 @@ ModuleManager.addModule({
     name: "ts",
     description: "Enable the typescript transpiler",
     cancelFileTransfer: true,
-    activator: (filePath) => filePath.endsWith(".ts"),
-    handleFile: (filePath) => {
-        const tsCode = fs.readFileSync(filePath, "utf8");
-        const result = ts.transpileModule(tsCode, { compilerOptions });
-        ColorLogger.moduleLog(`Transpiled: ${filePath}`);
-        return { newFilePath: filePath.replace(/\.ts$/, ".js"), fileData: result.outputText };
-    },
+    activatorHandlerPairs: [
+        {
+            activator: (filePath) => !filePath.endsWith(".d.ts") && filePath.endsWith(".ts"),
+            handleFile: (filePath) => {
+                const tsCode = fs.readFileSync(filePath, "utf8");
+                const result = ts.transpileModule(tsCode, { compilerOptions });
+                ColorLogger.moduleLog(`Transpiled: ${filePath}`);
+                return { newFilePath: filePath.replace(/\.ts$/, ".js"), fileData: result.outputText };
+            }
+        },
+        {
+            activator: (filePath) => filePath.endsWith(".d.ts")
+        }
+    ],
 });

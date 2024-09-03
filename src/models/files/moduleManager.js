@@ -1,4 +1,11 @@
 /**
+ * @typedef {Object} ActivatorHandlerPair
+ * @property {(filePath: string) => boolean} activator - The function to check if the handler should activate
+ * @property {(filePath: string) => { newFilePath: string | undefined, fileData: string | undefined }} handleFile - The function to handle the file
+ * @property {boolean} cancelFileTransfer - Whether the module should cancel the file transfer
+ */
+
+/**
  * @typedef {Object} Module
  * @property {String} name - The name of the module
  * @property {String} description - The description of the module
@@ -6,11 +13,9 @@
  * @property {(filePath: string) => void} activator - The function to check if the module should activate
  * @property {(filePath: string) => { newFilePath: string | undefined, fileData: string | undefined}} handleFile - The function to handle the file
  * @property {(filePath: string) => Promise<void>} onLaunch - The function to run when the module is launched
+ * @property {ActivatorHandlerPair[]} activatorHandlerPairs - Array of activator-handler pairs
  */
 
-/**
- * Manages the modules
-*/
 class ModuleManager {
     /**
      * @type {Module[]}
@@ -27,7 +32,7 @@ class ModuleManager {
     }
 
     static checkIfModuleExists(name) {
-        return this.modules.some(module => module.name === name);
+        return this.modules.some((module) => module.name === name);
     }
 
     /**
@@ -39,9 +44,10 @@ class ModuleManager {
         let value = false;
         for (const module of this.modules) {
             if (module.activator(filePath)) {
-                const data = module.handleFile(filePath);
+                let data = {};
+                if (module.handleFile) data = module.handleFile(filePath);
                 if (module.cancelFileTransfer) {
-                    if (data.fileData !== undefined) {
+                    if (data?.fileData !== undefined) {
                         await fileHandler.writeFile(data.newFilePath || filePath, data.fileData);
                     }
                     value = true;
@@ -50,8 +56,35 @@ class ModuleManager {
         }
         return value;
     }
+
+    static async filterModules(modulesToAdd) {
+        this.modules = this.modules.filter((module) => modulesToAdd.includes(module.name));
+
+        for (const module of this.modules) {
+            if (module.activatorHandlerPairs) {
+                for (let i = 0; i < module.activatorHandlerPairs.length; i++) {
+                    const pair = module.activatorHandlerPairs[i];
+                    if (!pair.activator) {
+                        module.activatorHandlerPairs.splice(i, 1);
+                        continue;
+                    }
+                    if (pair.cancelFileTransfer === undefined) pair.cancelFileTransfer = module.cancelFileTransfer || false;
+                }
+                this.modules.push(...module.activatorHandlerPairs);
+            }
+        }
+
+        for (const module of this.modules) {
+            if (module.onLaunch) {
+                await module.onLaunch();
+            }
+            if (!module.activator) {
+                this.modules = this.modules.filter((m) => m.name !== module.name);
+            }
+        }
+    }
 }
 
 module.exports = {
-    ModuleManager
+    ModuleManager,
 };

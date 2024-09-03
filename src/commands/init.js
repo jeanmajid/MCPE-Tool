@@ -2,7 +2,8 @@ const { program } = require("../main");
 const { Questioner } = require("../models/cli/questioner");
 const { ManifestGenerator } = require("../models/generators/manifestGenerator");
 const { ColorLogger } = require("../models/cli/colorLogger");
-const fs = require("fs");
+const fs = require("node:fs");
+const { generateUniqueId } = require("../utils/id");
 
 program
     .command("init")
@@ -43,8 +44,8 @@ program
             generatorBP.addModule("data");
             generatorBP.addModule("script", "javascript", "scripts/index");
             generatorBP.addAuthor("jeanmajid");
-            generatorBP.addDependency("@minecraft/server", "1.12.0-beta");
-            generatorBP.addDependency("@minecraft/server-ui", "1.2.0-beta");
+            generatorBP.addDependency("@minecraft/server", "1.0.0-beta");
+            generatorBP.addDependency("@minecraft/server-ui", "1.0.0-beta");
 
             fs.writeFileSync("BP/manifest.json", generatorBP.generateString());
 
@@ -66,11 +67,15 @@ program
 
         ColorLogger.info("Creating config file...");
         fs.writeFileSync(
-            "config.json",
+            "./config.json",
             JSON.stringify(
                 {
                     name: answers.projectName,
                     description: answers.projectDescription,
+                    modules: [
+                        "npm"
+                    ],
+                    id: generateUniqueId()
                 },
                 null,
                 4

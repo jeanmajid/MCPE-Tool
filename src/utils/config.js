@@ -6,7 +6,7 @@ const fs = require("fs");
  * @property {string} name - The name of the project.
  * @property {string} description - The description of the project.
  * @property {Array} modules - The modules of the project.
- * @property {boolean} isBeta - Indicates if the project is in beta.
+ * @property {string} id - The ID of the project.
  */
 
 /**

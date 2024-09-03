@@ -1,0 +1,43 @@
+const { program } = require("../main");
+const { ColorLogger } = require("../models/cli/colorLogger");
+const { readConfig, writeConfig } = require("../utils/config");
+const { generateUniqueId } = require("../utils/id");
+
+program
+    .command("repair")
+    .description("repair the config")
+    .action(async () => {
+        let changesMade = []
+        const config = readConfig();
+
+        if (config.name === undefined || config.name === "") {
+            config.name = "default";
+            changesMade.push("Added name");
+        }
+
+        if (config.id === undefined) {
+            config.id = generateUniqueId();
+            changesMade.push("Added an unique id");
+        }
+
+        if (config.modules === undefined) {
+            config.modules = [];
+            changesMade.push("Added the config array");
+        }
+
+        if (config.description === undefined) {
+            config.description = "";
+            changesMade.push("Added an description");
+        }
+
+        writeConfig(config);
+        if (changesMade.length > 0) {
+            ColorLogger.success("Succesfully repaired the config!");
+            ColorLogger.info("Changes made:");
+            for (const change of changesMade) {
+                ColorLogger.info("- " + change);
+            }
+        } else {
+            ColorLogger.info("Config is already up to date and fixed");
+        }
+    });

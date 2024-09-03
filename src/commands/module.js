@@ -3,8 +3,10 @@ const { readConfig, writeConfig } = require("../utils/config");
 const { ModuleManager } = require("../models/files/moduleManager");
 const { ColorLogger } = require("../models/cli/colorLogger");
 
+program.command("module").description("Manage modules");
+
 program
-    .command("add")
+    .subCommand("add")
     .description("Add a module to the watcher")
     .action(async (args) => {
         const config = readConfig();
@@ -34,7 +36,7 @@ program
     });
 
 program
-    .command("remove")
+    .subCommand("remove")
     .description("Remove a module from the watcher")
     .action(async (args) => {
         const config = readConfig();
@@ -59,9 +61,10 @@ program
     });
 
 program
-    .command("list")
+    .subCommand("list")
     .description("List all modules")
-    .action(async () => {
+    .action(async (args, flags) => {
+        console.log(args, flags);
         ColorLogger.info("Modules:");
         for (const module of ModuleManager.modules) {
             ColorLogger.info(`- ${module.name} - ${module.description}`);

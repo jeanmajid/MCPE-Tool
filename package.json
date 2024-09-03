@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "esbuild ./src/main.js --bundle --outfile=./dist/main.js --platform=node --target=esnext && npm link"
+        "watch": "esbuild ./src/main.js --bundle --outfile=./dist/main.js --platform=node --target=esnext --watch --external:better-sqlite3",
+        "build": "esbuild ./src/main.js --bundle --outfile=./dist/main.js --platform=node --target=esnext --minify --tree-shaking=true --external:better-sqlite3 && npm link"
     },
     "keywords": [],
     "author": "",
@@ -13,6 +14,8 @@
         "mc": "./dist/main.js"
     },
     "dependencies": {
+        "@minecraft/server": "^1.14.0-beta.1.21.22-stable",
+        "better-sqlite3": "^11.2.1",
         "chokidar": "^3.6.0",
         "typescript": "^5.5.4",
         "uuid": "^10.0.0"

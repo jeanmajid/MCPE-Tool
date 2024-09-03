@@ -2,6 +2,7 @@ const chokidar = require("chokidar");
 const { FileHandler } = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
 const { ModuleManager } = require("./moduleManager");
+import { DEBUG } from "../../constants/dev";
 const fs = require("fs");
 
 class Watcher {
@@ -76,9 +77,11 @@ class Watcher {
             process.exit(0);
         };
 
-        // process.on("exit", cleanUp);
-        // process.on("SIGINT", cleanUp);
-        // process.on("uncaughtException", cleanUp);
+        if (!DEBUG) {
+            process.on("exit", cleanUp);
+            process.on("SIGINT", cleanUp);
+            process.on("uncaughtException", cleanUp);
+        }
     }
 
     stopWatching() {
