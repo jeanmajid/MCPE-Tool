@@ -7,10 +7,39 @@ const crypto = require("crypto");
 const { readConfig } = require("../utils/config");
 const { PROJECT_PATH_SRC } = require("../constants/paths");
 
+const projectId = readConfig().id;
+
+if (!projectId) {
+    return;
+}
+
 ModuleManager.addModule({
     name: "backup",
     description: "Backups files for your current project",
     activator: () => true,
+    onLaunch: () => {
+        const db = new Database(PROJECT_PATH_SRC + `data/backups/${projectId}.db`);
+
+        db.exec(`
+    CREATE TABLE IF NOT EXISTS file_metadata (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_path TEXT NOT NULL,
+        version INTEGER NOT NULL,
+        project_id INTEGER NOT NULL,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+        db.exec(`
+    CREATE TABLE IF NOT EXISTS file_contents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_id INTEGER NOT NULL,
+        content BLOB NOT NULL,
+        hash TEXT NOT NULL,
+        project_id INTEGER NOT NULL,
+        FOREIGN KEY (file_id) REFERENCES file_metadata(id)
+    )
+`);
+    },
     handleFile: async (filePath) => {
         const content = await fs.promises.readFile(filePath);
         const compressedContent = zlib.gzipSync(content);
@@ -52,31 +81,3 @@ async function rollbackFile(projectId, filePath, version) {
         }
     }
 }
-
-const projectId = readConfig().id;
-
-if (!projectId) {
-    return;
-}
-
-const db = new Database(PROJECT_PATH_SRC + `data/backups/${projectId}.db`);
-
-db.exec(`
-    CREATE TABLE IF NOT EXISTS file_metadata (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        file_path TEXT NOT NULL,
-        version INTEGER NOT NULL,
-        project_id INTEGER NOT NULL,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-`);
-db.exec(`
-    CREATE TABLE IF NOT EXISTS file_contents (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        file_id INTEGER NOT NULL,
-        content BLOB NOT NULL,
-        hash TEXT NOT NULL,
-        project_id INTEGER NOT NULL,
-        FOREIGN KEY (file_id) REFERENCES file_metadata(id)
-    )
-`);

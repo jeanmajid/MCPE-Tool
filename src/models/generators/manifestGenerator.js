@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
  * Class representing a Manifest Generator.
  */
 class ManifestGenerator {
+    mainUUID = uuidv4();
     /**
      * Create a Manifest Generator.
      * @param {string} name - The name of the manifest.
@@ -19,7 +20,7 @@ class ManifestGenerator {
             header: {
                 name: name,
                 description: description,
-                uuid: uuidv4(),
+                uuid: this.mainUUID,
                 version: [1, 0, 0],
                 min_engine_version: [1, 20, 80],
             },
@@ -73,6 +74,18 @@ class ManifestGenerator {
             this.manifest.dependencies = [];
         }
         this.manifest.dependencies.push({ module_name, version });
+    }
+
+    /**
+     * Add a dependency to the manifest using a UUID.
+     * @param {string} uuid - The UUID of the module to depend on.
+     * @param {string} version - The version of the module to depend on.
+     */
+    addDependencyUUID(uuid, version) {
+        if (!this.manifest.dependencies) {
+            this.manifest.dependencies = [];
+        }
+        this.manifest.dependencies.push({ uuid, version });
     }
 
     /**

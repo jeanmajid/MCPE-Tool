@@ -11,10 +11,11 @@ program
     .action(async (args) => {
         const config = readConfig();
 
-        if (!config.name) {
-            ColorLogger.error("No config file found. Run 'mc init' first.");
+        if (!config.name || !config.id) {
+            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
             return;
         }
+
         if (args.length === 0) {
             ColorLogger.error("No module name provided.");
             return;
@@ -41,8 +42,8 @@ program
     .action(async (args) => {
         const config = readConfig();
 
-        if (!config.name) {
-            ColorLogger.error("No config file found. Run 'mc init' first.");
+        if (!config.id) {
+            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
             return;
         }
         if (args.length === 0) {
@@ -64,7 +65,6 @@ program
     .subCommand("list")
     .description("List all modules")
     .action(async (args, flags) => {
-        console.log(args, flags);
         ColorLogger.info("Modules:");
         for (const module of ModuleManager.modules) {
             ColorLogger.info(`- ${module.name} - ${module.description}`);

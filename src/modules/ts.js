@@ -8,6 +8,9 @@ const compilerOptions = {
     target: "ESNext",
     moduleResolution: "Node",
     allowSyntheticDefaultImports: true,
+    preserveConstEnums: true,
+    removeComments: true,
+    isolatedModules: false,
 };
 
 ModuleManager.addModule({
@@ -22,10 +25,10 @@ ModuleManager.addModule({
                 const result = ts.transpileModule(tsCode, { compilerOptions });
                 ColorLogger.moduleLog(`Transpiled: ${filePath}`);
                 return { newFilePath: filePath.replace(/\.ts$/, ".js"), fileData: result.outputText };
-            }
+            },
         },
         {
-            activator: (filePath) => filePath.endsWith(".d.ts")
-        }
+            activator: (filePath) => filePath.endsWith(".d.ts"),
+        },
     ],
 });

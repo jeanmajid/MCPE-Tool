@@ -4,17 +4,22 @@ const { ManifestGenerator } = require("../models/generators/manifestGenerator");
 const { ColorLogger } = require("../models/cli/colorLogger");
 const fs = require("node:fs");
 const { generateUniqueId } = require("../utils/id");
+const { readConfig } = require("../utils/config");
 
 program
     .command("init")
     .description("Initialize the project with interactive prompts")
     .action(async () => {
+        if (readConfig().id) {
+            ColorLogger.error("Project already initialized. Please remove the config file to reinitialize the project.");
+            return;
+        }
         const answers = await Questioner.prompt([
             {
                 type: "input",
                 name: "projectName",
                 message: "Project name:",
-                default: () => "MyProject",
+                default: () => process.cwd().split(/[\/\\]/).pop(),
             },
             {
                 type: "input",
@@ -36,21 +41,23 @@ program
             }
         ]);
         ColorLogger.info(`Initializing project: ${answers.projectName}`);
+        const generatorBP = new ManifestGenerator(answers.projectName, answers.projectDescription);
+        const generatorRP = new ManifestGenerator(answers.projectName, answers.projectDescription);
         if (answers.behaviourPack) {
             ColorLogger.info("Creating behaviour pack...");
             fs.mkdirSync("BP", { recursive: true });
 
-            const generatorBP = new ManifestGenerator(answers.projectName, answers.projectDescription);
             generatorBP.addModule("data");
-            generatorBP.addModule("script", "javascript", "scripts/index");
+            generatorBP.addModule("script", "javascript", "scripts/index.js");
             generatorBP.addAuthor("jeanmajid");
             generatorBP.addDependency("@minecraft/server", "1.0.0-beta");
             generatorBP.addDependency("@minecraft/server-ui", "1.0.0-beta");
 
+            if (answers.resourcePack) generatorBP.addDependencyUUID(generatorRP.mainUUID, "1.0.0");
+
             fs.writeFileSync("BP/manifest.json", generatorBP.generateString());
 
             ColorLogger.info("Creating scripts folder...");
-
             fs.mkdirSync("BP/scripts", { recursive: true });
             fs.writeFileSync("BP/scripts/index.js", "");
         }
@@ -58,9 +65,10 @@ program
             ColorLogger.info("Creating resource pack...");
             fs.mkdirSync("RP", { recursive: true });
 
-            const generatorRP = new ManifestGenerator(answers.projectName, answers.projectDescription);
             generatorRP.addModule("resources");
             generatorRP.addAuthor("jeanmajid");
+
+            if (answers.behaviourPack) generatorRP.addDependencyUUID(generatorBP.mainUUID, "1.0.0");
 
             fs.writeFileSync("RP/manifest.json", generatorRP.generateString());
         }

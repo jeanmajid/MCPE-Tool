@@ -18,7 +18,8 @@ ModuleManager.addModule({
         }
 
         for (const dependency of manifest.dependencies) {
-            if (!dependency.version.endsWith("-beta")) return;
+            if (dependency.uuid) continue;
+            if (!dependency.version.endsWith("-beta")) continue;
             const latest = await getLatestPackageVersion(dependency.module_name);
 
             if (latest.version === dependency.version) {
@@ -37,28 +38,35 @@ async function installPackage(packageName) {
     const bpDir = "./BP";
     if (!fs.existsSync(`${bpDir}/package.json`)) {
         ColorLogger.error("No package.json file found in the current directory.");
-        exec("npm init -y", {cwd: bpDir}, (error, stdout, stderr) => {
+        await new Promise((resolve, reject) => {
+            exec("npm init -y", { cwd: bpDir }, (error, stdout, stderr) => {
+                if (error) {
+                    ColorLogger.error(`Error creating package.json file: ${error.message}`);
+                    reject(error);
+                    return;
+                }
+                if (stderr) {
+                    ColorLogger.error(`Error creating package.json file: ${stderr}`);
+                    reject(new Error(stderr));
+                    return;
+                }
+                ColorLogger.moduleLog("Successfully created package.json file.");
+                resolve();
+            });
+        });
+    }
+    await new Promise((resolve, reject) => {
+        exec(`npm install ${packageName}`, { cwd: bpDir }, (error, stdout, stderr) => {
             if (error) {
-                ColorLogger.error(`Error creating package.json file: ${error.message}`);
+                ColorLogger.error(`Error installing package ${packageName}: ${error.message}`);
                 return;
             }
             if (stderr) {
-                ColorLogger.error(`Error creating package.json file: ${stderr}`);
+                ColorLogger.error(`Error installing package ${packageName}: ${stderr}`);
                 return;
             }
-            ColorLogger.moduleLog("Successfully created package.json file.");
+            ColorLogger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
+            resolve();
         });
-        await new Promise(r => setTimeout(r, 1000));
-    }
-    exec(`npm install ${packageName}`, { cwd: bpDir }, (error, stdout, stderr) => {
-        if (error) {
-            ColorLogger.error(`Error installing package ${packageName}: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            ColorLogger.error(`Error installing package ${packageName}: ${stderr}`);
-            return;
-        }
-        ColorLogger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
     });
 }

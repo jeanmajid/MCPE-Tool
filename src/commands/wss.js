@@ -1,0 +1,67 @@
+const { program } = require("../main");
+const keylistener = require("C:/Users/jeanh/Documents/GitHub/NPM-keylistener/build/Release/keylistener");
+const { Server } = require("ws");
+const { ColorLogger } = require("../models/cli/colorLogger");
+
+program
+    .command("wss")
+    .description("Runs a websocket server with some cool stuff")
+    .action(async () => {
+        ColorLogger.info("Starting websocket server on port 8080");
+        const connections = [];
+        const wss = new Server({ port: 8080 });
+        wss.on("connection", (ws) => {
+            connections.push(ws);
+            
+            ws.on("close", () => {
+                const index = connections.indexOf(ws);
+                if (index > -1) {
+                    connections.splice(index, 1);
+                }
+            });
+        });
+
+        keylistener.start((keycode) => {
+            switch (keycode) {
+                case 80: // P
+                    for (const ws of connections) {
+                        sendCommand(ws, "gamemode spectator");
+                    }
+                    break;
+                case 79: // O
+                    for (const ws of connections) {
+                        sendCommand(ws, "gamemode c");
+                    }
+                    break;
+                case 73: // I
+                    for (const ws of connections) {
+                        sendCommand(ws, "gamemode s");
+                    }
+                    break;
+            }
+        });
+    });
+
+function sendCommand(ws, command) {
+    const msg = {
+        header: {
+            version: 1,
+            requestId: generateUUIDv4(),
+            messagePurpose: "commandRequest",
+            messageType: "commandRequest",
+        },
+        body: {
+            version: 1,
+            commandLine: command,
+        },
+    };
+    ws.send(JSON.stringify(msg));
+}
+
+function generateUUIDv4() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}

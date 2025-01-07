@@ -3,20 +3,16 @@ const { Watcher } = require("../models/files/watcher");
 const { readConfig } = require("../utils/config");
 const { COM_MOJANG_PATH } = require("../constants/paths");
 const { ModuleManager } = require("../models/files/moduleManager");
+const { ColorLogger } = require("../models/cli/colorLogger");
 
 program
     .command("watch")
     .description("Watch the current directory and copy files to the destination")
     .action(async () => {
         const config = readConfig();
-
-        if (!config.name) {
-            console.error("No config file found. Run 'mc init' first.");
-            return;
-        }
-
+        
         if (!config.id) {
-            console.error("No project ID found. Run 'mc init' first.");
+            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
             return;
         }
 

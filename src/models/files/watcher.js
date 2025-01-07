@@ -3,6 +3,7 @@ const { FileHandler } = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
 const { ModuleManager } = require("./moduleManager");
 import { DEBUG } from "../../constants/dev";
+import { IGNORE_PATHS } from "../../constants/paths";
 const fs = require("fs");
 
 class Watcher {
@@ -45,7 +46,7 @@ class Watcher {
         }
 
         this.watcher = chokidar.watch(watchFolders, {
-            ignored: ["**/node_modules/**", "**/.git/**", "**/.vscode/**", "**/.gitignore", "**/package.json", "**/package-lock.json", "**/*.md"],
+            ignored: IGNORE_PATHS,
         });
 
         const handleFileEvent = async (filePath, event) => {

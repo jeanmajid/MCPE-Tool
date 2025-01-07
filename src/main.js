@@ -12,7 +12,13 @@ require("./modules/backup");
 // Commands
 require("./commands/repair");
 require("./commands/init");
-require("./commands/watch");
 require("./commands/module");
+require("./commands/watch");
+require("./commands/build");
+require("./commands/translate");
+require("./commands/make");
+require("./commands/fix");
+require("./commands/wss");
+require("./commands/get");
 
 program.parse(process.argv);
