@@ -7,7 +7,8 @@ program
     .command("wss")
     .description("Runs a websocket server with some cool stuff")
     .action(async () => {
-        ColorLogger.info("Starting websocket server on port 8080");
+        keylistener.copyToClipboard("/wsserver localhost:8080");
+        ColorLogger.info("Starting websocket server on port 8080, wss command copied to clipboard");
         const connections = [];
         const wss = new Server({ port: 8080 });
         wss.on("connection", (ws) => {

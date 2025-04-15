@@ -1,3 +1,6 @@
+const fs = require("fs");
+const { BEHAVIOUR_PACK_PATH } = require("../constants/paths");
+
 /**
  * Fetches the versions of a given package from the npm registry.
  * @param {string} packageName - The name of the package.
@@ -27,7 +30,19 @@ async function getLatestPackageVersion(packageName) {
     return { version: latest.split(".").splice(0, 3).join("."), package: packageName + "@" + latest };
 }
 
+/**
+ * Retrieves the version of an installed package.
+ * @param {"@minecraft/server" | "@minecraft/server-ui"} packageName - The name of the package.
+ * @returns {string | undefined} - The version of the package.
+ */
+function getInstalledPackageVersion(packageName) {
+    const packageJson = JSON.parse(fs.readFileSync(`${BEHAVIOUR_PACK_PATH}/package.json`, "utf8"));
+    const dependencies = packageJson.dependencies || {};
+    return dependencies[packageName];
+}
+
 module.exports = {
     getPackageVersions,
     getLatestPackageVersion,
+    getInstalledPackageVersion
 };

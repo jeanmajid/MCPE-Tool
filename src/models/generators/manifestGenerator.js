@@ -22,7 +22,7 @@ class ManifestGenerator {
                 description: description,
                 uuid: this.mainUUID,
                 version: [1, 0, 0],
-                min_engine_version: [1, 20, 80],
+                min_engine_version: [1, 21, 70],
             },
         };
     }

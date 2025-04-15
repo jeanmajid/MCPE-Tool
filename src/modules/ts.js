@@ -1,34 +1,37 @@
 const { ModuleManager } = require("../models/files/moduleManager");
-const fs = require("fs");
-const ts = require("typescript");
+const { exec } = require("child_process");
 const { ColorLogger } = require("../models/cli/colorLogger");
-
-const compilerOptions = {
-    module: "ESNext",
-    target: "ESNext",
-    moduleResolution: "Node",
-    allowSyntheticDefaultImports: true,
-    preserveConstEnums: true,
-    removeComments: true,
-    isolatedModules: false,
-};
+const { writeFileSync, rmSync, existsSync } = require("fs");
 
 ModuleManager.addModule({
     name: "ts",
     description: "Enable the typescript transpiler",
     cancelFileTransfer: true,
-    activatorHandlerPairs: [
-        {
-            activator: (filePath) => !filePath.endsWith(".d.ts") && filePath.endsWith(".ts"),
-            handleFile: (filePath) => {
-                const tsCode = fs.readFileSync(filePath, "utf8");
-                const result = ts.transpileModule(tsCode, { compilerOptions });
-                ColorLogger.moduleLog(`Transpiled: ${filePath}`);
-                return { newFilePath: filePath.replace(/\.ts$/, ".js"), fileData: result.outputText };
+    activator: (filePath) => filePath.endsWith(".ts"),
+    onLaunch: (bpPath) => {
+        const tsConfig = {
+            "compilerOptions": {
+                "module": "ESNext",
+                "target": "ESNext",
+                "moduleResolution": "Node",
+                "allowSyntheticDefaultImports": true,
+                "removeComments": true,
+                "outDir": `${bpPath}/scripts`
             },
-        },
-        {
-            activator: (filePath) => filePath.endsWith(".d.ts"),
-        },
-    ],
+            "include": ["BP/scripts/**/*.ts"]
+        };
+        writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 2));
+
+        const watchProcess = exec("tsc --watch");
+
+        watchProcess.stdout.on('data', (data) => {
+            ColorLogger.moduleLog(data);
+        });
+        watchProcess.stderr.on('data', (data) => {
+            ColorLogger.error(data);
+        });
+    },
+    onExit: () => {
+        rmSync("./tsconfig.json");
+    }
 });

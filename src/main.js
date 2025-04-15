@@ -7,7 +7,6 @@ module.exports.program = program;
 // Modules
 require("./modules/ts");
 require("./modules/npm");
-require("./modules/backup");
 
 // Commands
 require("./commands/repair");

@@ -7,6 +7,8 @@ const fs = require("fs");
  * @property {string} description - The description of the project.
  * @property {Array} modules - The modules of the project.
  * @property {string} id - The ID of the project.
+ * @property {string?} resourcePackPath - The Path to the Resource Pack
+ * @property {string?} behaviourPackPath - The Path to the Behaviour Pack
  */
 
 /**

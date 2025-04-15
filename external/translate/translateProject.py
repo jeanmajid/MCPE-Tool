@@ -8,12 +8,7 @@ for package in available_packages:
     if package.from_code == "en":
         language_codes.add(package.to_code)
 
-for package in available_packages:
-    if package.from_code == "en" and package.to_code in language_codes:
-        print(f"Downloading {package.to_code}")
-        argostranslate.package.install_from_path(package.download())
-
-json_file_path = "C:/Users/jeanh/OneDrive/Dokumente/GitHub/MCBE-DataScraper/data/1.21.30/RP/texts/languages.json"
+json_file_path = "C:/Users/jeanh/Documents/GitHub/MCBE-DataScraper/data/1.21.30/RP/texts/languages.json"
 
 with open(json_file_path, 'r') as file:
     data = json.load(file)
@@ -21,6 +16,13 @@ with open(json_file_path, 'r') as file:
         json.dump(data, file2, indent=4)
 
 data = [item for item in data if 'en' not in item]
+
+for package in available_packages:
+    if package.from_code == "en" and package.to_code in language_codes:
+        if package.to_code not in data:
+            continue
+        print(f"Downloading {package.to_code}")
+        argostranslate.package.install_from_path(package.download())
 
 parts_behind_underscore = [filename.split('_')[0] if '_' in filename else filename for filename in data]
 

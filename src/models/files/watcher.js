@@ -3,8 +3,11 @@ const { FileHandler } = require("./fileHandler");
 const { ColorLogger } = require("../cli/colorLogger");
 const { ModuleManager } = require("./moduleManager");
 import { DEBUG } from "../../constants/dev";
-import { IGNORE_PATHS } from "../../constants/paths";
+import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../../constants/paths";
+import { minimatch } from "minimatch";
 const fs = require("fs");
+
+let cleanUpIsRunning = false;
 
 class Watcher {
     constructor(sourceDir, destDirBP, destDirRP) {
@@ -29,8 +32,8 @@ class Watcher {
 
         const watchFolders = [];
 
-        const bpFolder = `${this.fileHandler.sourceDir}/BP`;
-        const rpFolder = `${this.fileHandler.sourceDir}/RP`;
+        const bpFolder = BEHAVIOUR_PACK_PATH;
+        const rpFolder = RESOURCE_PACK_PATH;
 
         if (fs.existsSync(bpFolder)) {
             watchFolders.push(bpFolder);
@@ -46,7 +49,9 @@ class Watcher {
         }
 
         this.watcher = chokidar.watch(watchFolders, {
-            ignored: IGNORE_PATHS,
+            ignored: (filePath) => {
+                return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
+            }
         });
 
         const handleFileEvent = async (filePath, event) => {
@@ -73,8 +78,13 @@ class Watcher {
         ColorLogger.info("Watching for file changes...");
 
         const cleanUp = () => {
+            if (cleanUpIsRunning) return;
+            cleanUpIsRunning = true;
             ColorLogger.delete("Cleaning up...");
             this.fileHandler.removeDestinationDirectories();
+            for (const module of ModuleManager.modules) {
+                if (module.onExit) module.onExit();
+            }
             process.exit(0);
         };
 

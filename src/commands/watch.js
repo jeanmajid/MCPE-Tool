@@ -16,14 +16,14 @@ program
             return;
         }
 
+        const bpPath = COM_MOJANG_PATH + "development_behavior_packs/" + config.name + "BP";
+        const rpPath = COM_MOJANG_PATH + "development_resource_packs/" + config.name + "RP";
+
         if (!config.modules || config.modules.length === 0) {
             ModuleManager.modules = [];
         } else {
-            await ModuleManager.filterModules(config.modules);
+            await ModuleManager.filterModules(config.modules, bpPath, rpPath);
         }
-
-        const bpPath = COM_MOJANG_PATH + "development_behavior_packs/" + config.name + "BP";
-        const rpPath = COM_MOJANG_PATH + "development_resource_packs/" + config.name + "RP";
 
         const watcher = new Watcher(".", bpPath, rpPath);
         watcher.startWatching();

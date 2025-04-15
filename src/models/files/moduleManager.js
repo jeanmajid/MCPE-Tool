@@ -12,8 +12,9 @@
  * @property {boolean} cancelFileTransfer - Whether the module should cancel the file transfer
  * @property {(filePath: string) => void} activator - The function to check if the module should activate
  * @property {(filePath: string) => { newFilePath: string | undefined, fileData: string | undefined}} handleFile - The function to handle the file
- * @property {(filePath: string) => Promise<void>} onLaunch - The function to run when the module is launched
+ * @property {(bpPath: string, rpPath: string) => Promise<void>} onLaunch - The function to run when the module is launched
  * @property {ActivatorHandlerPair[]} activatorHandlerPairs - Array of activator-handler pairs
+ * @property {() => void} onExit
  */
 
 class ModuleManager {
@@ -57,7 +58,7 @@ class ModuleManager {
         return value;
     }
 
-    static async filterModules(modulesToAdd) {
+    static async filterModules(modulesToAdd, bpPath, rpPath) {
         this.modules = this.modules.filter((module) => modulesToAdd.includes(module.name));
 
         for (const module of this.modules) {
@@ -76,7 +77,7 @@ class ModuleManager {
 
         for (const module of this.modules) {
             if (module.onLaunch) {
-                await module.onLaunch();
+                await module.onLaunch(bpPath, rpPath);
             }
             if (!module.activator) {
                 this.modules = this.modules.filter((m) => m.name !== module.name);
