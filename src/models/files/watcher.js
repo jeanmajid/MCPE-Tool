@@ -5,6 +5,10 @@ const { ModuleManager } = require("./moduleManager");
 import { DEBUG } from "../../constants/dev";
 import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../../constants/paths";
 import { minimatch } from "minimatch";
+import LocalTransport from "./transport/localTransport";
+import SftpTransport from "./transport/sftpTransport";
+import path from "path";
+import { readConfig } from "../../utils/config";
 const fs = require("fs");
 
 let cleanUpIsRunning = false;
@@ -12,7 +16,29 @@ let cleanUpIsRunning = false;
 class Watcher {
     constructor(sourceDir, destDirBP, destDirRP) {
         this.watcher = null;
-        this.fileHandler = new FileHandler(sourceDir, destDirBP, destDirRP);
+        const config = readConfig();
+        if (config.remote && !config.remote.disabled) {
+            if (!config.remote.targetPathBP || !config.remote.targetPathRP) {
+                ColorLogger.error("Please specify the targetPathBP and targetPathRP in the remote config");
+                process.exit(0);
+            }
+            const keyPath = fs.existsSync(config.remote.privateKey) ? config.remote.privateKey : path.resolve(process.env.HOME || process.env.USERPROFILE, ".ssh", config.remote.privateKey);
+            this.transport = new SftpTransport(
+                {
+                    host: config.remote.host,
+                    username: config.remote.username,
+                    privateKey: fs.readFileSync(keyPath) || undefined,
+                    passphrase: config.remote.passphrase,
+                    password: config.remote.password
+                },
+                config.remote.targetPathBP,
+                config.remote.targetPathRP
+            );
+            this.fileHandler = new FileHandler(sourceDir, this.transport.transportBP, this.transport.transportRP);
+        } else {
+            this.fileHandler = new FileHandler(sourceDir, new LocalTransport(destDirBP), new LocalTransport(destDirRP));
+        }
+
     }
 
     /**
@@ -23,13 +49,11 @@ class Watcher {
         this.modules.push(module);
     }
 
-    async refresh() {
-        await this.fileHandler.refreshDir();
-    }
-
-    startWatching() {
-        this.refresh();
-
+    async startWatching() {
+        if (this.transport) {
+            await this.transport.connect();
+            ColorLogger.info("Succesfully connected to remote!");
+        }
         const watchFolders = [];
 
         const bpFolder = BEHAVIOUR_PACK_PATH;
@@ -51,7 +75,7 @@ class Watcher {
         this.watcher = chokidar.watch(watchFolders, {
             ignored: (filePath) => {
                 return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
-            }
+            },
         });
 
         const handleFileEvent = async (filePath, event) => {
@@ -77,11 +101,11 @@ class Watcher {
 
         ColorLogger.info("Watching for file changes...");
 
-        const cleanUp = () => {
+        const cleanUp = async () => {
             if (cleanUpIsRunning) return;
             cleanUpIsRunning = true;
             ColorLogger.delete("Cleaning up...");
-            this.fileHandler.removeDestinationDirectories();
+            await this.fileHandler.removeDestinationDirectories();
             for (const module of ModuleManager.modules) {
                 if (module.onExit) module.onExit();
             }

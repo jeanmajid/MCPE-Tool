@@ -1,15 +1,5 @@
+/**@import { Config } from "./configType" */
 const fs = require("fs");
-
-/**
- * The default configuration object.
- * @typedef {Object} Config
- * @property {string} name - The name of the project.
- * @property {string} description - The description of the project.
- * @property {Array} modules - The modules of the project.
- * @property {string} id - The ID of the project.
- * @property {string?} resourcePackPath - The Path to the Resource Pack
- * @property {string?} behaviourPackPath - The Path to the Behaviour Pack
- */
 
 /**
  * Reads the configuration from the "config.json" file.
