@@ -1,42 +1,37 @@
-const { Color } = require("./color");
-const { ColorLogger } = require("./colorLogger");
+import { Color } from "./color.js";
+import { ColorLogger } from "./colorLogger.js";
 
 /**
  * Represents a command line interface command.
  */
-class Command {
-    /**
-     * Constructs a new Command instance.
-     */
-    constructor() {
-        this.commands = {};
-        this.currentCommand = null;
-        this.currentSubCommand = null;
-    }
+export class Command {
+    static commands = {};
+    static currentCommand = null;
+    static currentSubCommand = null;
 
     /**
      * Sets the current command name.
      * @param {string} name - The name of the command.
      * @returns {Command} The Command instance.
      */
-    command(name) {
-        this.currentSubCommand = null;
+    static command(name) {
+        Command.currentSubCommand = null;
         const command = { description: "", action: null };
-        this.commands[name] = command;
-        this.currentCommand = command;
-        return this;
+        Command.commands[name] = command;
+        Command.currentCommand = command;
+        return Command;
     }
 
-    subCommand(name) {
-        if (this.currentCommand) {
-            this.currentSubCommand = name;
+    static subCommand(name) {
+        if (Command.currentCommand) {
+            Command.currentSubCommand = name;
             const subCommand = { description: "", action: null };
-            if (!this.currentCommand.subCommands) {
-                this.currentCommand.subCommands = {};
+            if (!Command.currentCommand.subCommands) {
+                Command.currentCommand.subCommands = {};
             }
-            this.currentCommand.subCommands[name] = subCommand;
+            Command.currentCommand.subCommands[name] = subCommand;
         }
-        return this;
+        return Command;
     }
 
     /**
@@ -44,15 +39,15 @@ class Command {
      * @param {string} desc - The description of the command.
      * @returns {Command} The Command instance.
      */
-    description(desc) {
-        if (this.currentCommand) {
-            if (this.currentSubCommand) {
-                this.currentCommand.subCommands[this.currentSubCommand].description = desc;
+    static description(desc) {
+        if (Command.currentCommand) {
+            if (Command.currentSubCommand) {
+                Command.currentCommand.subCommands[Command.currentSubCommand].description = desc;
             } else {
-                this.currentCommand.description = desc;
+                Command.currentCommand.description = desc;
             }
         }
-        return this;
+        return Command;
     }
 
     /**
@@ -60,15 +55,15 @@ class Command {
      * @param {Function} actionFunc - The action function to be executed for the command.
      * @returns {Command} The Command instance.
      */
-    action(actionFunc) {
-        if (this.currentCommand) {
-            if (this.currentSubCommand) {
-                this.currentCommand.subCommands[this.currentSubCommand].action = actionFunc;
+    static action(actionFunc) {
+        if (Command.currentCommand) {
+            if (Command.currentSubCommand) {
+                Command.currentCommand.subCommands[Command.currentSubCommand].action = actionFunc;
             } else {
-                this.currentCommand.action = actionFunc;
+                Command.currentCommand.action = actionFunc;
             }
         }
-        return this;
+        return Command;
     }
 
     /**
@@ -76,21 +71,21 @@ class Command {
      * @param {string} commandName - The name of the command to execute.
      * @returns {Promise} - A promise that resolves when the command execution is complete.
      */
-    async execute(commandName, subCommand = undefined, args, flags = []) {
-        if (!this.commands[commandName]) {
+    static async execute(commandName, subCommand = undefined, args, flags = []) {
+        if (!Command.commands[commandName]) {
             ColorLogger.error(`Command "${commandName}" not found.`);
             return;
         }
 
-        if (subCommand && this.commands[commandName]?.subCommands) {
-            const action = this.commands[commandName].subCommands[subCommand]?.action;
+        if (subCommand && Command.commands[commandName]?.subCommands) {
+            const action = Command.commands[commandName].subCommands[subCommand]?.action;
             if (!action) {
                 ColorLogger.error(`Subcommand "${subCommand}" not found for command "${commandName}".`);
                 return;
             }
             await action(args, flags);
         } else {
-            const action = this.commands[commandName].action;
+            const action = Command.commands[commandName].action;
             if (!action) {
                 ColorLogger.error(`Command "${commandName}" requires a subcommand.`);
                 return;
@@ -102,13 +97,13 @@ class Command {
     /**
      * Displays the available commands and their descriptions.
      */
-    help() {
+    static help() {
         console.log(Color.blue("Available commands:"));
-        for (const command in this.commands) {
-            console.log(Color.green(`- ${command}: ${this.commands[command].description}`));
-            if (this.commands[command].subCommands) {
-                for (const subCommand in this.commands[command].subCommands) {
-                    console.log(Color.yellow(`  - ${subCommand}: ${this.commands[command].subCommands[subCommand].description}`));
+        for (const command in Command.commands) {
+            console.log(Color.green(`- ${command}: ${Command.commands[command].description}`));
+            if (Command.commands[command].subCommands) {
+                for (const subCommand in Command.commands[command].subCommands) {
+                    console.log(Color.yellow(`  - ${subCommand}: ${Command.commands[command].subCommands[subCommand].description}`));
                 }
             }
         }
@@ -117,7 +112,7 @@ class Command {
      * Parses the command line arguments and executes the corresponding command.
      * @param {string[]} argv - The command line arguments.
      */
-    parse(argv) {
+    static parse(argv) {
         const flags = [];
         let args = argv.slice(2).filter((arg) => {
             if (arg.startsWith("-")) {
@@ -135,13 +130,9 @@ class Command {
             args = args.slice(1);
         }
         if (!commandName || commandName === "help") {
-            this.help();
+            Command.help();
         } else {
-            this.execute(commandName, subCommand, args, flags);
+            Command.execute(commandName, subCommand, args, flags);
         }
     }
 }
-
-module.exports = {
-    Command,
-};

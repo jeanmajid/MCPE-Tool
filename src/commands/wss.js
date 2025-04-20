@@ -1,16 +1,16 @@
-const { program } = require("../main");
-const keylistener = require("C:/Users/jeanh/Documents/GitHub/NPM-keylistener/build/Release/keylistener");
-const { Server } = require("ws");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import keylistener from "@jeanmajid/windows-keylistener";
+import { WebSocketServer } from "ws";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
-program
+Command
     .command("wss")
     .description("Runs a websocket server with some cool stuff")
     .action(async () => {
         keylistener.copyToClipboard("/wsserver localhost:8080");
         ColorLogger.info("Starting websocket server on port 8080, wss command copied to clipboard");
         const connections = [];
-        const wss = new Server({ port: 8080 });
+        const wss = new WebSocketServer({ port: 8080 });
         wss.on("connection", (ws) => {
             connections.push(ws);
             

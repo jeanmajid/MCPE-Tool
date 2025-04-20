@@ -1,9 +1,9 @@
-const { program } = require("../main");
-const { ColorLogger } = require("../models/cli/colorLogger");
-const { readConfig, writeConfig } = require("../utils/config");
-const { generateUniqueId } = require("../utils/id");
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
+import { readConfig, writeConfig } from "../utils/config.js";
+import { generateUniqueId } from "../utils/id.js";
 
-program
+Command
     .command("repair")
     .description("repair the config")
     .action(async () => {

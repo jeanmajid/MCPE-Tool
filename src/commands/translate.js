@@ -1,9 +1,9 @@
-const { program } = require("../main");
-const { ColorLogger } = require("../models/cli/colorLogger");
-const fs = require("fs");
-const { spawn } = require("child_process");
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import fs from "fs";
+import { spawn } from "child_process";
+import { Command } from "../models/cli/command.js";
 
-program
+Command
     .command("translate")
     .description("translates into all available languages")
     .action(async () => {

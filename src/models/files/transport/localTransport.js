@@ -1,9 +1,9 @@
-const Transport = require("./transport");
-const fs = require("fs");
-const path = require("path");
-const { ensureDirSync, removeSync } = require("../../../utils/files");
+import { Transport } from "./transport.js";
+import fs from "fs";
+import path from "path";
+import { ensureDirSync, removeSync } from "../../../utils/files.js";
 
-class LocalTransport extends Transport {
+export class LocalTransport extends Transport {
     /**
      * @param {string} destPath base local path (will be prefixed to all ops)
      */
@@ -33,5 +33,3 @@ class LocalTransport extends Transport {
         removeSync(pathTo);
     }
 }
-
-module.exports = LocalTransport;

@@ -1,9 +1,9 @@
-const { Color } = require("./color");
+import { Color } from "./color.js";
 
 /**
  * A utility class for logging messages with different colors.
  */
-class ColorLogger {
+export class ColorLogger {
     /**
      * The last logged message.
      * @type {string|null}
@@ -69,7 +69,3 @@ class ColorLogger {
         this.logMessage(message, Color.cyan);
     }
 }
-
-module.exports = {
-    ColorLogger
-};

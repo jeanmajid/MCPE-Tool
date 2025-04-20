@@ -1,5 +1,1 @@
-const DEBUG = false;
-
-module.exports = {
-    DEBUG,
-};
+export const DEBUG = false;

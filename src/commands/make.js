@@ -1,11 +1,11 @@
-const { program } = require("../main");
-const { readConfig } = require("../utils/config");
-const fs = require("fs");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import { readConfig } from "../utils/config.js";
+import fs from "fs";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
 //TODO: Implement make
 
-program
+Command
     .command("make")
     .description("Makes stuff from premade templates")
     .action(async () => {

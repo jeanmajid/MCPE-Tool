@@ -1,11 +1,11 @@
-const { program } = require("../main");
-const { Watcher } = require("../models/files/watcher");
-const { readConfig } = require("../utils/config");
-const { COM_MOJANG_PATH } = require("../constants/paths");
-const { ModuleManager } = require("../models/files/moduleManager");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import { Watcher } from "../models/files/watcher.js";
+import { readConfig } from "../utils/config.js";
+import { COM_MOJANG_PATH } from "../constants/paths.js";
+import { ModuleManager } from "../models/files/moduleManager.js";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
-program
+Command
     .command("watch")
     .description("Watch the current directory and copy files to the destination")
     .action(async () => {

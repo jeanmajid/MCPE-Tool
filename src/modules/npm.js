@@ -1,10 +1,10 @@
-const { ModuleManager } = require("../models/files/moduleManager");
-const { getLatestPackageVersion, getInstalledPackageVersion } = require("../utils/npm");
-const { readManifest, writeManifest } = require("../utils/manifest");
-const fs = require("fs");
-const { ColorLogger } = require("../models/cli/colorLogger");
-const { exec } = require("child_process");
-const { BEHAVIOUR_PACK_PATH } = require("../constants/paths");
+import { ModuleManager } from "../models/files/moduleManager.js";
+import { getLatestPackageVersion, getInstalledPackageVersion } from "../utils/npm.js";
+import { readManifest, writeManifest } from "../utils/manifest.js";
+import fs from "fs";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { exec } from "child_process";
+import { BEHAVIOUR_PACK_PATH } from "../constants/paths.js";
 
 ModuleManager.addModule({
     name: "npm",

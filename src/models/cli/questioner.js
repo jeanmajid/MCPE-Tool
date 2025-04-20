@@ -1,11 +1,11 @@
-const readline  = require("readline");
-const { Color } = require("./color.js");
+import readline from 'readline';
+import { Color } from './color.js';
 
 /**
  * Class representing a Questioner.
  * @class
  */
-class Questioner {
+export class Questioner {
     /**
      * Prompts the user with a series of questions and returns the answers.
      * @param {Array} questions - An array of question objects.
@@ -40,8 +40,4 @@ class Questioner {
         rl.close();
         return answers;
     }
-}
-
-module.exports = {
-    Questioner
 }

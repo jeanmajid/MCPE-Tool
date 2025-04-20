@@ -1,11 +1,11 @@
-const { program } = require("../main");
-const { readConfig, writeConfig } = require("../utils/config");
-const { ModuleManager } = require("../models/files/moduleManager");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import { readConfig, writeConfig } from "../utils/config.js";
+import { ModuleManager } from "../models/files/moduleManager.js";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
-program.command("module").description("Manage modules");
+Command.command("module").description("Manage modules");
 
-program
+Command
     .subCommand("add")
     .description("Add a module to the watcher")
     .action(async (args) => {
@@ -36,7 +36,7 @@ program
         ColorLogger.info(`Added module ${args[0]}`);
     });
 
-program
+Command
     .subCommand("remove")
     .description("Remove a module from the watcher")
     .action(async (args) => {
@@ -61,7 +61,7 @@ program
         ColorLogger.info(`Removed module ${args[0]}`);
     });
 
-program
+Command
     .subCommand("list")
     .description("List all modules")
     .action(async (args, flags) => {

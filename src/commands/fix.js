@@ -1,9 +1,9 @@
-const { program } = require("../main");
-const { readConfig } = require("../utils/config");
-const fs = require("fs");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import { readConfig } from "../utils/config.js";
+import fs from "fs";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
-program
+Command
     .command("fix")
     .description("Fix specific things based on the input")
     .action(async () => {
@@ -14,7 +14,7 @@ program
         }
     });
 
-program
+Command
     .subCommand("animationNames")
     .description("fixes the animation names")
     .action(async (args, flags) => {

@@ -1,7 +1,7 @@
-const { ModuleManager } = require("../models/files/moduleManager");
-const { exec } = require("child_process");
-const { ColorLogger } = require("../models/cli/colorLogger");
-const { writeFileSync, rmSync, existsSync } = require("fs");
+import { ModuleManager } from "../models/files/moduleManager.js";
+import { exec } from "child_process";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { writeFileSync, rmSync } from "fs";
 
 ModuleManager.addModule({
     name: "ts",

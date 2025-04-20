@@ -1,19 +1,19 @@
-const chokidar = require("chokidar");
-const { FileHandler } = require("./fileHandler");
-const { ColorLogger } = require("../cli/colorLogger");
-const { ModuleManager } = require("./moduleManager");
-import { DEBUG } from "../../constants/dev";
-import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../../constants/paths";
+import chokidar from "chokidar";
+import { FileHandler } from "./fileHandler.js";
+import { ColorLogger } from "../cli/colorLogger.js";
+import { ModuleManager } from "./moduleManager.js";
+import { DEBUG } from "../../constants/dev.js";
+import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../../constants/paths.js";
 import { minimatch } from "minimatch";
-import LocalTransport from "./transport/localTransport";
-import SftpTransport from "./transport/sftpTransport";
+import { LocalTransport } from "./transport/localTransport.js";
+import { SftpTransport } from "./transport/sftpTransport.js";
 import path from "path";
-import { readConfig } from "../../utils/config";
-const fs = require("fs");
+import { readConfig } from "../../utils/config.js";
+import fs from "fs";
 
 let cleanUpIsRunning = false;
 
-class Watcher {
+export class Watcher {
     constructor(sourceDir, destDirBP, destDirRP) {
         this.watcher = null;
         const config = readConfig();
@@ -22,23 +22,24 @@ class Watcher {
                 ColorLogger.error("Please specify the targetPathBP and targetPathRP in the remote config");
                 process.exit(0);
             }
-            const keyPath = fs.existsSync(config.remote.privateKey) ? config.remote.privateKey : path.resolve(process.env.HOME || process.env.USERPROFILE, ".ssh", config.remote.privateKey);
+            const keyPath = fs.existsSync(config.remote.privateKey)
+                ? config.remote.privateKey
+                : path.resolve(process.env.HOME || process.env.USERPROFILE, ".ssh", config.remote.privateKey);
             this.transport = new SftpTransport(
                 {
                     host: config.remote.host,
                     username: config.remote.username,
                     privateKey: fs.readFileSync(keyPath) || undefined,
                     passphrase: config.remote.passphrase,
-                    password: config.remote.password
+                    password: config.remote.password,
                 },
-                config.remote.targetPathBP,
-                config.remote.targetPathRP
+                config.remote.targetPathBP + "/" + config.name + "BP",
+                config.remote.targetPathRP + "/" + config.name + "RP"
             );
             this.fileHandler = new FileHandler(sourceDir, this.transport.transportBP, this.transport.transportRP);
         } else {
             this.fileHandler = new FileHandler(sourceDir, new LocalTransport(destDirBP), new LocalTransport(destDirRP));
         }
-
     }
 
     /**
@@ -132,7 +133,3 @@ class Watcher {
         }
     }
 }
-
-module.exports = {
-    Watcher,
-};

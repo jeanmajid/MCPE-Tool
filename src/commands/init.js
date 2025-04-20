@@ -1,12 +1,13 @@
-const { program } = require("../main");
-const { Questioner } = require("../models/cli/questioner");
-const { ManifestGenerator } = require("../models/generators/manifestGenerator");
-const { ColorLogger } = require("../models/cli/colorLogger");
-const fs = require("node:fs");
-const { generateUniqueId } = require("../utils/id");
-const { readConfig } = require("../utils/config");
+import { Questioner } from "../models/cli/questioner.js";
+import { ManifestGenerator } from "../models/generators/manifestGenerator.js";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import fs from "fs";
+import { generateUniqueId } from "../utils/id.js";
+import { readConfig } from "../utils/config.js";
+import { Command } from "../models/cli/command.js";
 
-program
+
+Command
     .command("init")
     .description("Initialize the project with interactive prompts")
     .action(async () => {

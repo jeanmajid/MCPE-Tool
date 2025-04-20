@@ -1,8 +1,8 @@
-const Transport = require("./transport");
-const SftpClient = require("ssh2-sftp-client");
-const path = require("path");
+import { Transport } from "./transport.js";
+import SftpClient from "ssh2-sftp-client";
+import path from "path";
 
-class SftpTransport extends Transport {
+export class SftpTransport extends Transport {
     /**
      * @param {import('ssh2').ConnectConfig} config ssh2‑sftp‑client connect config
      * @param {string} targetPathBP
@@ -114,5 +114,3 @@ class SftpSubTransport extends Transport {
         }
     }
 }
-
-module.exports = SftpTransport;

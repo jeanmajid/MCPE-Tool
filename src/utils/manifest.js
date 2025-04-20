@@ -1,5 +1,5 @@
-const fs = require("fs");
-const { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } = require("../constants/paths");
+import fs from "fs";
+import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../constants/paths.js";
 
 /**
  * @typedef {Object} ManifestBP
@@ -50,7 +50,7 @@ const { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } = require("../constants/paths"
  * @param {"BP" | "RP"} type - The type of manifest to read.
  * @returns {ManifestBP | ManifestRP | undefined} The parsed JSON object from the manifest file.
  */
-function readManifest(type) {
+export function readManifest(type) {
     try {
         return JSON.parse(fs.readFileSync(`${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`));
     } catch (error) {
@@ -63,11 +63,6 @@ function readManifest(type) {
  * @param {"BP" | "RP"} type - The type of manifest to write.
  * @param {ManifestBP | ManifestRP} manifest - The manifest object to write.
  */
-function writeManifest(type, manifest) {
+export function writeManifest(type, manifest) {
     fs.writeFileSync(`${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`, JSON.stringify(manifest, null, 4));
 }
-
-module.exports = {
-    readManifest,
-    writeManifest,
-};

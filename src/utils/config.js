@@ -1,12 +1,12 @@
 /**@import { Config } from "./configType" */
-const fs = require("fs");
+import fs from "fs";
 
 /**
  * Reads the configuration from the "config.json" file.
  * If the file doesn't exist or is empty, an empty object is returned.
  * @returns {Config} The configuration object parsed from the "config.json" file.
  */
-function readConfig() {
+export function readConfig() {
     if (!fs.existsSync("./config.json")) {
         return {};
     }
@@ -17,11 +17,6 @@ function readConfig() {
  * Writes the configuration to the "config.json" file.
  * @param {Config} config - The configuration object to write.
  */
-function writeConfig(config) {
+export function writeConfig(config) {
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 4));
 }
-
-module.exports = {
-    readConfig,
-    writeConfig
-};

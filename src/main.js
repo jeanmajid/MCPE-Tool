@@ -1,23 +1,21 @@
 #!/usr/bin/env node
 
-const { Command } = require("./models/cli/command");
-const program = new Command();
-module.exports.program = program;
+import { Command } from "./models/cli/command.js";
 
 // Modules
-require("./modules/ts");
-require("./modules/npm");
+import "./modules/ts.js";
+import "./modules/npm.js";
 
 // Commands
-require("./commands/repair");
-require("./commands/init");
-require("./commands/module");
-require("./commands/watch");
-require("./commands/build");
-require("./commands/translate");
-require("./commands/make");
-require("./commands/fix");
-require("./commands/wss");
-require("./commands/get");
+import "./commands/repair.js";
+import "./commands/init.js";
+import "./commands/module.js";
+import "./commands/watch.js";
+import "./commands/build.js";
+import "./commands/translate.js";
+import "./commands/make.js";
+import "./commands/fix.js";
+import "./commands/wss.js";
+import "./commands/get.js";
 
-program.parse(process.argv);
+Command.parse(process.argv);

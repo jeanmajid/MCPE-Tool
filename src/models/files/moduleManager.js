@@ -17,7 +17,7 @@
  * @property {() => void} onExit
  */
 
-class ModuleManager {
+export class ModuleManager {
     /**
      * @type {Module[]}
      */
@@ -85,7 +85,3 @@ class ModuleManager {
         }
     }
 }
-
-module.exports = {
-    ModuleManager,
-};

@@ -1,15 +1,12 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { ColorLogger } = require("../cli/colorLogger");
-const { ModuleManager } = require("./moduleManager");
-const { ensureDirSync, removeSync } = require("../../utils/files");
-const { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } = require("../../constants/paths");
-const Transport = require("./transport/transport");
+import path from "path";
+import { ColorLogger } from "../cli/colorLogger.js";
+import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../../constants/paths.js";
+import { Transport } from "./transport/transport.js";
 
 /**
  * Represents a file handler that performs file operations such as copying, deleting, and refreshing directories.
  */
-class FileHandler {
+export class FileHandler {
     /**
      * Creates a new instance of the FileHandler class.
      * @param {string} sourceDir
@@ -83,7 +80,3 @@ class FileHandler {
         await this.transportRP.deleteFile(".")
     }
 }
-
-module.exports = {
-    FileHandler,
-};

@@ -1,12 +1,12 @@
-const { glob } = require("glob");
-const { IGNORE_PATHS } = require("../constants/paths");
-const { program } = require("../main");
-const { readConfig } = require("../utils/config");
-const archiver = require("archiver");
-const fs = require("fs");
-const { ColorLogger } = require("../models/cli/colorLogger");
+import { glob } from "glob";
+import { IGNORE_PATHS } from "../constants/paths.js";
+import { readConfig } from "../utils/config.js";
+import archiver from "archiver";
+import fs from "fs";
+import { ColorLogger } from "../models/cli/colorLogger.js";
+import { Command } from "../models/cli/command.js";
 
-program
+Command
     .command("build")
     .description("Build the project, based on the modules, into .mcpack or .mcaddon")
     .action(async () => {

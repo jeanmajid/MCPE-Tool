@@ -1,7 +1,7 @@
 /**
  * Provides color functions for console output.
  */
-class Color {
+export class Color {
     static black(message) {
         return `\x1b[30m${message}\x1b[0m`;
     }
@@ -34,7 +34,3 @@ class Color {
         return `\x1b[37m${message}\x1b[0m`;
     }
 }
-
-module.exports = {
-    Color,
-};
