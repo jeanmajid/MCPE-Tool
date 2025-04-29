@@ -1,5 +1,3 @@
-import keylistener from "@jeanmajid/windows-keylistener";
-import { WebSocketServer } from "ws";
 import { ColorLogger } from "../models/cli/colorLogger.js";
 import { Command } from "../models/cli/command.js";
 
@@ -7,6 +5,9 @@ Command
     .command("wss")
     .description("Runs a websocket server with some cool stuff")
     .action(async () => {
+        const { default: keylistener} = await import("@jeanmajid/windows-keylistener");
+        const { WebSocketServer } = await import("ws");
+
         keylistener.copyToClipboard("/wsserver localhost:8080");
         ColorLogger.info("Starting websocket server on port 8080, wss command copied to clipboard");
         const connections = [];

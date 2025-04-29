@@ -12,6 +12,9 @@ export type Config = {
     /** The Path to the Behaviour Pack (optional). */
     behaviourPackPath?: string;
 
+    /**Path  */
+    outPut?: "preview" | "stable";
+
     remote: {
         host: string;
         username: string;
@@ -21,5 +24,5 @@ export type Config = {
         passphrase: string;
         password: string;
         disabled: boolean;
-    }
+    };
 };

@@ -1,13 +1,10 @@
-import { glob } from "glob";
 import { IGNORE_PATHS } from "../constants/paths.js";
 import { readConfig } from "../utils/config.js";
-import archiver from "archiver";
 import fs from "fs";
 import { ColorLogger } from "../models/cli/colorLogger.js";
 import { Command } from "../models/cli/command.js";
 
-Command
-    .command("build")
+Command.command("build")
     .description("Build the project, based on the modules, into .mcpack or .mcaddon")
     .action(async () => {
         const config = readConfig();
@@ -24,6 +21,9 @@ Command
             return;
         }
 
+        const { glob } = await import("glob");
+        const { default: archiver } = await import("archiver");
+
         fs.mkdirSync("dist", { recursive: true });
 
         if (isBP) {
@@ -37,7 +37,7 @@ Command
                 };
             });
 
-            const bpBuffer = await zipFiles(paths);
+            const bpBuffer = await zipFiles(paths, archiver);
             fs.writeFileSync(`./dist/${config.name}BP.mcpack`, bpBuffer);
         }
 
@@ -52,7 +52,7 @@ Command
                 };
             });
 
-            const rpBuffer = await zipFiles(paths);
+            const rpBuffer = await zipFiles(paths, archiver);
             fs.writeFileSync(`./dist/${config.name}RP.mcpack`, rpBuffer);
         }
 
@@ -66,12 +66,12 @@ Command
                 };
             });
 
-            const addonBuffer = await zipFiles(paths);
+            const addonBuffer = await zipFiles(paths, archiver);
             fs.writeFileSync(`./dist/${config.name}.mcaddon`, addonBuffer);
         }
     });
 
-function zipFiles(files) {
+function zipFiles(files, archiver) {
     return new Promise((resolve, reject) => {
         const archive = archiver("zip", { zlib: { level: 9 } });
         const buffers = [];

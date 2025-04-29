@@ -1,21 +1,4 @@
-/**
- * @typedef {Object} ActivatorHandlerPair
- * @property {(filePath: string) => boolean} activator - The function to check if the handler should activate
- * @property {(filePath: string) => { newFilePath: string | undefined, fileData: string | undefined }} handleFile - The function to handle the file
- * @property {boolean} cancelFileTransfer - Whether the module should cancel the file transfer
- */
-
-/**
- * @typedef {Object} Module
- * @property {String} name - The name of the module
- * @property {String} description - The description of the module
- * @property {boolean} cancelFileTransfer - Whether the module should cancel the file transfer
- * @property {(filePath: string) => void} activator - The function to check if the module should activate
- * @property {(filePath: string) => { newFilePath: string | undefined, fileData: string | undefined}} handleFile - The function to handle the file
- * @property {(bpPath: string, rpPath: string) => Promise<void>} onLaunch - The function to run when the module is launched
- * @property {ActivatorHandlerPair[]} activatorHandlerPairs - Array of activator-handler pairs
- * @property {() => void} onExit
- */
+/**@import { Module, ActivatorHandlerPair } from "./module" */
 
 export class ModuleManager {
     /**

@@ -1,21 +1,29 @@
 #!/usr/bin/env node
 
+import { PROJECT_PATH_SRC } from "./constants/paths.js";
 import { Command } from "./models/cli/command.js";
+import { existsSync, readdirSync } from "fs";
 
-// Modules
-import "./modules/ts.js";
-import "./modules/npm.js";
+import path from "path";
+import { pathToFileURL } from "url";
 
-// Commands
-import "./commands/repair.js";
-import "./commands/init.js";
-import "./commands/module.js";
-import "./commands/watch.js";
-import "./commands/build.js";
-import "./commands/translate.js";
-import "./commands/make.js";
-import "./commands/fix.js";
-import "./commands/wss.js";
-import "./commands/get.js";
+async function loadDir(dir) {
+    if (!existsSync(dir)) {
+        return;
+    }
+    const jsFiles = readdirSync(dir).filter((f) => f.endsWith(".js"));
+    await Promise.all(
+        jsFiles.map((fileName) => {
+            const fullPath = path.join(dir, fileName);
+            return import(pathToFileURL(fullPath).href);
+        })
+    );
+}
+
+await Promise.all([
+    loadDir(path.join(PROJECT_PATH_SRC, "modules")),
+    loadDir(path.join(PROJECT_PATH_SRC, "commands")),
+    loadDir("./plugins"),
+]);
 
 Command.parse(process.argv);

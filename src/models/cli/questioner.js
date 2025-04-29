@@ -30,7 +30,7 @@ export class Questioner {
                 if (answer === "") {
                     answers[question.name] = question.default();
                 } else {
-                    answers[question.name] = answer.toLowerCase().includes("y");
+                    answers[question.name] = answer.toLowerCase().includes("y") || answer.toLowerCase().includes("t");
                 }
             } else if (question.type === "input") {
                 answers[question.name] = answer || (typeof question.default === "function" ? question.default() : question.default);
