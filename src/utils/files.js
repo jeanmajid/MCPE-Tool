@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
 
 /**
  * Ensures that the directory exists. If the directory structure does not exist, it is created.
@@ -31,4 +32,17 @@ export function removeSync(targetPath) {
             fs.unlinkSync(targetPath);
         }
     }
+}
+
+export async function loadDir(dir) {
+    if (!fs.existsSync(dir)) {
+        return;
+    }
+    const jsFiles = fs.readdirSync(dir).filter((f) => f.endsWith(".js"));
+    await Promise.all(
+        jsFiles.map((fileName) => {
+            const fullPath = path.join(dir, fileName);
+            return import(pathToFileURL(fullPath).href);
+        })
+    );
 }

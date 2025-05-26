@@ -5,8 +5,7 @@ import { Command } from "../models/cli/command.js";
 
 Command.command("module").description("Manage modules");
 
-Command
-    .subCommand("add")
+Command.subCommand("add")
     .description("Add a module to the watcher")
     .action(async (args) => {
         const config = readConfig();
@@ -36,8 +35,7 @@ Command
         ColorLogger.info(`Added module ${args[0]}`);
     });
 
-Command
-    .subCommand("remove")
+Command.subCommand("remove")
     .description("Remove a module from the watcher")
     .action(async (args) => {
         const config = readConfig();
@@ -61,10 +59,10 @@ Command
         ColorLogger.info(`Removed module ${args[0]}`);
     });
 
-Command
-    .subCommand("list")
+Command.subCommand("list")
     .description("List all modules")
     .action(async (args, flags) => {
+        await ModuleManager.loadAllModules();
         ColorLogger.info("Modules:");
         for (const module of ModuleManager.modules) {
             ColorLogger.info(`- ${module.name} - ${module.description}`);

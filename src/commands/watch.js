@@ -22,8 +22,10 @@ Command
         if (!config.modules || config.modules.length === 0) {
             ModuleManager.modules = [];
         } else {
+            await ModuleManager.loadAllModules();
             await ModuleManager.filterModules(config.modules, bpPath, rpPath);
         }
+
 
         const watcher = new Watcher(".", bpPath, rpPath);
         watcher.startWatching();

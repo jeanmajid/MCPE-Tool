@@ -1,10 +1,17 @@
 /**@import { Module, ActivatorHandlerPair } from "./module" */
+import path from "path";
+import { loadDir } from "../../utils/files.js";
+import { PROJECT_PATH_SRC } from "../../constants/paths.js";
 
 export class ModuleManager {
     /**
      * @type {Module[]}
      */
     static modules = [];
+
+    static async loadAllModules() {
+        await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "modules")), loadDir("./plugins")]);
+    }
 
     /**
      * Registers a new module

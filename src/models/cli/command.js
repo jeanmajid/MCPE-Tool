@@ -1,5 +1,10 @@
+import { loadDir } from "../../utils/files.js";
 import { Color } from "./color.js";
 import { ColorLogger } from "./colorLogger.js";
+import path from "path";
+import { PROJECT_PATH_SRC } from "../../constants/paths.js";
+import { pathToFileURL } from "url";
+import { existsSync } from "fs";
 
 /**
  * Represents a command line interface command.
@@ -72,8 +77,14 @@ export class Command {
      * @returns {Promise} - A promise that resolves when the command execution is complete.
      */
     static async execute(commandName, subCommand = undefined, args, flags = []) {
-        if (!Command.commands[commandName]) {
+        const commandFilePath = pathToFileURL(path.join(PROJECT_PATH_SRC, "commands", commandName + ".js"));
+        if (!existsSync(commandFilePath)) {
             ColorLogger.error(`Command "${commandName}" not found.`);
+            return;
+        }
+        await import(commandFilePath);
+        if (!Command.commands[commandName]) {
+            ColorLogger.error(`Command "${commandName}" not registered properly.`);
             return;
         }
 
@@ -94,10 +105,15 @@ export class Command {
         }
     }
 
+    static async loadAllCommands() {
+        await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "commands")), loadDir("./plugins")]);
+    }
+
     /**
      * Displays the available commands and their descriptions.
      */
-    static help() {
+    static async help() {
+        await this.loadAllCommands();
         console.log(Color.blue("Available commands:"));
         for (const command in Command.commands) {
             console.log(Color.green(`- ${command}: ${Command.commands[command].description}`));
