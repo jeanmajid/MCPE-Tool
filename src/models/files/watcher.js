@@ -19,26 +19,40 @@ export class Watcher {
         const config = readConfig();
         if (config.remote && !config.remote.disabled) {
             if (!config.remote.targetPathBP || !config.remote.targetPathRP) {
-                ColorLogger.error("Please specify the targetPathBP and targetPathRP in the remote config");
+                ColorLogger.error(
+                    "Please specify the targetPathBP and targetPathRP in the remote config"
+                );
                 process.exit(0);
             }
             const keyPath = fs.existsSync(config.remote.privateKey)
                 ? config.remote.privateKey
-                : path.resolve(process.env.HOME || process.env.USERPROFILE, ".ssh", config.remote.privateKey);
+                : path.resolve(
+                      process.env.HOME || process.env.USERPROFILE,
+                      ".ssh",
+                      config.remote.privateKey
+                  );
             this.transport = new SftpTransport(
                 {
                     host: config.remote.host,
                     username: config.remote.username,
                     privateKey: fs.readFileSync(keyPath) || undefined,
                     passphrase: config.remote.passphrase,
-                    password: config.remote.password,
+                    password: config.remote.password
                 },
                 config.remote.targetPathBP + "/" + config.name + "BP",
                 config.remote.targetPathRP + "/" + config.name + "RP"
             );
-            this.fileHandler = new FileHandler(sourceDir, this.transport.transportBP, this.transport.transportRP);
+            this.fileHandler = new FileHandler(
+                sourceDir,
+                this.transport.transportBP,
+                this.transport.transportRP
+            );
         } else {
-            this.fileHandler = new FileHandler(sourceDir, new LocalTransport(destDirBP), new LocalTransport(destDirRP));
+            this.fileHandler = new FileHandler(
+                sourceDir,
+                new LocalTransport(destDirBP),
+                new LocalTransport(destDirRP)
+            );
         }
     }
 
@@ -76,7 +90,7 @@ export class Watcher {
         this.watcher = chokidar.watch(watchFolders, {
             ignored: (filePath) => {
                 return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
-            },
+            }
         });
 
         const handleFileEvent = async (filePath, event) => {

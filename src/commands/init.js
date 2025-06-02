@@ -6,13 +6,13 @@ import { generateUniqueId } from "../utils/id.js";
 import { readConfig } from "../utils/config.js";
 import { Command } from "../models/cli/command.js";
 
-
-Command
-    .command("init")
+Command.command("init")
     .description("Initialize the project with interactive prompts")
     .action(async () => {
         if (readConfig().id) {
-            ColorLogger.error("Project already initialized. Please remove the config file to reinitialize the project.");
+            ColorLogger.error(
+                "Project already initialized. Please remove the config file to reinitialize the project."
+            );
             return;
         }
         const answers = await Questioner.prompt([
@@ -20,25 +20,25 @@ Command
                 type: "input",
                 name: "projectName",
                 message: "Project name:",
-                default: () => process.cwd().split(/[\/\\]/).pop(),
+                default: () => process.cwd().split(/[/\\]/).pop()
             },
             {
                 type: "input",
                 name: "projectDescription",
                 message: "Project description:",
-                default: () => "",
+                default: () => ""
             },
             {
                 type: "confirm",
                 name: "behaviourPack",
                 message: "Behaviour pack?",
-                default: () => true,
+                default: () => true
             },
             {
                 type: "confirm",
                 name: "resourcePack",
                 message: "Resource pack?",
-                default: () => false,
+                default: () => false
             }
         ]);
         ColorLogger.info(`Initializing project: ${answers.projectName}`);
@@ -81,9 +81,7 @@ Command
                 {
                     name: answers.projectName,
                     description: answers.projectDescription,
-                    modules: [
-                        "npm"
-                    ],
+                    modules: ["npm"],
                     id: generateUniqueId()
                 },
                 null,

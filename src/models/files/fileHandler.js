@@ -1,7 +1,6 @@
 import path from "path";
 import { ColorLogger } from "../cli/colorLogger.js";
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../../constants/paths.js";
-import { Transport } from "./transport/transport.js";
 
 /**
  * Represents a file handler that performs file operations such as copying, deleting, and refreshing directories.
@@ -10,7 +9,7 @@ export class FileHandler {
     /**
      * Creates a new instance of the FileHandler class.
      * @param {string} sourceDir
-     * @param {Transport} transportBP 
+     * @param {Transport} transportBP
      * @param {Transport} transportRP
      */
     constructor(sourceDir, transportBP, transportRP) {
@@ -31,9 +30,11 @@ export class FileHandler {
         const isBP = this.isBP(filePath);
         const relativePath = path.relative(this.sourceDir, filePath);
         const transport = isBP ? this.transportBP : this.transportRP;
-        const pathTo = relativePath.slice(isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2);
+        const pathTo = relativePath.slice(
+            isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2
+        );
         try {
-            await transport.copyFile(filePath, pathTo)
+            await transport.copyFile(filePath, pathTo);
             ColorLogger.success(`Copied: ${filePath} ➔ ${pathTo}`);
         } catch (err) {
             ColorLogger.error(`Copy failed: ${filePath} ➔ ${pathTo} | ${err}`);
@@ -49,7 +50,9 @@ export class FileHandler {
         const isBP = this.isBP(filePath);
         const relativePath = path.relative(this.sourceDir, filePath);
         const transport = isBP ? this.transportBP : this.transportRP;
-        const pathTo = relativePath.slice(isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2);
+        const pathTo = relativePath.slice(
+            isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2
+        );
         try {
             transport.writeFile(pathTo, newFile);
             ColorLogger.success(`Updated: ${pathTo}`);
@@ -66,7 +69,9 @@ export class FileHandler {
         const isBP = this.isBP(filePath);
         const relativePath = path.relative(this.sourceDir, filePath);
         const transport = isBP ? this.transportBP : this.transportRP;
-        const pathTo = relativePath.slice(isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2);
+        const pathTo = relativePath.slice(
+            isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2
+        );
         try {
             transport.deleteFile(pathTo);
             ColorLogger.delete(`Removed: ${pathTo}`);
@@ -76,7 +81,7 @@ export class FileHandler {
     }
 
     async removeDestinationDirectories() {
-        await this.transportBP.deleteFile(".")
-        await this.transportRP.deleteFile(".")
+        await this.transportBP.deleteFile(".");
+        await this.transportRP.deleteFile(".");
     }
 }

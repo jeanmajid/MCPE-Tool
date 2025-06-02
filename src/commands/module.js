@@ -11,7 +11,9 @@ Command.subCommand("add")
         const config = readConfig();
 
         if (!config.name || !config.id) {
-            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
+            ColorLogger.error(
+                'No config file found. Run "mc init" or if you already have a project run "mc repair".'
+            );
             return;
         }
 
@@ -41,7 +43,9 @@ Command.subCommand("remove")
         const config = readConfig();
 
         if (!config.id) {
-            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
+            ColorLogger.error(
+                'No config file found. Run "mc init" or if you already have a project run "mc repair".'
+            );
             return;
         }
         if (args.length === 0) {
@@ -61,7 +65,7 @@ Command.subCommand("remove")
 
 Command.subCommand("list")
     .description("List all modules")
-    .action(async (args, flags) => {
+    .action(async () => {
         await ModuleManager.loadAllModules();
         ColorLogger.info("Modules:");
         for (const module of ModuleManager.modules) {

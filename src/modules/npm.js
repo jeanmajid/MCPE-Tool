@@ -32,32 +32,40 @@ ModuleManager.addModule({
             const latest = await getLatestPackageVersion(dependency.module_name);
 
             if (latest.version === dependency.version) {
-                ColorLogger.moduleLog(`The package ${dependency.module_name} is already up-to-date.`);
+                ColorLogger.moduleLog(
+                    `The package ${dependency.module_name} is already up-to-date.`
+                );
             } else {
                 dependency.version = latest.version;
                 writeManifest("BP", manifest);
                 await installPackage(latest.package);
-                ColorLogger.moduleLog(`Updated package ${dependency.module_name} version to ${latest.version}`);
+                ColorLogger.moduleLog(
+                    `Updated package ${dependency.module_name} version to ${latest.version}`
+                );
             }
         }
-    },
+    }
 });
 
 async function installPackage(packageName) {
-    await initialiseNpm()
-    await new Promise((resolve, reject) => {
-        exec(`npm install ${packageName}`, { cwd: BEHAVIOUR_PACK_PATH }, (error, stdout, stderr) => {
-            if (error) {
-                ColorLogger.error(`Error installing package ${packageName}: ${error.message}`);
-                return;
+    await initialiseNpm();
+    await new Promise((resolve) => {
+        exec(
+            `npm install ${packageName}`,
+            { cwd: BEHAVIOUR_PACK_PATH },
+            (error, stdout, stderr) => {
+                if (error) {
+                    ColorLogger.error(`Error installing package ${packageName}: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    ColorLogger.error(`Error installing package ${packageName}: ${stderr}`);
+                    return;
+                }
+                ColorLogger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
+                resolve();
             }
-            if (stderr) {
-                ColorLogger.error(`Error installing package ${packageName}: ${stderr}`);
-                return;
-            }
-            ColorLogger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
-            resolve();
-        });
+        );
     });
 }
 
@@ -85,9 +93,15 @@ async function initialiseNpm() {
 
 async function tryFixStableVersion(dependency) {
     await initialiseNpm();
-    if (dependency.version !== getInstalledPackageVersion(dependency.module_name)?.replace("^", "")) {
-        ColorLogger.moduleLog(`The package ${dependency.module_name} has a different version in the manifest than the one installed. Updating...`);
+    if (
+        dependency.version !== getInstalledPackageVersion(dependency.module_name)?.replace("^", "")
+    ) {
+        ColorLogger.moduleLog(
+            `The package ${dependency.module_name} has a different version in the manifest than the one installed. Updating...`
+        );
         await installPackage(dependency.module_name + "@" + dependency.version);
-        ColorLogger.moduleLog(`Updated package ${dependency.module_name} version to ${dependency.version}`);
+        ColorLogger.moduleLog(
+            `Updated package ${dependency.module_name} version to ${dependency.version}`
+        );
     }
 }

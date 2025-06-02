@@ -5,13 +5,14 @@ import { Command } from "../models/cli/command.js";
 
 //TODO: Implement make
 
-Command
-    .command("make")
+Command.command("make")
     .description("Makes stuff from premade templates")
     .action(async () => {
         const config = readConfig();
         if (!config.id) {
-            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
+            ColorLogger.error(
+                'No config file found. Run "mc init" or if you already have a project run "mc repair".'
+            );
             return;
         }
 
@@ -22,6 +23,4 @@ Command
             ColorLogger.error("No BP or RP folder found. Please create one of them.");
             return;
         }
-
-
     });

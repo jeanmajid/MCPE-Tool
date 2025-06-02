@@ -22,8 +22,8 @@ export class ManifestGenerator {
                 description: description,
                 uuid: this.mainUUID,
                 version: [1, 0, 0],
-                min_engine_version: [1, 21, 70],
-            },
+                min_engine_version: [1, 21, 70]
+            }
         };
     }
 
@@ -41,7 +41,7 @@ export class ManifestGenerator {
         const module = {
             type: type,
             uuid: uuidv4(),
-            version: [1, 0, 0],
+            version: [1, 0, 0]
         };
 
         if (language) module.language = language;
@@ -57,7 +57,7 @@ export class ManifestGenerator {
     addAuthor(author) {
         if (!this.manifest.metadata) {
             this.manifest.metadata = {
-                authors: [],
+                authors: []
             };
         }
 

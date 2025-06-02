@@ -1,5 +1,5 @@
-import readline from 'readline';
-import { Color } from './color.js';
+import readline from "readline";
+import { Color } from "./color.js";
 
 /**
  * Class representing a Questioner.
@@ -15,7 +15,7 @@ export class Questioner {
         const answers = {};
         const rl = readline.createInterface({
             input: process.stdin,
-            output: process.stdout,
+            output: process.stdout
         });
 
         for (const question of questions) {
@@ -30,10 +30,15 @@ export class Questioner {
                 if (answer === "") {
                     answers[question.name] = question.default();
                 } else {
-                    answers[question.name] = answer.toLowerCase().includes("y") || answer.toLowerCase().includes("t");
+                    answers[question.name] =
+                        answer.toLowerCase().includes("y") || answer.toLowerCase().includes("t");
                 }
             } else if (question.type === "input") {
-                answers[question.name] = answer || (typeof question.default === "function" ? question.default() : question.default);
+                answers[question.name] =
+                    answer ||
+                    (typeof question.default === "function"
+                        ? question.default()
+                        : question.default);
             }
         }
 

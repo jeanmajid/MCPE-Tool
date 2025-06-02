@@ -77,7 +77,9 @@ export class Command {
      * @returns {Promise} - A promise that resolves when the command execution is complete.
      */
     static async execute(commandName, subCommand = undefined, args, flags = []) {
-        const commandFilePath = pathToFileURL(path.join(PROJECT_PATH_SRC, "commands", commandName + ".js"));
+        const commandFilePath = pathToFileURL(
+            path.join(PROJECT_PATH_SRC, "commands", commandName + ".js")
+        );
         if (!existsSync(commandFilePath)) {
             ColorLogger.error(`Command "${commandName}" not found.`);
             return;
@@ -91,7 +93,9 @@ export class Command {
         if (subCommand && Command.commands[commandName]?.subCommands) {
             const action = Command.commands[commandName].subCommands[subCommand]?.action;
             if (!action) {
-                ColorLogger.error(`Subcommand "${subCommand}" not found for command "${commandName}".`);
+                ColorLogger.error(
+                    `Subcommand "${subCommand}" not found for command "${commandName}".`
+                );
                 return;
             }
             await action(args, flags);
@@ -119,7 +123,11 @@ export class Command {
             console.log(Color.green(`- ${command}: ${Command.commands[command].description}`));
             if (Command.commands[command].subCommands) {
                 for (const subCommand in Command.commands[command].subCommands) {
-                    console.log(Color.yellow(`  - ${subCommand}: ${Command.commands[command].subCommands[subCommand].description}`));
+                    console.log(
+                        Color.yellow(
+                            `  - ${subCommand}: ${Command.commands[command].subCommands[subCommand].description}`
+                        )
+                    );
                 }
             }
         }

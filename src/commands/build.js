@@ -9,7 +9,9 @@ Command.command("build")
     .action(async () => {
         const config = readConfig();
         if (!config.id) {
-            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
+            ColorLogger.error(
+                'No config file found. Run "mc init" or if you already have a project run "mc repair".'
+            );
             return;
         }
 
@@ -33,7 +35,7 @@ Command.command("build")
             const paths = bpFiles.map((file) => {
                 return {
                     filePath: file,
-                    outputPath: file.slice(3),
+                    outputPath: file.slice(3)
                 };
             });
 
@@ -48,7 +50,7 @@ Command.command("build")
             const paths = rpFiles.map((file) => {
                 return {
                     filePath: file,
-                    outputPath: file.slice(3),
+                    outputPath: file.slice(3)
                 };
             });
 
@@ -59,12 +61,14 @@ Command.command("build")
         if (isBP && isRP) {
             ColorLogger.info("Creating .mcaddon file...");
 
-            const paths = [`./dist/${config.name}BP.mcpack`, `./dist/${config.name}RP.mcpack`].map((file) => {
-                return {
-                    filePath: file,
-                    outputPath: file.slice(7),
-                };
-            });
+            const paths = [`./dist/${config.name}BP.mcpack`, `./dist/${config.name}RP.mcpack`].map(
+                (file) => {
+                    return {
+                        filePath: file,
+                        outputPath: file.slice(7)
+                    };
+                }
+            );
 
             const addonBuffer = await zipFiles(paths, archiver);
             fs.writeFileSync(`./dist/${config.name}.mcaddon`, addonBuffer);

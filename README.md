@@ -4,14 +4,20 @@ A command-line tool designed to streamline the development process for Minecraft
 
 TODO:
 
-- Convert to ES6
+- Rewrite in ts
+
 - Make cleanup always run
 - Make npm more robust and check the version each time
-- Make filewatcher more robust and make the pathing system better
 - config
+-- configmanager class
 -- make format better
--- add typings
+-- add typings with local json format thingy
 -- rename to mc.config or mcconfig.json or support any name
 - Make the manifest generator more dynamic
 -- Add creator name
 -- add an global config
+- add mcpe creator lsp basically / maybe even ai stuff
+- package manager, for custom packs also add a regolith filter that then supports it
+- module
+-- Import module, make index.js have a custom format allowing for globs
+-- Add helper methods like is in folder or is fileType for modules

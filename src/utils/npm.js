@@ -27,7 +27,10 @@ export async function getLatestPackageVersion(packageName) {
     versions = versions.filter((version) => version.includes("stable"));
     const latest = versions[versions.length - 1];
 
-    return { version: latest.split(".").splice(0, 3).join("."), package: packageName + "@" + latest };
+    return {
+        version: latest.split(".").splice(0, 3).join("."),
+        package: packageName + "@" + latest
+    };
 }
 
 /**

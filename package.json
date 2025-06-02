@@ -1,32 +1,43 @@
 {
-  "name": "mcpe-tool",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "",
-  "main": "src/api/index.js",
-  "exports": {
-    ".": {
-      "import": "./src/api/index.js",
-      "require": "./src/api/index.js"
+    "name": "mcpe-tool",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "main": "src/api/index.js",
+    "exports": {
+        ".": {
+            "import": "./src/api/index.js",
+            "require": "./src/api/index.js"
+        }
+    },
+    "scripts": {
+        "build": "npm link",
+        "lint": "eslint src/**/*.{js,ts}",
+        "lint:fix": "eslint src/**/*.{js,ts} --fix"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bin": {
+        "mc": "./src/main.js"
+    },
+    "dependencies": {
+        "@jeanmajid/windows-keylistener": "^1.0.7",
+        "archiver": "^7.0.1",
+        "chokidar": "^4.0.3",
+        "eslint": "^9.28.0",
+        "glob": "^11.0.1",
+        "minimatch": "^10.0.1",
+        "ssh2-sftp-client": "^12.0.0",
+        "uuid": "^11.1.0",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.29",
+        "@typescript-eslint/eslint-plugin": "^8.33.0",
+        "@typescript-eslint/parser": "^8.33.0",
+        "eslint-config-prettier": "^10.1.5",
+        "eslint-plugin-prettier": "^5.4.1",
+        "prettier": "^3.5.3"
     }
-  },
-  "scripts": {
-    "build": "npm link"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "bin": {
-    "mc": "./src/main.js"
-  },
-  "dependencies": {
-    "@jeanmajid/windows-keylistener": "^1.0.7",
-    "archiver": "^7.0.1",
-    "chokidar": "^4.0.3",
-    "glob": "^11.0.1",
-    "minimatch": "^10.0.1",
-    "ssh2-sftp-client": "^12.0.0",
-    "uuid": "^11.1.0",
-    "ws": "^8.18.0"
-  }
 }

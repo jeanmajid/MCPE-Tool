@@ -59,7 +59,8 @@ export class ModuleManager {
                         module.activatorHandlerPairs.splice(i, 1);
                         continue;
                     }
-                    if (pair.cancelFileTransfer === undefined) pair.cancelFileTransfer = module.cancelFileTransfer || false;
+                    if (pair.cancelFileTransfer === undefined)
+                        pair.cancelFileTransfer = module.cancelFileTransfer || false;
                 }
                 this.modules.push(...module.activatorHandlerPairs);
             }

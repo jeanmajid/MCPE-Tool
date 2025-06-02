@@ -3,11 +3,10 @@ import { Command } from "../models/cli/command.js";
 import { readConfig, writeConfig } from "../utils/config.js";
 import { generateUniqueId } from "../utils/id.js";
 
-Command
-    .command("repair")
+Command.command("repair")
     .description("repair the config")
     .action(async () => {
-        let changesMade = []
+        const changesMade = [];
         const config = readConfig();
 
         if (config.name === undefined || config.name === "") {

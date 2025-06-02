@@ -1,11 +1,10 @@
 import { ColorLogger } from "../models/cli/colorLogger.js";
 import { Command } from "../models/cli/command.js";
 
-Command
-    .command("wss")
+Command.command("wss")
     .description("Runs a websocket server with some cool stuff")
     .action(async () => {
-        const { default: keylistener} = await import("@jeanmajid/windows-keylistener");
+        const { default: keylistener } = await import("@jeanmajid/windows-keylistener");
         const { WebSocketServer } = await import("ws");
 
         keylistener.copyToClipboard("/wsserver localhost:8080");
@@ -14,7 +13,7 @@ Command
         const wss = new WebSocketServer({ port: 8080 });
         wss.on("connection", (ws) => {
             connections.push(ws);
-            
+
             ws.on("close", () => {
                 const index = connections.indexOf(ws);
                 if (index > -1) {
@@ -50,12 +49,12 @@ function sendCommand(ws, command) {
             version: 1,
             requestId: generateUUIDv4(),
             messagePurpose: "commandRequest",
-            messageType: "commandRequest",
+            messageType: "commandRequest"
         },
         body: {
             version: 1,
-            commandLine: command,
-        },
+            commandLine: command
+        }
     };
     ws.send(JSON.stringify(msg));
 }

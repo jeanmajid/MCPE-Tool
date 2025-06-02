@@ -1,10 +1,12 @@
+import { Module } from "../models/files/module";
+
 export type Config = {
     /** The name of the project. */
     name: string;
     /** The description of the project. */
     description: string;
     /** The modules of the project. */
-    modules: any[];
+    modules: Module[];
     /** The ID of the project. */
     id: string;
     /** The Path to the Resource Pack (optional). */

@@ -14,8 +14,8 @@ export class SftpTransport extends Transport {
         this.client.client.setMaxListeners(0);
         this.config = config;
 
-        this.transportBP = new SftpSubTransport(this.client, targetPathBP.replace(/[\\\/]$/, ""));
-        this.transportRP = new SftpSubTransport(this.client, targetPathRP.replace(/[\\\/]$/, ""));
+        this.transportBP = new SftpSubTransport(this.client, targetPathBP.replace(/[\\/]$/, ""));
+        this.transportRP = new SftpSubTransport(this.client, targetPathRP.replace(/[\\/]$/, ""));
     }
 
     async connect() {
@@ -50,7 +50,9 @@ class SftpSubTransport extends Transport {
             cur += `/${p}`;
             try {
                 await this.client.mkdir(cur);
-            } catch {}
+            } catch {
+                // Directory already exists or creation failed, continue
+            }
         }
     }
 

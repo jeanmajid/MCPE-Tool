@@ -52,8 +52,12 @@ import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../constants/paths.js";
  */
 export function readManifest(type) {
     try {
-        return JSON.parse(fs.readFileSync(`${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`));
-    } catch (error) {
+        return JSON.parse(
+            fs.readFileSync(
+                `${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`
+            )
+        );
+    } catch {
         return undefined;
     }
 }
@@ -64,5 +68,8 @@ export function readManifest(type) {
  * @param {ManifestBP | ManifestRP} manifest - The manifest object to write.
  */
 export function writeManifest(type, manifest) {
-    fs.writeFileSync(`${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`, JSON.stringify(manifest, null, 4));
+    fs.writeFileSync(
+        `${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`,
+        JSON.stringify(manifest, null, 4)
+    );
 }

@@ -5,14 +5,15 @@ import { ModuleManager } from "../models/files/moduleManager.js";
 import { ColorLogger } from "../models/cli/colorLogger.js";
 import { Command } from "../models/cli/command.js";
 
-Command
-    .command("watch")
+Command.command("watch")
     .description("Watch the current directory and copy files to the destination")
     .action(async () => {
         const config = readConfig();
-        
+
         if (!config.id) {
-            ColorLogger.error('No config file found. Run "mc init" or if you already have a project run "mc repair".');
+            ColorLogger.error(
+                'No config file found. Run "mc init" or if you already have a project run "mc repair".'
+            );
             return;
         }
 
@@ -25,7 +26,6 @@ Command
             await ModuleManager.loadAllModules();
             await ModuleManager.filterModules(config.modules, bpPath, rpPath);
         }
-
 
         const watcher = new Watcher(".", bpPath, rpPath);
         watcher.startWatching();

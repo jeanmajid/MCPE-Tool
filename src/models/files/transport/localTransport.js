@@ -9,7 +9,7 @@ export class LocalTransport extends Transport {
      */
     constructor(destPath) {
         super();
-        this.destPath = destPath.replace(/[\\\/]$/, "");
+        this.destPath = destPath.replace(/[\\/]$/, "");
     }
 
     async ensureDir(dirRel) {
