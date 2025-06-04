@@ -11,7 +11,10 @@
         }
     },
     "scripts": {
-        "build": "npm link",
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "start": "node dist/main.js",
+        "build:link": "npm run build && npm link",
         "lint": "eslint src/**/*.{js,ts}",
         "lint:fix": "eslint src/**/*.{js,ts} --fix"
     },

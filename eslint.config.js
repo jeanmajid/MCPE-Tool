@@ -47,6 +47,14 @@ export default [
         files: ["**/*.ts"],
         languageOptions: {
             parser: typescriptParser,
+            globals: {
+                console: "readonly",
+                fetch: "readonly",
+                process: "readonly",
+                Buffer: "readonly",
+                __dirname: "readonly",
+                __filename: "readonly"
+            },
             parserOptions: {
                 ecmaVersion: "latest",
                 sourceType: "module"
@@ -69,6 +77,8 @@ export default [
                     endOfLine: "auto"
                 }
             ],
+            "no-redeclare": "off",
+            "@typescript-eslint/no-redeclare": "error",
             "@typescript-eslint/no-unused-vars": "warn",
             "@typescript-eslint/explicit-function-return-type": "warn"
         }
