@@ -1,15 +1,15 @@
-import { DEBUG } from "./../constants/dev";
+import { DEBUG } from "./../constants/dev.js";
 import chokidar, { FSWatcher } from "chokidar";
-import { FileHandler } from "./fileHandler";
-import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "./../constants/paths";
+import { FileHandler } from "./fileHandler.js";
+import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "./../constants/paths.js";
 import { minimatch } from "minimatch";
-import { LocalTransport } from "./transport/localTransport";
-import { SftpTransport } from "./transport/sftpTransport";
+import { LocalTransport } from "./transport/localTransport.js";
+import { SftpTransport } from "./transport/sftpTransport.js";
 import path from "path";
 import fs from "fs";
-import { Logger } from "../logger/logger";
-import { ConfigManager } from "../config/configManager";
-import { ModuleManager } from "../modules/moduleManager";
+import { Logger } from "../logger/logger.js";
+import { ConfigManager } from "../config/configManager.js";
+import { ModuleManager } from "../modules/moduleManager.js";
 
 let cleanUpIsRunning = false;
 

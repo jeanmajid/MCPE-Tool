@@ -22,6 +22,7 @@ export class SftpTransport {
 
     constructor(config: SftpConfig, targetPathBP: string, targetPathRP: string) {
         this.client = new SftpClient();
+        // @ts-expect-error The types are stupid here
         this.client.client.setMaxListeners(0);
         this.config = config;
 

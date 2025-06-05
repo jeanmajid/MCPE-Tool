@@ -1,4 +1,4 @@
-import { ConfigManager } from "./../config/configManager";
+import { ConfigManager } from "./../config/configManager.js";
 import os from "os";
 
 const config = ConfigManager.readConfig();
@@ -8,7 +8,7 @@ export const COM_MOJANG_PATH =
         ? `${HOME_DIR}/AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang/`
         : `${HOME_DIR}/AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang/`;
 export const PROJECT_PATH = `${HOME_DIR}/Documents/GitHub/MCPE-Tool/`;
-export const PROJECT_PATH_SRC = `${PROJECT_PATH}src/`;
+export const PROJECT_PATH_SRC = `${PROJECT_PATH}dist/`;
 export const BEHAVIOUR_PACK_PATH = config.behaviourPackPath || "./BP";
 export const RESOURCE_PACK_PATH = config.resourcePackPath || "./RP";
 

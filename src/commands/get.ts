@@ -1,7 +1,7 @@
 import fs from "fs";
-import { Command } from "../core/cli/command";
-import { Logger } from "../core/logger/logger";
-import { ConfigManager } from "../core/config/configManager";
+import { Command } from "../core/cli/command.js";
+import { Logger } from "../core/logger/logger.js";
+import { ConfigManager } from "../core/config/configManager.js";
 
 // TODO: Implement fix
 

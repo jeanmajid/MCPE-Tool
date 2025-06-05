@@ -1,5 +1,5 @@
-import { Logger } from "./../logger/logger";
-import { Color } from "./../logger/color";
+import { Logger } from "./../logger/logger.js";
+import { Color } from "./../logger/color.js";
 import { loadDir } from "../../utils/files.js";
 import path from "path";
 import { PROJECT_PATH_SRC } from "../constants/paths.js";

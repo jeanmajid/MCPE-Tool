@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { generateUUIDv4 } from "../../utils/id.js";
 
 interface ManifestModule {
     type: string;
@@ -36,7 +36,7 @@ interface Manifest {
  * Class representing a Manifest Generator.
  */
 export class ManifestGenerator {
-    mainUUID: string = uuidv4();
+    mainUUID: string = generateUUIDv4();
     manifest: Manifest;
 
     /**
@@ -70,7 +70,7 @@ export class ManifestGenerator {
 
         const module: ManifestModule = {
             type: type,
-            uuid: uuidv4(),
+            uuid: generateUUIDv4(),
             version: [1, 0, 0]
         };
 

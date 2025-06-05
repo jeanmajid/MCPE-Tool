@@ -1,5 +1,5 @@
-import { Command } from "./../core/cli/command";
-import { Watcher } from "./../core/filesystem/watcher";
+import { Command } from "./../core/cli/command.js";
+import { Watcher } from "./../core/filesystem/watcher.js";
 import { ConfigManager } from "../core/config/configManager.js";
 import { COM_MOJANG_PATH } from "../core/constants/paths.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";

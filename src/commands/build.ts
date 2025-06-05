@@ -1,5 +1,5 @@
-import { Command } from "./../core/cli/command";
-import { IGNORE_PATHS } from "../core/constants/paths";
+import { Command } from "./../core/cli/command.js";
+import { IGNORE_PATHS } from "../core/constants/paths.js";
 import fs from "fs";
 import { ConfigManager } from "../core/config/configManager.js";
 import { Logger } from "../core/logger/logger.js";

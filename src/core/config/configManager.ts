@@ -1,5 +1,4 @@
 import fs from "fs";
-import { Module } from "../modules/moduleManager";
 
 export interface Config {
     /** The name of the project. */

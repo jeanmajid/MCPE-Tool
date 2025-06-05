@@ -3,11 +3,11 @@
     "version": "1.0.0",
     "type": "module",
     "description": "",
-    "main": "src/api/index.js",
+    "main": "dist/core/api/index.js",
     "exports": {
         ".": {
-            "import": "./src/api/index.js",
-            "require": "./src/api/index.js"
+            "import": "./dist/core/api/index.js",
+            "require": "./dist/core/api/index.js"
         }
     },
     "scripts": {
@@ -22,7 +22,7 @@
     "author": "",
     "license": "MIT",
     "bin": {
-        "mc": "./src/main.js"
+        "mc": "./dist/main.js"
     },
     "dependencies": {
         "@jeanmajid/windows-keylistener": "^1.0.7",
@@ -32,11 +32,13 @@
         "glob": "^11.0.1",
         "minimatch": "^10.0.1",
         "ssh2-sftp-client": "^12.0.0",
-        "uuid": "^11.1.0",
         "ws": "^8.18.0"
     },
     "devDependencies": {
+        "@types/archiver": "^6.0.3",
         "@types/node": "^22.15.29",
+        "@types/ssh2-sftp-client": "^9.0.4",
+        "@types/ws": "^8.18.1",
         "@typescript-eslint/eslint-plugin": "^8.33.0",
         "@typescript-eslint/parser": "^8.33.0",
         "eslint-config-prettier": "^10.1.5",

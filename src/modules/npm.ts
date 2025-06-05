@@ -1,4 +1,4 @@
-import { ModuleManager } from "./../core/modules/moduleManager";
+import { ModuleManager } from "./../core/modules/moduleManager.js";
 import {
     getLatestPackageVersion,
     getInstalledPackageVersion,
