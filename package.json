@@ -16,7 +16,8 @@
         "start": "node dist/main.js",
         "build:link": "npm run build && npm link",
         "lint": "eslint src/**/*.{js,ts}",
-        "lint:fix": "eslint src/**/*.{js,ts} --fix"
+        "lint:fix": "eslint src/**/*.{js,ts} --fix",
+        "schema": "node external/scripts/schema.js"
     },
     "keywords": [],
     "author": "",

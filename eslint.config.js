@@ -4,6 +4,9 @@ import typescriptParser from "@typescript-eslint/parser";
 import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 
+/**
+ * @type {import("eslint").Linter.Config[]}
+ */
 export default [
     js.configs.recommended,
     prettier,
@@ -78,12 +81,13 @@ export default [
                 }
             ],
             "no-redeclare": "off",
+            "prefer-const": "warn",
             "@typescript-eslint/no-redeclare": "error",
             "@typescript-eslint/no-unused-vars": "warn",
             "@typescript-eslint/explicit-function-return-type": "warn"
         }
     },
     {
-        ignores: ["node_modules/", "external/", ".vscode/", "dist/", "test/", "*.d.ts"]
+        ignores: ["node_modules/", ".vscode/", "dist/", "test/", "*.d.ts"]
     }
 ];

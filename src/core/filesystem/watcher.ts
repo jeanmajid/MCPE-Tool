@@ -16,7 +16,7 @@ let cleanUpIsRunning = false;
 export class Watcher {
     private watcher: FSWatcher | null;
     private fileHandler: FileHandler;
-    private transport?: SftpTransport;
+    private remoteTransport?: SftpTransport;
 
     constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
         this.watcher = null;
@@ -35,7 +35,7 @@ export class Watcher {
                       ".ssh",
                       config.remote.privateKey
                   );
-            this.transport = new SftpTransport(
+            this.remoteTransport = new SftpTransport(
                 {
                     host: config.remote.host,
                     username: config.remote.username,
@@ -48,8 +48,8 @@ export class Watcher {
             );
             this.fileHandler = new FileHandler(
                 sourceDir,
-                this.transport.transportBP,
-                this.transport.transportRP
+                this.remoteTransport.transportBP,
+                this.remoteTransport.transportRP
             );
         } else {
             this.fileHandler = new FileHandler(
@@ -61,9 +61,9 @@ export class Watcher {
     }
 
     async startWatching(): Promise<void> {
-        if (this.transport) {
-            await this.transport.connect();
-            Logger.info("Succesfully connected to remote!");
+        if (this.remoteTransport) {
+            await this.remoteTransport.connect();
+            Logger.info("Successfully connected to remote!");
         }
         const watchFolders: string[] = [];
 
@@ -115,11 +115,19 @@ export class Watcher {
         const cleanUp = async (): Promise<void> => {
             if (cleanUpIsRunning) return;
             cleanUpIsRunning = true;
+
             Logger.delete("Cleaning up...");
+            this.stopWatching();
+
             await this.fileHandler.removeDestinationDirectories();
             for (const module of ModuleManager.modules) {
                 if (module.onExit) module.onExit();
             }
+
+            if (this.remoteTransport) {
+                await this.remoteTransport.end();
+            }
+
             process.exit(0);
         };
 
@@ -131,15 +139,16 @@ export class Watcher {
     }
 
     stopWatching(): void {
-        if (this.watcher) {
-            try {
-                this.watcher.close();
-                this.watcher = null;
-            } catch (error) {
-                Logger.error(`Error stopping the watcher: ${error}`);
-            }
-        } else {
+        if (!this.watcher) {
             Logger.error("Watcher is not running.");
+            return;
+        }
+
+        try {
+            this.watcher.close();
+            this.watcher = null;
+        } catch (error) {
+            Logger.error(`Error stopping the watcher: ${error}`);
         }
     }
 }

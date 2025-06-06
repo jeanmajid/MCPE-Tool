@@ -50,7 +50,7 @@ export class ModuleManager {
     static async processFile(filePath: string, fileHandler: FileHandler): Promise<boolean> {
         let value = false;
         for (const module of this.modules) {
-            if (module.activator && module.activator(filePath)) {
+            if (module.activator?.(filePath)) {
                 const { fileData, newFilePath } = module.handleFile
                     ? module.handleFile(filePath)
                     : {};

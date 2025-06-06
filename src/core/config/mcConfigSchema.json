@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MC Config Schema",
+  "description": "Auto-generated schema for mc Config",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the project",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the project",
+      "type": "string"
+    },
+    "modules": {
+      "description": "The modules of the project",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "id": {
+      "description": "The ID of the project",
+      "type": "string"
+    },
+    "resourcePackPath": {
+      "description": "The Path to the Resource Pack (optional)",
+      "type": "string"
+    },
+    "behaviourPackPath": {
+      "description": "The Path to the Behaviour Pack (optional)",
+      "type": "string"
+    },
+    "outPut": {
+      "description": "Output target environment",
+      "type": "string",
+      "enum": [
+        "preview",
+        "stable"
+      ]
+    },
+    "remote": {
+      "description": "Remote deployment configuration",
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "privateKey": {
+          "type": "string"
+        },
+        "targetPathBP": {
+          "type": "string"
+        },
+        "targetPathRP": {
+          "type": "string"
+        },
+        "passphrase": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "host",
+        "username",
+        "privateKey",
+        "targetPathBP",
+        "targetPathRP",
+        "disabled"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "modules",
+    "id"
+  ],
+  "additionalProperties": false
+}

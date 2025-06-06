@@ -1,30 +1,37 @@
 import fs from "fs";
 
 export interface Config {
-    /** The name of the project. */
+    /** The name of the project */
     name: string;
-    /** The description of the project. */
+    /** The description of the project */
     description: string;
-    /** The modules of the project. */
+    /** The modules of the project */
     modules: string[];
-    /** The ID of the project. */
+    /** The ID of the project */
     id: string;
-    /** The Path to the Resource Pack (optional). */
+    /** The Path to the Resource Pack (optional) */
     resourcePackPath?: string;
-    /** The Path to the Behaviour Pack (optional). */
+    /** The Path to the Behaviour Pack (optional) */
     behaviourPackPath?: string;
-
-    /**Path  */
+    /** Output target environment */
     outPut?: "preview" | "stable";
-
-    remote: {
+    /** Remote deployment configuration */
+    remote?: {
+        /** Remote host address */
         host: string;
+        /** Username for remote connection */
         username: string;
+        /** Path to private key file */
         privateKey: string;
+        /** Target path for Behaviour Pack on remote */
         targetPathBP: string;
+        /** Target path for Resource Pack on remote */
         targetPathRP: string;
-        passphrase: string;
-        password: string;
+        /** Passphrase for private key */
+        passphrase?: string;
+        /** Password for remote connection */
+        password?: string;
+        /** Whether remote deployment is disabled */
         disabled: boolean;
     };
 }
