@@ -8,7 +8,7 @@ for package in available_packages:
     if package.from_code == "en":
         language_codes.add(package.to_code)
 
-json_file_path = "C:/Users/jeanh/Documents/GitHub/MCBE-DataScraper/data/1.21.30/RP/texts/languages.json"
+json_file_path = "C:/Users/jeanh/Documents/GitHub/MCPE-DataScraper/data/1.21.73/RP/texts/languages.json"
 
 with open(json_file_path, 'r') as file:
     data = json.load(file)
@@ -17,10 +17,13 @@ with open(json_file_path, 'r') as file:
 
 data = [item for item in data if 'en' not in item]
 
+json_language_codes = set()
+for item in data:
+    lang_code = item.split('_')[0] if '_' in item else item
+    json_language_codes.add(lang_code)
+
 for package in available_packages:
-    if package.from_code == "en" and package.to_code in language_codes:
-        if package.to_code not in data:
-            continue
+    if package.from_code == "en" and package.to_code in json_language_codes:
         print(f"Downloading {package.to_code}")
         argostranslate.package.install_from_path(package.download())
 
@@ -56,7 +59,7 @@ for language_code in parts_behind_underscore:
                 print(f"en -> {to_code}: {translatedText}")
                 translatedKeys.append(f"{key}={translatedText}")
             with open(f"./RP/texts/{data[index]}.lang", 'w', encoding='utf-8') as file:
-                file.write('\n'.join(translatedKeys))
+                file.write('/n'.join(translatedKeys))
         except AttributeError as e:
             pass
             raise AttributeError(f"Error translating to {to_code}: {e}")

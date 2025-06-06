@@ -2,6 +2,7 @@ import fs from "fs";
 import { spawn } from "child_process";
 import { Logger } from "../core/logger/logger.js";
 import { Command } from "../core/cli/command.js";
+import { EXTERNAL_PATHS } from "../core/constants/paths.js";
 
 Command.command("translate")
     .description("translates into all available languages")
@@ -12,14 +13,10 @@ Command.command("translate")
             return;
         }
         Logger.info("Starting to translate all lang keys...");
-        const script = spawn(
-            "python",
-            [
-                "-u",
-                "C:/Users/jeanh/OneDrive/Dokumente/GitHub/MCPE-Tool/external/translate/translateProject.py"
-            ],
-            { cwd: ".", env: { ...process.env, PYTHONIOENCODING: "utf-8" } }
-        );
+        const script = spawn("python", ["-u", EXTERNAL_PATHS.TRANSLATE_PYTHON], {
+            cwd: ".",
+            env: { ...process.env, PYTHONIOENCODING: "utf-8" }
+        });
         script.stdout.on("data", (data) => {
             Logger.info(data.toString());
         });

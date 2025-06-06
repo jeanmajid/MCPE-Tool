@@ -21,3 +21,7 @@ export const IGNORE_PATHS = [
     "**/package.json",
     "**/package-lock.json"
 ];
+
+export const EXTERNAL_PATHS = {
+    TRANSLATE_PYTHON: `${PROJECT_PATH}external/translate/translateProject.py`
+};
