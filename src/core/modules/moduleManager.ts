@@ -33,8 +33,31 @@ export class ModuleManager {
         await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "modules")), loadDir("./plugins")]);
     }
 
+    /**
+     * Adds a module to the module registry with validation
+     * @param data - The module configuration object
+     * @throws {Error} When module name is missing, empty, or already exists
+     * @example
+     * ```typescript
+     * ModuleManager.addModule({
+     *   name: "MyModule",
+     *   description: "A sample module that processes .mcfunction files",
+     *   activator: (filePath) => filePath.endsWith('.mcfunction'),
+     *   handleFile: (filePath) => ({
+     *     newFilePath: filePath,
+     *     fileData: "# Processed by MyModule\n" + fs.readFileSync(filePath, 'utf8')
+     *   })
+     * });
+     * ```
+     */
     static addModule(data: Module): void {
         if (!data.name) throw new Error("No Name specified for module");
+        if (typeof data.name !== "string") throw new Error("Module name must be a string");
+        if (data.name.trim() === "") throw new Error("Module name cannot be empty");
+        if (this.checkIfModuleExists(data.name))
+            throw new Error(`Module with name '${data.name}' already exists`);
+        if (!data.description) throw new Error("No description specified for module");
+
         this.modules.push(data);
     }
 
@@ -44,8 +67,8 @@ export class ModuleManager {
 
     /**
      * Processes a file through the registered modules
-     * @param {string} filePath - The path of the file to process
-     * @param {import("../../../srcOLD/models/files/fileHandler.js").FileHandler} fileHandler - The file handler to use
+     * @param filePath - The path of the file to process
+     * @param fileHandler - The file handler to use
      */
     static async processFile(filePath: string, fileHandler: FileHandler): Promise<boolean> {
         let value = false;
@@ -65,6 +88,13 @@ export class ModuleManager {
         return value;
     }
 
+    /**
+     * Filters modules by name, processes their activator-handler pairs, and calls onLaunch for each module.
+     *
+     * @param modulesToAdd - Array of module names to include
+     * @param bpPath - Path to the behavior pack directory
+     * @param rpPath - Path to the resource pack directory
+     */
     static async filterModules(
         modulesToAdd: string[],
         bpPath: string,
