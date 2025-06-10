@@ -4,8 +4,6 @@ A command-line tool designed to streamline the development process for Minecraft
 
 TODO:
 
-- Rewrite in ts
-
 - Make cleanup always run
 - Make npm more robust and check the version each time
 - config

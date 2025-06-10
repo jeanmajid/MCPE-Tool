@@ -1,4 +1,4 @@
-// Unused Code for now
+// !Will be removed in the future, probably, not sure. Theres basically no use case for this and it doesnt support the modules.
 
 import { Transport } from "./transport.js";
 import SftpClient from "ssh2-sftp-client";

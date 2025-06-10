@@ -1,16 +1,30 @@
 import { ConfigManager } from "./../config/configManager.js";
+import { fileURLToPath } from "url";
+import path from "path";
 import os from "os";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const PROJECT_PATH = path.join(__dirname, "../../..");
 
 const config = ConfigManager.readConfig();
 export const HOME_DIR = os.homedir();
+
 export const COM_MOJANG_PATH =
-    config.outPut !== "preview"
-        ? `${HOME_DIR}/AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang/`
-        : `${HOME_DIR}/AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang/`;
-export const PROJECT_PATH = `${HOME_DIR}/Documents/GitHub/MCPE-Tool/`;
-export const PROJECT_PATH_SRC = `${PROJECT_PATH}dist/`;
-export const BEHAVIOUR_PACK_PATH = config.behaviourPackPath || "./BP";
-export const RESOURCE_PACK_PATH = config.resourcePackPath || "./RP";
+    config.output !== "preview"
+        ? path.join(
+              HOME_DIR,
+              "AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang"
+          )
+        : path.join(
+              HOME_DIR,
+              "AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang"
+          );
+
+export const PROJECT_PATH_SRC = path.join(PROJECT_PATH, "dist");
+export const BEHAVIOUR_PACK_PATH = config.behaviourPackPath || path.join(".", "BP");
+export const RESOURCE_PACK_PATH = config.resourcePackPath || path.join(".", "RP");
 
 export const IGNORE_PATHS = [
     "**/node_modules/**",
@@ -23,5 +37,5 @@ export const IGNORE_PATHS = [
 ];
 
 export const EXTERNAL_PATHS = {
-    TRANSLATE_PYTHON: `${PROJECT_PATH}external/translate/translateProject.py`
+    TRANSLATE_PYTHON: path.join(PROJECT_PATH, "external/translate/translateProject.py")
 };

@@ -59,7 +59,7 @@ for language_code in parts_behind_underscore:
                 print(f"en -> {to_code}: {translatedText}")
                 translatedKeys.append(f"{key}={translatedText}")
             with open(f"./RP/texts/{data[index]}.lang", 'w', encoding='utf-8') as file:
-                file.write('/n'.join(translatedKeys))
+                file.write('\n'.join(translatedKeys))
         except AttributeError as e:
             pass
             raise AttributeError(f"Error translating to {to_code}: {e}")

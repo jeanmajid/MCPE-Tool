@@ -5,6 +5,9 @@ import { Command } from "../core/cli/command.js";
 import { ConfigManager } from "../core/config/configManager.js";
 import { Logger } from "../core/logger/logger.js";
 import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
+import path from "path";
+import { PROJECT_PATH_SRC } from "../core/constants/paths.js";
+import { pathToFileURL } from "url";
 
 Command.command("init")
     .description("Initialize the project with interactive prompts")
@@ -85,6 +88,9 @@ Command.command("init")
             "./config.json",
             JSON.stringify(
                 {
+                    $schema: pathToFileURL(
+                        path.join(PROJECT_PATH_SRC, "core", "config", "mcConfigSchema.json")
+                    ),
                     name: answers.projectName,
                     description: answers.projectDescription,
                     modules: ["npm"],

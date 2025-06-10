@@ -29,7 +29,7 @@ export class SchemaGenerator {
 
         if (outputPath) {
             fs.writeFileSync(outputPath, JSON.stringify(schema, null, 2));
-            console.log(`✅ Schema generated: ${outputPath}`);
+            console.log(`Schema generated: ${outputPath}`);
         }
 
         return schema;
@@ -180,5 +180,5 @@ export class SchemaGenerator {
 SchemaGenerator.generateFromFile(
     "src/core/config/configManager.ts",
     "Config",
-    "src/core/config/mcConfigSchema.json"
+    "dist/core/config/mcConfigSchema.json"
 );

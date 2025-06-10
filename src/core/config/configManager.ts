@@ -14,7 +14,7 @@ export interface Config {
     /** The Path to the Behaviour Pack (optional) */
     behaviourPackPath?: string;
     /** Output target environment */
-    outPut?: "preview" | "stable";
+    output?: "preview" | "stable";
     /** Remote deployment configuration */
     remote?: {
         /** Remote host address */
