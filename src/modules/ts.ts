@@ -2,12 +2,13 @@ import { exec } from "child_process";
 import { writeFileSync, rmSync } from "fs";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
+import { pathHasExtension } from "../utils/path.js";
 
 ModuleManager.addModule({
     name: "ts",
     description: "Enable the typescript transpiler",
     cancelFileTransfer: true,
-    activator: (filePath) => filePath.endsWith(".ts"),
+    activator: (filePath) => pathHasExtension(filePath, "ts"),
     onLaunch: (bpPath) => {
         const tsConfig = {
             compilerOptions: {

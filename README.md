@@ -7,9 +7,6 @@ TODO:
 - Make cleanup always run
 - Make npm more robust and check the version each time
 - config
--- configmanager class
--- make format better
--- add typings with local json format thingy
 -- rename to mc.config or mcconfig.json or support any name
 - Make the manifest generator more dynamic
 -- Add creator name
