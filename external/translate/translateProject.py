@@ -8,7 +8,7 @@ for package in available_packages:
     if package.from_code == "en":
         language_codes.add(package.to_code)
 
-json_file_path = "C:/Users/jeanh/Documents/GitHub/MCPE-DataScraper/data/1.21.73/RP/texts/languages.json"
+json_file_path = "./languages.json"
 
 with open(json_file_path, 'r') as file:
     data = json.load(file)
