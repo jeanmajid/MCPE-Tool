@@ -22,6 +22,18 @@ export const COM_MOJANG_PATH =
               "AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang"
           );
 
+export const OUTPUT_BEHAVIOUR_PACK_PATH = path.join(
+    COM_MOJANG_PATH,
+    "development_behavior_packs",
+    config.name + "BP"
+);
+
+export const OUTPUT_RESOURCE_PACK_PATH = path.join(
+    COM_MOJANG_PATH,
+    "development_resource_packs",
+    config.name + "RP"
+);
+
 export const PROJECT_PATH_SRC = path.join(PROJECT_PATH, "dist");
 export const BEHAVIOUR_PACK_PATH = config.behaviourPackPath || path.join(".", "BP");
 export const RESOURCE_PACK_PATH = config.resourcePackPath || path.join(".", "RP");

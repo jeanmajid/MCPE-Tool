@@ -17,6 +17,7 @@ export class Watcher {
     private watcher: FSWatcher | null;
     private fileHandler: FileHandler;
     private remoteTransport?: SftpTransport;
+    public lastTransfer: number = -1;
 
     constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
         this.watcher = null;
@@ -90,6 +91,8 @@ export class Watcher {
         });
 
         const handleFileEvent = async (filePath: string, event: string): Promise<void> => {
+            this.lastTransfer = Date.now();
+
             if (event === "unlink") {
                 await this.fileHandler.deleteFile(filePath);
                 return;
@@ -112,30 +115,30 @@ export class Watcher {
 
         Logger.info("Watching for file changes...");
 
-        const cleanUp = async (): Promise<void> => {
-            if (cleanUpIsRunning) return;
-            cleanUpIsRunning = true;
-
-            Logger.delete("Cleaning up...");
-            this.stopWatching();
-
-            await this.fileHandler.removeDestinationDirectories();
-            for (const module of ModuleManager.modules) {
-                if (module.onExit) module.onExit();
-            }
-
-            if (this.remoteTransport) {
-                await this.remoteTransport.end();
-            }
-
-            process.exit(0);
-        };
-
         if (!DEBUG) {
-            process.on("exit", cleanUp);
-            process.on("SIGINT", cleanUp);
-            process.on("uncaughtException", cleanUp);
+            process.on("exit", this.cleanUp);
+            process.on("SIGINT", this.cleanUp);
+            process.on("uncaughtException", this.cleanUp);
         }
+    }
+
+    async cleanUp(): Promise<void> {
+        if (cleanUpIsRunning) return;
+        cleanUpIsRunning = true;
+
+        Logger.delete("Cleaning up...");
+        if (this.watcher) this.stopWatching();
+
+        for (const module of ModuleManager.modules) {
+            if (module.onExit) module.onExit();
+        }
+
+        if (this.remoteTransport) {
+            await this.remoteTransport.end();
+        }
+
+        await this.fileHandler.removeDestinationDirectories();
+        process.exit(0);
     }
 
     stopWatching(): void {
@@ -150,5 +153,7 @@ export class Watcher {
         } catch (error) {
             Logger.error(`Error stopping the watcher: ${error}`);
         }
+
+        this.cleanUp();
     }
 }

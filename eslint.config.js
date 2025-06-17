@@ -21,7 +21,9 @@ export default [
                 process: "readonly",
                 Buffer: "readonly",
                 __dirname: "readonly",
-                __filename: "readonly"
+                __filename: "readonly",
+                setTimeout: "readonly",
+                setInterval: "readonly"
             }
         },
         plugins: {
@@ -56,7 +58,9 @@ export default [
                 process: "readonly",
                 Buffer: "readonly",
                 __dirname: "readonly",
-                __filename: "readonly"
+                __filename: "readonly",
+                setTimeout: "readonly",
+                setInterval: "readonly"
             },
             parserOptions: {
                 ecmaVersion: "latest",

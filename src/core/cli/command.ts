@@ -7,7 +7,7 @@ import { pathToFileURL } from "url";
 import { existsSync } from "fs";
 
 interface CommandAction {
-    (args: string[], flags: string[]): Promise<void> | void;
+    (args: string[], flags: string[]): Promise<void | unknown> | void | unknown;
 }
 
 interface SubCommand {
@@ -96,7 +96,7 @@ export class Command {
         subCommand: string | undefined = undefined,
         args: string[],
         flags: string[] = []
-    ): Promise<void> {
+    ): Promise<undefined | unknown> {
         const commandFilePath = pathToFileURL(
             path.join(PROJECT_PATH_SRC, "commands", commandName + ".js")
         );
@@ -116,14 +116,14 @@ export class Command {
                 Logger.error(`Subcommand "${subCommand}" not found for command "${commandName}".`);
                 return;
             }
-            await action(args, flags);
+            return await action(args, flags);
         } else {
             const action = Command.commands[commandName].action;
             if (!action) {
                 Logger.error(`Command "${commandName}" requires a subcommand.`);
                 return;
             }
-            await action(args, flags);
+            return await action(args, flags);
         }
     }
 

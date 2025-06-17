@@ -1,8 +1,10 @@
-import { exec } from "child_process";
+import { ChildProcess, exec } from "child_process";
 import { writeFileSync, rmSync } from "fs";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
+
+let watchProcess: ChildProcess;
 
 ModuleManager.addModule({
     name: "ts",
@@ -23,7 +25,7 @@ ModuleManager.addModule({
         };
         writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 2));
 
-        const watchProcess = exec("tsc --watch");
+        watchProcess = exec("tsc --watch");
 
         watchProcess.stdout?.on("data", (data) => {
             Logger.moduleLog(data);
@@ -34,5 +36,6 @@ ModuleManager.addModule({
     },
     onExit: () => {
         rmSync("./tsconfig.json");
+        watchProcess.kill();
     }
 });

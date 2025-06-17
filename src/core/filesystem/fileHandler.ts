@@ -28,7 +28,9 @@ export class FileHandler {
         const relativePath = path.relative(this.sourceDir, filePath);
         const transport = isBP ? this.transportBP : this.transportRP;
         const pathTo = relativePath.slice(
-            isBP ? BEHAVIOUR_PACK_PATH.length - 2 : RESOURCE_PACK_PATH.length - 2
+            isBP
+                ? BEHAVIOUR_PACK_PATH.replace("./", "").length
+                : RESOURCE_PACK_PATH.replace("./", "").length
         );
         return { transport, pathTo };
     }

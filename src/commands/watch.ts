@@ -1,10 +1,9 @@
 import { Command } from "./../core/cli/command.js";
 import { Watcher } from "./../core/filesystem/watcher.js";
 import { ConfigManager } from "../core/config/configManager.js";
-import { COM_MOJANG_PATH } from "../core/constants/paths.js";
+import { OUTPUT_BEHAVIOUR_PACK_PATH, OUTPUT_RESOURCE_PACK_PATH } from "../core/constants/paths.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { Logger } from "../core/logger/logger.js";
-import path from "path";
 
 Command.command("watch")
     .description("Watch the current directory and copy files to the destination")
@@ -18,8 +17,8 @@ Command.command("watch")
             return;
         }
 
-        const bpPath = path.join(COM_MOJANG_PATH, "development_behavior_packs", config.name + "BP");
-        const rpPath = path.join(COM_MOJANG_PATH, "development_resource_packs", config.name + "RP");
+        const bpPath = OUTPUT_BEHAVIOUR_PACK_PATH;
+        const rpPath = OUTPUT_RESOURCE_PACK_PATH;
 
         if (!config.modules || config.modules.length === 0) {
             ModuleManager.modules = [];
@@ -30,4 +29,6 @@ Command.command("watch")
 
         const watcher = new Watcher(".", bpPath, rpPath);
         watcher.startWatching();
+
+        return watcher;
     });

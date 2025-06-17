@@ -22,6 +22,8 @@ Command.subCommand("add")
             return;
         }
 
+        await ModuleManager.loadAllModules();
+
         const exists = ModuleManager.checkIfModuleExists(args[0]);
         if (!exists) {
             Logger.error(`Module ${args[0]} does not exist.`);
