@@ -11,12 +11,11 @@ import { Logger } from "../logger/logger.js";
 import { ConfigManager } from "../config/configManager.js";
 import { ModuleManager } from "../modules/moduleManager.js";
 
-let cleanUpIsRunning = false;
-
 export class Watcher {
     private watcher: FSWatcher | null;
     private fileHandler: FileHandler;
     private remoteTransport?: SftpTransport;
+    private cleanUpIsRunning = false;
     public lastTransfer: number = -1;
 
     constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
@@ -116,32 +115,16 @@ export class Watcher {
         Logger.info("Watching for file changes...");
 
         if (!DEBUG) {
-            process.on("exit", this.cleanUp);
-            process.on("SIGINT", this.cleanUp);
-            process.on("uncaughtException", this.cleanUp);
+            // Arrow functions to bind the this context
+            process.on("exit", () => this.stopWatching());
+            process.on("SIGINT", () => this.stopWatching());
+            process.on("uncaughtException", () => this.stopWatching());
         }
-    }
-
-    async cleanUp(): Promise<void> {
-        if (cleanUpIsRunning) return;
-        cleanUpIsRunning = true;
-
-        Logger.delete("Cleaning up...");
-        if (this.watcher) this.stopWatching();
-
-        for (const module of ModuleManager.modules) {
-            if (module.onExit) module.onExit();
-        }
-
-        if (this.remoteTransport) {
-            await this.remoteTransport.end();
-        }
-
-        await this.fileHandler.removeDestinationDirectories();
-        process.exit(0);
     }
 
     stopWatching(): void {
+        if (this.cleanUpIsRunning) return;
+        this.cleanUpIsRunning = true;
         if (!this.watcher) {
             Logger.error("Watcher is not running.");
             return;
@@ -155,5 +138,20 @@ export class Watcher {
         }
 
         this.cleanUp();
+    }
+
+    private async cleanUp(): Promise<void> {
+        Logger.delete("Cleaning up...");
+
+        for (const module of ModuleManager.modules) {
+            if (module.onExit) await module.onExit();
+        }
+
+        if (this.remoteTransport) {
+            await this.remoteTransport.end();
+        }
+
+        await this.fileHandler.removeDestinationDirectories();
+        process.exit(0);
     }
 }

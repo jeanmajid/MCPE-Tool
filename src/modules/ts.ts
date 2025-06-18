@@ -3,15 +3,19 @@ import { writeFileSync, rmSync } from "fs";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
+import { BaseModule } from "../core/modules/baseModule.js";
 
-let watchProcess: ChildProcess;
+class tsModule extends BaseModule {
+    name: string = "ts";
+    description: string = "Enable the typescript transpiler";
+    cancelFileTransfer: boolean = true;
+    watchProcess: ChildProcess | undefined;
 
-ModuleManager.addModule({
-    name: "ts",
-    description: "Enable the typescript transpiler",
-    cancelFileTransfer: true,
-    activator: (filePath) => pathHasExtension(filePath, "ts"),
-    onLaunch: (bpPath) => {
+    activator(filePath: string): boolean {
+        return pathHasExtension(filePath, "ts");
+    }
+
+    onLaunch(bpPath?: string): Promise<void> | void {
         const tsConfig = {
             compilerOptions: {
                 module: "ESNext",
@@ -25,17 +29,20 @@ ModuleManager.addModule({
         };
         writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 2));
 
-        watchProcess = exec("tsc --watch");
+        this.watchProcess = exec("tsc --watch");
 
-        watchProcess.stdout?.on("data", (data) => {
+        this.watchProcess.stdout?.on("data", (data) => {
             Logger.moduleLog(data);
         });
-        watchProcess.stderr?.on("data", (data) => {
+        this.watchProcess.stderr?.on("data", (data) => {
             Logger.error(data);
         });
-    },
-    onExit: () => {
-        rmSync("./tsconfig.json");
-        watchProcess.kill();
     }
-});
+
+    onExit(): Promise<void> | void {
+        if (this.watchProcess) this.watchProcess.kill();
+        rmSync("./tsconfig.json");
+    }
+}
+
+ModuleManager.registerModule(new tsModule());

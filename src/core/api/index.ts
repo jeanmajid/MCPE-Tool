@@ -9,7 +9,7 @@ export { Logger } from "../logger/logger.js";
 export { Color } from "../logger/color.js";
 
 export { ModuleManager } from "../modules/moduleManager.js";
-export type { Module } from "../modules/moduleManager.js";
+export { BaseModule } from "../modules/baseModule.js";
 
 export { pathHasAnyExtension, pathHasExtension, pathIsInDirectory } from "../../utils/path.js";
 export {

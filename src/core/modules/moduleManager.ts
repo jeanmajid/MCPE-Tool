@@ -2,32 +2,10 @@ import path from "path";
 import { loadDir } from "../../utils/files.js";
 import { FileHandler } from "../filesystem/fileHandler.js";
 import { PROJECT_PATH_SRC } from "../constants/paths.js";
-
-type ActivatorHandlerPair = {
-    activator: (filePath: string) => boolean;
-    handleFile: (filePath: string) => {
-        newFilePath: string | undefined;
-        fileData: string | undefined;
-    };
-    cancelFileTransfer: boolean;
-};
-
-export type Module = {
-    name: string;
-    description: string;
-    cancelFileTransfer?: boolean;
-    activator?: (filePath: string) => boolean;
-    handleFile?: (filePath: string) => {
-        newFilePath: string | undefined;
-        fileData: string | undefined;
-    };
-    onLaunch?: (bpPath?: string, rpPath?: string) => Promise<void> | void;
-    activatorHandlerPairs?: ActivatorHandlerPair[];
-    onExit?: () => void;
-};
+import { BaseModule } from "./baseModule.js";
 
 export class ModuleManager {
-    static modules: Module[] = [];
+    static modules: BaseModule[] = [];
 
     static async loadAllModules(): Promise<void> {
         await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "modules")), loadDir("./plugins")]);
@@ -35,7 +13,7 @@ export class ModuleManager {
 
     /**
      * Adds a module to the module registry with validation
-     * @param data - The module configuration object
+     * @param module - The module configuration object
      * @throws {Error} When module name is missing, empty, or already exists
      * @example
      * ```typescript
@@ -50,15 +28,15 @@ export class ModuleManager {
      * });
      * ```
      */
-    static addModule(data: Module): void {
-        if (!data.name) throw new Error("No Name specified for module");
-        if (typeof data.name !== "string") throw new Error("Module name must be a string");
-        if (data.name.trim() === "") throw new Error("Module name cannot be empty");
-        if (this.checkIfModuleExists(data.name))
-            throw new Error(`Module with name '${data.name}' already exists`);
-        if (!data.description) throw new Error("No description specified for module");
+    static registerModule(module: BaseModule): void {
+        if (!module.name) throw new Error("No Name specified for module");
+        if (typeof module.name !== "string") throw new Error("Module name must be a string");
+        if (module.name.trim() === "") throw new Error("Module name cannot be empty");
+        if (this.checkIfModuleExists(module.name))
+            throw new Error(`Module with name '${module.name}' already exists`);
+        if (!module.description) throw new Error("No description specified for module");
 
-        this.modules.push(data);
+        this.modules.push(module);
     }
 
     static checkIfModuleExists(name: string): boolean {
@@ -113,7 +91,7 @@ export class ModuleManager {
                     if (pair.cancelFileTransfer === undefined)
                         pair.cancelFileTransfer = module.cancelFileTransfer || false;
                 }
-                this.modules.push(...(module.activatorHandlerPairs as Module[]));
+                this.modules.push(...(module.activatorHandlerPairs as BaseModule[]));
             }
         }
 
