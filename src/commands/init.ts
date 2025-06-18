@@ -42,6 +42,12 @@ Command.command("init")
                 name: "resourcePack",
                 message: "Resource pack?",
                 default: (): boolean => false
+            },
+            {
+                type: "input",
+                name: "author",
+                message: "Project Author",
+                default: (): string => ""
             }
         ]);
         Logger.info(`Initializing project: ${answers.projectName}`);
@@ -59,7 +65,9 @@ Command.command("init")
 
             generatorBP.addModule("data");
             generatorBP.addModule("script", "javascript", "scripts/index.js");
-            generatorBP.addAuthor("jeanmajid");
+            if (answers.author) {
+                generatorBP.addAuthor(answers.author as string);
+            }
             generatorBP.addDependency("@minecraft/server", "1.0.0-beta");
             generatorBP.addDependency("@minecraft/server-ui", "1.0.0-beta");
 
@@ -76,7 +84,9 @@ Command.command("init")
             fs.mkdirSync("RP", { recursive: true });
 
             generatorRP.addModule("resources");
-            generatorRP.addAuthor("jeanmajid");
+            if (answers.author) {
+                generatorRP.addAuthor(answers.author as string);
+            }
 
             if (answers.behaviourPack) generatorRP.addDependencyUUID(generatorBP.mainUUID, "1.0.0");
 

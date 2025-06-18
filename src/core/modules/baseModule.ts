@@ -4,33 +4,19 @@ export abstract class BaseModule {
     cancelFileTransfer?: boolean;
 
     activator?(filePath: string): boolean;
-    handleFile?(filePath: string): {
-        newFilePath: string | undefined;
-        fileData: string | undefined;
-    };
+    handleFile?(filePath: string): FileHandlerResult;
     onLaunch?(bpPath?: string, rpPath?: string): Promise<void> | void;
     activatorHandlerPairs?: BaseActivatorHandlerPair[];
     onExit?(): Promise<void> | void;
 }
 
-export abstract class BaseActivatorHandlerPair {
-    activator: (filePath: string) => boolean;
-    handleFile: (filePath: string) => {
-        newFilePath: string | undefined;
-        fileData: string | undefined;
-    };
-    cancelFileTransfer: boolean;
+export type FileHandlerResult = {
+    newFilePath: string | undefined;
+    fileData: string | undefined;
+};
 
-    constructor(
-        activator: (filePath: string) => boolean,
-        handleFile: (filePath: string) => {
-            newFilePath: string | undefined;
-            fileData: string | undefined;
-        },
-        cancelFileTransfer: boolean
-    ) {
-        this.activator = activator;
-        this.handleFile = handleFile;
-        this.cancelFileTransfer = cancelFileTransfer;
-    }
+export abstract class BaseActivatorHandlerPair {
+    activator?: (filePath: string) => boolean;
+    handleFile?: (filePath: string) => FileHandlerResult;
+    cancelFileTransfer?: boolean;
 }
