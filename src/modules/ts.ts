@@ -16,6 +16,15 @@ class tsModule extends BaseModule {
     }
 
     onLaunch(bpPath?: string): Promise<void> | void {
+        exec("tsc --version", (error) => {
+            if (error) {
+                Logger.error(
+                    "TypeScript compiler not found. Please install TypeScript globally: npm install -g typescript"
+                );
+                process.exit(1);
+            }
+        });
+
         const tsConfig = {
             compilerOptions: {
                 module: "ESNext",
