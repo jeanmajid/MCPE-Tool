@@ -9,11 +9,10 @@ TODO:
 - config
 -- rename to mc.config or mcconfig.json or support any name
 - Make the manifest generator more dynamic
--- Add creator name
 -- add an global config
 - add mcpe creator lsp basically / maybe even ai stuff
 - package manager, for custom packs also add a regolith filter that then supports it
 - module ideas
--- Import module, make index.js have a custom format allowing for globs
+-- Import module, make index.js have a custom format allowing for globs - import("./commands/**")
 - Init
 -- automatic eslint setup
