@@ -5,7 +5,7 @@ import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
 import { BaseModule } from "../core/modules/baseModule.js";
 
-class tsModule extends BaseModule {
+class TsModule extends BaseModule {
     name: string = "ts";
     description: string = "Enable the typescript transpiler";
     cancelFileTransfer: boolean = true;
@@ -36,7 +36,7 @@ class tsModule extends BaseModule {
             },
             include: ["BP/scripts/**/*.ts"]
         };
-        writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 2));
+        writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
 
         this.watchProcess = exec("tsc --watch");
 
@@ -54,4 +54,4 @@ class tsModule extends BaseModule {
     }
 }
 
-ModuleManager.registerModule(new tsModule());
+ModuleManager.registerModule(new TsModule());

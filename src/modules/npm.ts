@@ -11,7 +11,7 @@ import {
 import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
 import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
 
-class npmModule extends BaseModule {
+class NpmModule extends BaseModule {
     name: string = "npm";
     description: string = "Auto install npm packages";
     watchProcess: ChildProcess | undefined;
@@ -130,4 +130,4 @@ class npmModule extends BaseModule {
     }
 }
 
-ModuleManager.registerModule(new npmModule());
+ModuleManager.registerModule(new NpmModule());
