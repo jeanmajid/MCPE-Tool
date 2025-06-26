@@ -1,5 +1,9 @@
 import fs from "fs";
-import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
+import { PROJECT_PATH } from "../core/constants/paths.js";
+import { Logger } from "../core/logger/logger.js";
+import { exec } from "child_process";
+import { HAS_INTERNET } from "../modules/wifi.js";
+import path from "path";
 
 export type validPackageNames = "@minecraft/server" | "@minecraft/server-ui";
 
@@ -9,6 +13,10 @@ export type validPackageNames = "@minecraft/server" | "@minecraft/server-ui";
  * @returns A promise that resolves to an array of package versions.
  */
 export async function getPackageVersions(packageName: string): Promise<string[] | undefined> {
+    if (!HAS_INTERNET) {
+        Logger.error("No internet connection available. Cannot fetch package versions.");
+        return undefined;
+    }
     try {
         const response = await fetch(`https://registry.npmjs.org/${packageName}`);
         const data = await response.json();
@@ -45,8 +53,91 @@ export async function getLatestPackageVersion(
  * @param packageName - The name of the package.
  * @returns The version of the package.
  */
-export function getInstalledPackageVersion(packageName: validPackageNames): string | undefined {
-    const packageJson = JSON.parse(fs.readFileSync(`${BEHAVIOUR_PACK_PATH}/package.json`, "utf8"));
+export function getInstalledPackageVersion(packageName: string, cwd = "."): string | undefined {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(cwd, "package.json"), "utf8"));
     const dependencies = packageJson.dependencies || {};
     return dependencies[packageName];
+}
+
+export async function installPackage(packageName: string, cwd = "."): Promise<boolean> {
+    await initialiseNpm(cwd);
+    return await new Promise<boolean>((resolve) => {
+        if (!HAS_INTERNET) {
+            Logger.error(
+                `Failed to install package ${packageName} - no internet connection available`
+            );
+            process.exit(1);
+        }
+        exec(`npm install ${packageName}`, { cwd }, (error, stdout, stderr) => {
+            if (error) {
+                Logger.error(`Error installing package ${packageName}: ${error.message}`);
+                resolve(false);
+                return;
+            }
+            if (stderr) {
+                Logger.error(`Error installing package ${packageName}: ${stderr}`);
+                resolve(false);
+                return;
+            }
+            Logger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
+            resolve(true);
+        });
+    });
+}
+
+export async function initialiseNpm(cwd = "."): Promise<void> {
+    if (!fs.existsSync(path.join(cwd, "package.json"))) {
+        Logger.error("No package.json file found in the current directory.");
+        await new Promise<void>((resolve, reject) => {
+            exec("npm init -y", { cwd }, (error, stdout, stderr) => {
+                if (error) {
+                    Logger.error(`Error creating package.json file: ${error.message}`);
+                    reject(error);
+                    return;
+                }
+                if (stderr) {
+                    Logger.error(`Error creating package.json file: ${stderr}`);
+                    reject(new Error(stderr));
+                    return;
+                }
+                Logger.moduleLog("Successfully created package.json file.");
+                resolve();
+            });
+        });
+    }
+}
+
+/**
+ * Dynamically imports a package, installing it first if it's not already installed.
+ *
+ * This function checks if the specified package is already installed in the project.
+ * If not, it attempts to install the package before importing it. If installation
+ * fails, the process will exit with code 1.
+ *
+ * @param packageName - The name of the npm package to import
+ * @returns A promise that resolves to the imported module
+ *
+ * @example
+ * ```typescript
+ * const glob = (await dynamicImport("glob")) as typeof import("glob");
+ * ```
+ *
+ * @throws Will exit the process if package installation fails
+ */
+export async function dynamicImport(packageName: string): Promise<unknown> {
+    const packageBaseName =
+        packageName.split("@")[0] === ""
+            ? "@" + packageName.split("@")[1]
+            : packageName.split("@")[0];
+    if (getInstalledPackageVersion(packageBaseName, PROJECT_PATH)) {
+        return await import(packageBaseName);
+    }
+    const res = await installPackage(packageBaseName, PROJECT_PATH);
+
+    if (!res) {
+        Logger.error(`Failed to install package ${packageBaseName}`);
+        process.exit(1);
+    }
+
+    return await import(packageBaseName);
 }

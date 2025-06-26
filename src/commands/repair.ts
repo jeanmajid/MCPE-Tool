@@ -2,6 +2,10 @@ import { generateUniqueId } from "../utils/id.js";
 import { Logger } from "../core/logger/logger.js";
 import { Command } from "../core/cli/command.js";
 import { ConfigManager } from "../core/config/configManager.js";
+import { existsSync } from "fs";
+import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
+import path from "path";
+import { removeSync } from "../utils/files.js";
 
 Command.command("repair")
     .description("repair the config")
@@ -27,6 +31,19 @@ Command.command("repair")
         if (config.description === undefined) {
             config.description = "";
             changesMade.push("Added an description");
+        }
+
+        const removePaths = [
+            path.join(BEHAVIOUR_PACK_PATH, "node_modules"),
+            path.join(BEHAVIOUR_PACK_PATH, "package-lock.json"),
+            path.join(BEHAVIOUR_PACK_PATH, "package.json")
+        ];
+
+        for (const path of removePaths) {
+            if (existsSync(path)) {
+                removeSync(path);
+                changesMade.push(`Deleted ${path}`);
+            }
         }
 
         ConfigManager.writeConfig(config);
