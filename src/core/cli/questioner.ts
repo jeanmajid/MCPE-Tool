@@ -50,4 +50,35 @@ export class Questioner {
         rl.close();
         return answers;
     }
+
+    /**
+     * Prompts the user with a confirmation question and waits for their input.
+     *
+     * @param question - The question to display to the user
+     * @returns A Promise that resolves to `true` if the user's answer contains 'y' or 't', otherwise `false`
+     *
+     * @example
+     * ```typescript
+     * const shouldContinue = await Questioner.promptConfirm("Do you want to continue?");
+     * if (shouldContinue) {
+     *   console.log("Continuing...");
+     * }
+     * ```
+     */
+    static async promptConfirm(question: string, color = Color.blue): Promise<boolean> {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        console.log(color(question));
+        const answer = await new Promise<string>((resolve) => {
+            rl.question(Color.green("(NO)" + " "), (ans) => {
+                resolve(ans);
+            });
+        });
+
+        rl.close();
+        return answer.toLowerCase().includes("y") || answer.toLowerCase().includes("t");
+    }
 }
