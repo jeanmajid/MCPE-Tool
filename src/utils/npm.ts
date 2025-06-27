@@ -59,7 +59,7 @@ export function getInstalledPackageVersion(packageName: string, cwd = "."): stri
     return dependencies[packageName];
 }
 
-export async function installPackage(packageName: string, cwd = "."): Promise<boolean> {
+export async function installPackage(packageName: string | string[], cwd = "."): Promise<boolean> {
     await initialiseNpm(cwd);
     return await new Promise<boolean>((resolve) => {
         if (!HAS_INTERNET) {
@@ -68,7 +68,8 @@ export async function installPackage(packageName: string, cwd = "."): Promise<bo
             );
             process.exit(1);
         }
-        exec(`npm install ${packageName}`, { cwd }, (error, stdout, stderr) => {
+        const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
+        exec(`npm install ${packages}`, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 Logger.error(`Error installing package ${packageName}: ${error.message}`);
                 resolve(false);

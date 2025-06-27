@@ -1,13 +1,14 @@
 import { Questioner } from "../core/cli/questioner.js";
-import fs from "fs";
+import fs, { copyFileSync, existsSync, mkdirSync } from "fs";
 import { generateUniqueId } from "../utils/id.js";
 import { Command } from "../core/cli/command.js";
 import { ConfigManager } from "../core/config/configManager.js";
 import { Logger } from "../core/logger/logger.js";
 import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
 import path from "path";
-import { PROJECT_PATH_SRC } from "../core/constants/paths.js";
+import { PROJECT_PATH, PROJECT_PATH_SRC } from "../core/constants/paths.js";
 import { pathToFileURL } from "url";
+import { installPackage } from "../utils/npm.js";
 
 Command.command("init")
     .description("Initialize the project with interactive prompts")
@@ -48,6 +49,12 @@ Command.command("init")
                 name: "author",
                 message: "Project Author",
                 default: (): string => ""
+            },
+            {
+                type: "confirm",
+                name: "eslint",
+                message: "Eslint?",
+                default: (): boolean => false
             }
         ]);
         Logger.info(`Initializing project: ${answers.projectName}`);
@@ -91,6 +98,25 @@ Command.command("init")
             if (answers.behaviourPack) generatorRP.addDependencyUUID(generatorBP.mainUUID, "1.0.0");
 
             fs.writeFileSync("RP/manifest.json", generatorRP.generateString());
+        }
+
+        if (answers.eslint) {
+            const eslintPackages = [
+                "eslint-config-prettier",
+                "eslint-plugin-prettier",
+                "prettier",
+                "@typescript-eslint/eslint-plugin",
+                "@typescript-eslint/parser"
+            ];
+
+            copyFileSync(path.join(PROJECT_PATH, "eslint.config.js"), "./eslint.config.js");
+            if (!existsSync("./.vscode")) mkdirSync("./.vscode");
+            copyFileSync(
+                path.join(PROJECT_PATH, ".vscode/settings.json"),
+                "./.vscode/settings.json"
+            );
+
+            await installPackage(eslintPackages);
         }
 
         Logger.info("Creating config file...");

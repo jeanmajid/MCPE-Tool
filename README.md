@@ -4,7 +4,6 @@ A command-line tool designed to streamline the development process for Minecraft
 ## TODO
 
 ### Core Features
-- Dynamic npm module install, instead of having them preinstalled - `dynamicImport("package")`
 - Make cleanup always run
 - Precoded paths for the commands
 
