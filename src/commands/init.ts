@@ -106,7 +106,8 @@ Command.command("init")
                 "eslint-plugin-prettier",
                 "prettier",
                 "@typescript-eslint/eslint-plugin",
-                "@typescript-eslint/parser"
+                "@typescript-eslint/parser",
+                "eslint"
             ];
 
             copyFileSync(path.join(PROJECT_PATH, "eslint.config.js"), "./eslint.config.js");
