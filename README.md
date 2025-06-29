@@ -2,7 +2,7 @@
 
 A powerful command-line tool designed to streamline the development process for Minecraft Bedrock Edition add-ons. MCPE-Tool provides project initialization, real-time file watching, module management, building capabilities, and various development utilities to enhance your Minecraft add-on development workflow.
 
-Join the [Discord](https://discord.gg/6PFMrzS3sG) for support
+Join the [Discord](https://discord.gg/6PFMrzS3sG) for support or watch this [video](https://www.youtube.com/watch?v=KIWSvrCObmg)
 
 If you find this project helpful, please consider giving it a star on GitHub
 
