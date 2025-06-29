@@ -12,6 +12,15 @@ import {
 import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
 import { HAS_INTERNET } from "../core/constants/wifi.js";
 
+const VALID_MCPE_PACKAGES = [
+    "@minecraft/server",
+    "@minecraft/server-ui",
+    "@minecraft/server-net",
+    "@minecraft/server-admin",
+    "@minecraft/server-gametest",
+    "@minecraft/debug-utilities"
+];
+
 class NpmModule extends BaseModule {
     name: string = "npm";
     description: string = "Auto install npm packages";
@@ -45,11 +54,7 @@ class NpmModule extends BaseModule {
                 await this.tryFixStableVersion(dependency);
                 continue;
             }
-            if (
-                !dependency.module_name ||
-                (dependency.module_name !== "@minecraft/server" &&
-                    dependency.module_name !== "@minecraft/server-ui") // TODO: use an array and include all modules
-            ) {
+            if (!dependency.module_name || !VALID_MCPE_PACKAGES.includes(dependency.module_name)) {
                 Logger.error(`[NPM MODULE] Unsupported package: ${dependency.module_name}`);
                 continue;
             }
@@ -62,7 +67,11 @@ class NpmModule extends BaseModule {
                 continue;
             }
 
-            if (latest.version === dependency.version) {
+            if (
+                latest.version === dependency.version &&
+                latest.package.split("@")[2] ===
+                    getInstalledPackageVersion(dependency.module_name)?.replace("^", "")
+            ) {
                 Logger.moduleLog(
                     `[NPM MODULE] The package ${dependency.module_name} is already up-to-date.`
                 );

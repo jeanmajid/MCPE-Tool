@@ -110,6 +110,7 @@ export async function initialiseNpm(cwd = "."): Promise<void> {
     }
 }
 
+// This function is unused currently
 /**
  * Dynamically imports a package, installing it first if it's not already installed.
  *
