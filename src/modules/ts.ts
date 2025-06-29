@@ -1,5 +1,5 @@
 import { ChildProcess, exec } from "child_process";
-import { writeFileSync, rmSync, existsSync } from "fs";
+import { writeFileSync, existsSync } from "fs";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
