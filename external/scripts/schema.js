@@ -89,14 +89,22 @@ export class SchemaGenerator {
         while (i < lines.length && braceCount > 0) {
             const line = lines[i].trim();
 
-            if (line.includes("{")) braceCount++;
-            if (line.includes("}")) braceCount--;
+            if (line.includes("{")) {
+                braceCount++;
+            }
+            if (line.includes("}")) {
+                braceCount--;
+            }
 
-            if (braceCount === 0) break;
+            if (braceCount === 0) {
+                break;
+            }
 
             if (line.startsWith("*")) {
                 const comment = line.replace(/^\*\s*/, "").trim();
-                if (comment) currentComment = comment;
+                if (comment) {
+                    currentComment = comment;
+                }
                 i++;
                 continue;
             }

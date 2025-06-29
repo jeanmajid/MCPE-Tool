@@ -11,8 +11,6 @@ import { ConfigManager } from "../core/config/configManager.js";
 import { Logger } from "../core/logger/logger.js";
 import type { Archiver } from "archiver";
 import { Watcher } from "../core/filesystem/watcher.js";
-import { dynamicImport } from "../utils/npm.js";
-import { PACKAGES } from "../core/constants/packages.js";
 
 interface FileMapping {
     filePath: string;
@@ -57,11 +55,8 @@ Command.command("build")
             }
         }
 
-        const { glob } = (await dynamicImport(PACKAGES.GLOB)) as typeof import("glob");
-        // @ts-expect-error says that it doesnt have a default export, even tho it does
-        const { default: archiver } = (await dynamicImport(
-            PACKAGES.ARCHIVER
-        )) as typeof import("archiver");
+        const { glob } = await import("glob");
+        const { default: archiver } = await import("archiver");
 
         fs.mkdirSync("dist", { recursive: true });
 
