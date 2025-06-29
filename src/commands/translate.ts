@@ -21,7 +21,9 @@ Command.command("translate")
             Logger.info(data.toString());
         });
         script.stderr.on("data", (data) => {
-            if (data.toString().includes("FutureWarning")) return;
+            if (data.toString().includes("FutureWarning")) {
+                return;
+            }
             Logger.error(data.toString());
         });
         script.on("close", (code) => {

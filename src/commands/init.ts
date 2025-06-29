@@ -78,7 +78,9 @@ Command.command("init")
             generatorBP.addDependency("@minecraft/server", "1.0.0-beta");
             generatorBP.addDependency("@minecraft/server-ui", "1.0.0-beta");
 
-            if (answers.resourcePack) generatorBP.addDependencyUUID(generatorRP.mainUUID, "1.0.0");
+            if (answers.resourcePack) {
+                generatorBP.addDependencyUUID(generatorRP.mainUUID, "1.0.0");
+            }
 
             fs.writeFileSync("BP/manifest.json", generatorBP.generateString());
 
@@ -95,7 +97,9 @@ Command.command("init")
                 generatorRP.addAuthor(answers.author as string);
             }
 
-            if (answers.behaviourPack) generatorRP.addDependencyUUID(generatorBP.mainUUID, "1.0.0");
+            if (answers.behaviourPack) {
+                generatorRP.addDependencyUUID(generatorBP.mainUUID, "1.0.0");
+            }
 
             fs.writeFileSync("RP/manifest.json", generatorRP.generateString());
         }
@@ -111,7 +115,9 @@ Command.command("init")
             ];
 
             copyFileSync(path.join(PROJECT_PATH, "eslint.config.js"), "./eslint.config.js");
-            if (!existsSync("./.vscode")) mkdirSync("./.vscode");
+            if (!existsSync("./.vscode")) {
+                mkdirSync("./.vscode");
+            }
             copyFileSync(
                 path.join(PROJECT_PATH, ".vscode/settings.json"),
                 "./.vscode/settings.json"

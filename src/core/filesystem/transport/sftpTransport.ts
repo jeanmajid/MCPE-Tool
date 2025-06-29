@@ -54,7 +54,9 @@ class SftpSubTransport implements Transport {
         const parts = full.split("/");
         let cur = "";
         for (const p of parts) {
-            if (!p) continue;
+            if (!p) {
+                continue;
+            }
             cur += `/${p}`;
             try {
                 await this.client.mkdir(cur);
@@ -92,7 +94,9 @@ class SftpSubTransport implements Transport {
         const relPosix = targetRel.replace(/\\/g, "/");
         const full = path.posix.join(this.destPath, relPosix);
         const exists = await this.client.exists(full);
-        if (!exists) return;
+        if (!exists) {
+            return;
+        }
 
         if (exists === "d") {
             const list = await this.client.list(full, () => true);

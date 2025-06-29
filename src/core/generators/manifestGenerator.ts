@@ -74,8 +74,12 @@ export class ManifestGenerator {
             version: [1, 0, 0]
         };
 
-        if (language) module.language = language;
-        if (entry) module.entry = entry;
+        if (language) {
+            module.language = language;
+        }
+        if (entry) {
+            module.entry = entry;
+        }
 
         this.manifest.modules.push(module);
     }

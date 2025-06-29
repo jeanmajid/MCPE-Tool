@@ -29,12 +29,21 @@ export class ModuleManager {
      * ```
      */
     static registerModule(module: BaseModule): void {
-        if (!module.name) throw new Error("No Name specified for module");
-        if (typeof module.name !== "string") throw new Error("Module name must be a string");
-        if (module.name.trim() === "") throw new Error("Module name cannot be empty");
-        if (this.checkIfModuleExists(module.name))
+        if (!module.name) {
+            throw new Error("No Name specified for module");
+        }
+        if (typeof module.name !== "string") {
+            throw new Error("Module name must be a string");
+        }
+        if (module.name.trim() === "") {
+            throw new Error("Module name cannot be empty");
+        }
+        if (this.checkIfModuleExists(module.name)) {
             throw new Error(`Module with name '${module.name}' already exists`);
-        if (!module.description) throw new Error("No description specified for module");
+        }
+        if (!module.description) {
+            throw new Error("No description specified for module");
+        }
 
         this.modules.push(module);
     }
@@ -88,8 +97,9 @@ export class ModuleManager {
                         module.activatorHandlerPairs.splice(i, 1);
                         continue;
                     }
-                    if (pair.cancelFileTransfer === undefined)
+                    if (pair.cancelFileTransfer === undefined) {
                         pair.cancelFileTransfer = module.cancelFileTransfer || false;
+                    }
                 }
                 this.modules.push(...(module.activatorHandlerPairs as BaseModule[]));
             }

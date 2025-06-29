@@ -5,7 +5,9 @@ function hasInternetConnection(): boolean {
 
     for (const name of Object.keys(interfaces)) {
         const netInterface = interfaces[name];
-        if (!netInterface) continue;
+        if (!netInterface) {
+            continue;
+        }
 
         const hasActiveConnection = netInterface.some(
             (addr) =>

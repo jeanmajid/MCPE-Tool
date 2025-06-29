@@ -99,7 +99,9 @@ export class Watcher {
 
             const shouldCancel = await ModuleManager.processFile(filePath, this.fileHandler);
 
-            if (shouldCancel) return;
+            if (shouldCancel) {
+                return;
+            }
 
             if (event === "add" || event === "change") {
                 await this.fileHandler.copyFile(filePath);
@@ -123,7 +125,9 @@ export class Watcher {
     }
 
     stopWatching(): void {
-        if (this.cleanUpIsRunning) return;
+        if (this.cleanUpIsRunning) {
+            return;
+        }
         this.cleanUpIsRunning = true;
         if (!this.watcher) {
             Logger.error("Watcher is not running.");
@@ -144,7 +148,9 @@ export class Watcher {
         Logger.delete("Cleaning up...");
 
         for (const module of ModuleManager.modules) {
-            if (module.onExit) await module.onExit();
+            if (module.onExit) {
+                await module.onExit();
+            }
         }
 
         if (this.remoteTransport) {

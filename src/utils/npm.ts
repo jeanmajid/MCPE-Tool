@@ -37,7 +37,9 @@ export async function getLatestPackageVersion(
     packageName: validPackageNames
 ): Promise<{ version: string; package: validPackageNames } | undefined> {
     const versions = await getPackageVersions(packageName);
-    if (!versions) return undefined;
+    if (!versions) {
+        return undefined;
+    }
 
     const stableVersions = versions.filter((version) => version.includes("stable"));
     const latest = stableVersions[stableVersions.length - 1];

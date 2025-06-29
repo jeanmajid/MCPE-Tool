@@ -38,7 +38,9 @@ class NpmModule extends BaseModule {
         }
 
         for (const dependency of manifest.dependencies) {
-            if (dependency.uuid) continue;
+            if (dependency.uuid) {
+                continue;
+            }
             if (!dependency.version.endsWith("-beta")) {
                 await this.tryFixStableVersion(dependency);
                 continue;

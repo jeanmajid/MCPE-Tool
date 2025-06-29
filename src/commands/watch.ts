@@ -28,7 +28,9 @@ Command.command("watch")
                 `A BP already exists at the output location, do you want to overwrite? (${bpPath})`,
                 Color.red
             );
-            if (!res) return;
+            if (!res) {
+                return;
+            }
         }
 
         if (existsSync(rpPath)) {
@@ -36,7 +38,9 @@ Command.command("watch")
                 `A RP already exists at the output location, do you want to overwrite? (${rpPath})`,
                 Color.red
             );
-            if (!res) return;
+            if (!res) {
+                return;
+            }
         }
 
         if (!config.modules || config.modules.length === 0) {

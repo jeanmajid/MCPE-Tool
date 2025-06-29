@@ -49,7 +49,9 @@ class TsModule extends BaseModule {
     }
 
     onExit(): Promise<void> | void {
-        if (this.watchProcess) this.watchProcess.kill();
+        if (this.watchProcess) {
+            this.watchProcess.kill();
+        }
         rmSync("./tsconfig.json");
     }
 }

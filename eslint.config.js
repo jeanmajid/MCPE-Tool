@@ -45,7 +45,9 @@ export default [
             ],
             "no-unused-vars": "warn",
             "prefer-const": "warn",
-            "no-var": "error"
+            "no-var": "error",
+            eqeqeq: "error",
+            curly: "error"
         }
     },
     {
@@ -88,7 +90,9 @@ export default [
             "prefer-const": "warn",
             "@typescript-eslint/no-redeclare": "error",
             "@typescript-eslint/no-unused-vars": "warn",
-            "@typescript-eslint/explicit-function-return-type": "warn"
+            "@typescript-eslint/explicit-function-return-type": "warn",
+            eqeqeq: "error",
+            curly: "error"
         }
     },
     {
