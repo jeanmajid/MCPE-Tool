@@ -16,7 +16,7 @@ A powerful command-line tool designed to streamline the development process for 
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) with Build tool installed (LTS version recommended)
+- [Node.js](https://nodejs.org/) with Build tools installed (LTS version recommended)
 - TypeScript (automatically installed if missing)
 
 ### Quick Install (Windows)
@@ -104,10 +104,11 @@ your-project/
 ├── BP/                   # Behavior Pack
 │   ├── manifest.json
 │   └── scripts/
-├── RP/                   # Resource Pack (optional)
+│   └── ...
+├── RP/                   # Resource Pack
 │   ├── manifest.json
-│   └── texts/
-└── dist/                 # Built packages
+│   └── ...
+└── dist/                 # Build packages
 ```
 
 ## Configuration
@@ -145,7 +146,7 @@ Automatically translate your add-on to multiple languages:
 2. Run `mc translate`
 3. Translated files will be generated for all supported languages
 
-**Note:** The translation feature currently utilizes the Argos translation library and probably do not provide production-quality translations. For professional or commercial projects, manual review and refinement of translated content is recommended.
+**Note:** The translation feature currently utilizes the Argos translation library and most definitely does not provide production-quality translations. For professional or commercial projects, manual review and refinement of translated content is recommended.
 
 ## Development
 
@@ -160,29 +161,61 @@ npm run lint:fix     # Fix ESLint issues
 
 ### Creating Custom Modules
 
-Extend MCPE-Tool with custom modules by implementing the [`BaseModule`](src/core/modules/baseModule.ts) interface:
+Extend MCPE-Tool with custom modules by extending the [`BaseModule`](src/core/modules/baseModule.ts) class:
 
 ```typescript
-import { BaseModule, ModuleManager } from "mcpe-tool";
+import { ModuleManager } from "../core/modules/moduleManager.js";
+import { BaseModule } from "../core/modules/baseModule.js";
+import { Logger } from "../core/logger/logger.js";
 
-class MyModule extends BaseModule {
-    name = "my-module";
-    description = "My custom module";
-    
-    activator(filePath: string): boolean {
-        return filePath.endsWith('.myext');
+class SampleModule extends BaseModule {
+    name: string = "samplePlugin";
+    description: string = "Sample plugin to cancel all file transactions for files that include the word .hide.";
+    cancelFileTransfer: boolean = true;
+
+    onLaunch(bpPath?: string, rpPath?: string): Promise<void> | void {
+        Logger.moduleLog("[SamplePlugin] Started!");
     }
-    
-    handleFile(filePath: string) {
-        // Process file
-        return { newFilePath: filePath, fileData: "processed content" };
+
+    onExit(): Promise<void> | void {
+        Logger.moduleLog("[SamplePlugin] Stopped!");
+    }
+
+    activator(filePath: string): boolean {
+        return filePath.includes(".hide.");
     }
 }
 
-ModuleManager.registerModule(new MyModule());
+ModuleManager.registerModule(new SampleModule());
 ```
 
-**Note:** Modules local thingy text TODO
+**Note:** To register custom modules, create a customModules folder in src (src/customModules) and write your module in there.
+
+### Creating Custom Commands
+
+Extend MCPE-Tool with custom commands:
+
+```typescript
+import { Command } from "../core/cli/command.js";
+import { Logger } from "../core/logger/logger.js";
+
+Command.command("test")
+    .description("testCommand")
+    .action(async (args, flags) => {
+        Logger.info("Ran your test command");
+    });
+
+Command.subCommand("sub")
+    .description("This is a sub command")
+    .action(async (args, flags) => {
+        Logger.info("Ran your test sub command");
+    });
+
+```
+
+**Note:** To register custom commands, create a customCommands folder in src (src/customCommands) and write your custom command code in there.
+
+**Important** To make your command work, the file name needs to be the same as the command name.
 
 ## WebSocket Debug Server
 
@@ -212,30 +245,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Built for the Minecraft Bedrock Edition add-on development community
 - Uses [Chokidar](https://github.com/paulmillr/chokidar) for file watching
 - Translation powered by [Argos Translate](https://github.com/argosopentech/argos-translate)
-
-## TODO
-
-This is the projects todo list and shows which features are currently being worked on. Open an [issue](https://github.com/jeanmajid/MCPE-Tool/issues) to suggest your own changes.
-
-### Core Features
-- Make cleanup always run
-- Precoded paths for the commands and modules
-
-### Configuration
-- Rename to `mc.config` or `mcconfig.json` or support any name
-- Sync manifest data with config on watch
-- Add a global config for things like eslint and tsconfig
-- Per module configs
-
-### Development Tools
-- Add MCPE creator LSP basically / maybe even AI stuff in the future
-- Package manager for custom packs
-
-### Modules
-- Make "external modules" - user defined ones with their own process for easier management. Their cwd could be in the target folder
-
-#### Module Ideas
-- Import module - Make `index.js` have a custom format allowing for globs: `import("./commands/**")`
-- Preprocessor macros - Extension for MC tool with `#define` support
-- TypeScript rewrite - First output raw TS in temp folder, then convert. Move tsconfig outside and do transformations first
-- Robust npm - Check version each time

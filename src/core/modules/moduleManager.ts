@@ -8,7 +8,10 @@ export class ModuleManager {
     static modules: BaseModule[] = [];
 
     static async loadAllModules(): Promise<void> {
-        await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "modules")), loadDir("./plugins")]);
+        await Promise.all([
+            loadDir(path.join(PROJECT_PATH_SRC, "modules")),
+            loadDir(path.join(PROJECT_PATH_SRC, "customModules"))
+        ]);
     }
 
     /**

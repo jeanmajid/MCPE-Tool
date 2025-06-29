@@ -97,12 +97,18 @@ export class Command {
         args: string[],
         flags: string[] = []
     ): Promise<undefined | unknown> {
-        const commandFilePath = pathToFileURL(
+        let commandFilePath = pathToFileURL(
             path.join(PROJECT_PATH_SRC, "commands", commandName + ".js")
         );
+
         if (!existsSync(commandFilePath)) {
-            Logger.error(`Command "${commandName}" not found.`);
-            return;
+            commandFilePath = pathToFileURL(
+                path.join(PROJECT_PATH_SRC, "customCommands", commandName + ".js")
+            );
+            if (!existsSync(commandFilePath)) {
+                Logger.error(`Command "${commandName}" not found.`);
+                return;
+            }
         }
         await import(commandFilePath.href);
         if (!Command.commands[commandName]) {
