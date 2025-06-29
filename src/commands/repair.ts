@@ -8,7 +8,9 @@ import path from "path";
 import { removeSync } from "../utils/files.js";
 
 Command.command("repair")
-    .description("repair the config")
+    .description(
+        "repair the config and some other things, that may still be present from older version"
+    )
     .action(async () => {
         const changesMade: string[] = [];
         const config = ConfigManager.readConfig();
