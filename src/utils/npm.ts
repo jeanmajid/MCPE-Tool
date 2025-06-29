@@ -2,7 +2,7 @@ import fs from "fs";
 import { PROJECT_PATH } from "../core/constants/paths.js";
 import { Logger } from "../core/logger/logger.js";
 import { exec } from "child_process";
-import { HAS_INTERNET } from "../modules/wifi.js";
+import { HAS_INTERNET } from "../core/constants/wifi.js";
 import path from "path";
 
 export type validPackageNames = "@minecraft/server" | "@minecraft/server-ui";

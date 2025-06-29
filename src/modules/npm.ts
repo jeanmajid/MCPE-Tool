@@ -10,7 +10,7 @@ import {
     installPackage
 } from "../utils/npm.js";
 import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
-import { HAS_INTERNET } from "./wifi.js";
+import { HAS_INTERNET } from "../core/constants/wifi.js";
 
 class NpmModule extends BaseModule {
     name: string = "npm";
