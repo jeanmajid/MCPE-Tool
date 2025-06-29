@@ -31,7 +31,6 @@ Command.command("wss")
             if (buttonStates.get(162)) {
                 switch (keycode) {
                     case 80: // P
-                        console.log("spectat");
                         for (const ws of connections) {
                             sendCommand(ws, "gamemode spectator");
                         }
