@@ -9,7 +9,7 @@ A powerful command-line tool designed to streamline the development process for 
 - 🔧 **Module System** - Extensible architecture with built-in modules for TypeScript, npm management
 - 📦 **Build System** - Create `.mcpack` and `.mcaddon` files for distribution
 - 🌐 **Translation Support** - Automatic translation of language files to multiple languages
-- 🔌 **WebSocket Server** - A customisable WSS connection, to control your world with keyboard shortcuts
+- 🔌 **WebSocket Server** - A (soon customisable) WSS connection, to control your world with keyboard shortcuts
 - ⚙️ **ESLint Integration** - Automated code quality and formatting
 
 ## Installation
@@ -165,12 +165,12 @@ Extend MCPE-Tool with custom modules by extending the [`BaseModule`](src/core/mo
 
 ```typescript
 import { ModuleManager } from "../core/modules/moduleManager.js";
-import { BaseModule } from "../core/modules/baseModule.js";
+import { BaseModule, FileHandlerResult } from "../core/modules/baseModule.js";
 import { Logger } from "../core/logger/logger.js";
 
 class SampleModule extends BaseModule {
     name: string = "samplePlugin";
-    description: string = "Sample plugin to cancel all file transactions for files that include the word .hide.";
+    description: string = "Sample plugin to redact all files that include the word .hide.";
     cancelFileTransfer: boolean = true;
 
     onLaunch(bpPath?: string, rpPath?: string): Promise<void> | void {
@@ -184,9 +184,17 @@ class SampleModule extends BaseModule {
     activator(filePath: string): boolean {
         return filePath.includes(".hide.");
     }
+
+    handleFile(filePath: string): FileHandlerResult {
+        return {
+            fileData: "this file was redacted",
+            newFilePath: filePath.replace(".hide.", ".")
+        };
+    }
 }
 
 ModuleManager.registerModule(new SampleModule());
+
 ```
 
 **Note:** To register custom modules, create a customModules folder in src (src/customModules) and write your module in there.
@@ -226,7 +234,7 @@ mc wss
 ```
 
 - Automatically copies `/wsserver localhost:8080` to clipboard
-- Use hotkeys (P, O, I) to send gamemode commands
+- Use hotkeys ctrl + (P, O, I) to send gamemode commands
 
 ## Contributing
 
