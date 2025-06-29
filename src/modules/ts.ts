@@ -1,5 +1,5 @@
 import { ChildProcess, exec } from "child_process";
-import { writeFileSync, rmSync } from "fs";
+import { writeFileSync, rmSync, existsSync } from "fs";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
@@ -25,18 +25,21 @@ class TsModule extends BaseModule {
             }
         });
 
-        const tsConfig = {
-            compilerOptions: {
-                module: "ESNext",
-                target: "ESNext",
-                moduleResolution: "Node",
-                allowSyntheticDefaultImports: true,
-                removeComments: true,
-                outDir: `${bpPath}/scripts`
-            },
-            include: ["BP/scripts/**/*.ts"]
-        };
-        writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
+        if (!existsSync("./tsconfig.json")) {
+            const tsConfig = {
+                compilerOptions: {
+                    module: "ESNext",
+                    target: "ESNext",
+                    moduleResolution: "Node",
+                    allowSyntheticDefaultImports: true,
+                    removeComments: true,
+                    outDir: `${bpPath}/scripts`
+                },
+                include: ["BP/scripts/**/*.ts"]
+            };
+
+            writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
+        }
 
         this.watchProcess = exec("tsc --watch");
 
@@ -52,7 +55,6 @@ class TsModule extends BaseModule {
         if (this.watchProcess) {
             this.watchProcess.kill();
         }
-        rmSync("./tsconfig.json");
     }
 }
 
