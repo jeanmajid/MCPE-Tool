@@ -59,6 +59,14 @@ if %errorLevel% neq 0 (
 
 echo.
 echo ========================================
+echo Generating Config Schema
+echo ========================================
+echo.
+
+call npm run schema
+
+echo.
+echo ========================================
 echo Linking Project Globally
 echo ========================================
 echo.

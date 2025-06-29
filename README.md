@@ -40,6 +40,9 @@ npm install
 # Build the project
 npm run build
 
+# Generate the schema
+npm run schema
+
 # Link globally
 npm link
 ```
