@@ -127,7 +127,7 @@ Command.command("init")
 
             const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
             packageJson.type = "module";
-            fs.writeFileSync("./package.json", JSON.stringify(packageJson));
+            fs.writeFileSync("./package.json", JSON.stringify(packageJson, null, 4));
         }
 
         Logger.info("Creating config file...");
