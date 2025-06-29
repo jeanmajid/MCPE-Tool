@@ -28,7 +28,7 @@
     "mc": "./dist/main.js"
   },
   "dependencies": {
-    "@jeanmajid/windows-keylistener": "^1.1.2",
+    "@jeanmajid/windows-keylistener": "^1.1.3",
     "archiver": "^7.0.1",
     "chokidar": "^4.0.3",
     "eslint": "^9.29.0",

@@ -3,6 +3,8 @@ import { Logger } from "../core/logger/logger.js";
 import type { WebSocket } from "ws";
 import { generateUUIDv4 } from "../utils/id.js";
 
+const buttonStates = new Map();
+
 Command.command("wss")
     .description("Runs a websocket server with some cool stuff")
     .action(async () => {
@@ -24,23 +26,27 @@ Command.command("wss")
             });
         });
 
-        keylistener.start((keycode: number) => {
-            switch (keycode) {
-                case 80: // P
-                    for (const ws of connections) {
-                        sendCommand(ws, "gamemode spectator");
-                    }
-                    break;
-                case 79: // O
-                    for (const ws of connections) {
-                        sendCommand(ws, "gamemode c");
-                    }
-                    break;
-                case 73: // I
-                    for (const ws of connections) {
-                        sendCommand(ws, "gamemode s");
-                    }
-                    break;
+        keylistener.start((keycode: number, isPressed: boolean) => {
+            buttonStates.set(keycode, isPressed);
+            if (buttonStates.get(162)) {
+                switch (keycode) {
+                    case 80: // P
+                        console.log("spectat");
+                        for (const ws of connections) {
+                            sendCommand(ws, "gamemode spectator");
+                        }
+                        break;
+                    case 79: // O
+                        for (const ws of connections) {
+                            sendCommand(ws, "gamemode c");
+                        }
+                        break;
+                    case 73: // I
+                        for (const ws of connections) {
+                            sendCommand(ws, "gamemode s");
+                        }
+                        break;
+                }
             }
         });
     });
