@@ -124,6 +124,10 @@ Command.command("init")
             );
 
             await installPackage(eslintPackages);
+
+            const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+            packageJson.type = "module";
+            fs.writeFileSync("./package.json", JSON.stringify(packageJson));
         }
 
         Logger.info("Creating config file...");
