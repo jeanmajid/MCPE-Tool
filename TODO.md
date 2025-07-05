@@ -2,6 +2,9 @@
 
 This is the projects todo list and shows which features are currently being worked on. Open an [issue](https://github.com/jeanmajid/MCPE-Tool/issues) to suggest your own changes.
 
+## Release
+- Release as a npm package aswell
+
 ### Core Features
 - Make cleanup always run
 - Precoded paths for the commands and modules
