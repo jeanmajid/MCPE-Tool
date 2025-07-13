@@ -33,6 +33,7 @@ class NpmModule extends BaseModule {
             );
             return;
         }
+        await initialiseNpm();
         Logger.moduleLog("Checking for npm package updates...");
         const manifest = readManifest("BP");
 
