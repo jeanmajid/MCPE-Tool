@@ -13,14 +13,14 @@ If you find this project helpful, please consider giving it a star on GitHub
 - 🔧 **Module System** - Extensible architecture with built-in modules for TypeScript, npm management
 - 📦 **Build System** - Create `.mcpack` and `.mcaddon` files for distribution
 - 🌐 **Translation Support** - Automatic translation of language files to multiple languages
-- 🔌 **WebSocket Server** - A (soon customisable) WSS connection, to control your world with keyboard shortcuts
+- 🔌 **WebSocket Server** - A (soon customisable) WSS connection, to control your world with keyboard shortcuts (Disabled for now)
 - ⚙️ **ESLint Integration** - Automated code quality and formatting
 
 ## Installation
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) with Build tools installed (LTS version recommended)
+- [Node.js](https://nodejs.org/) (LTS version recommended)
 - TypeScript (automatically installed if missing)
 
 ### Quick Install (Windows)
