@@ -4,7 +4,7 @@ import { PROJECT_PATH } from "../core/constants/paths.js";
 import { execSync } from "child_process";
 
 Command.command("update")
-    .description("Update mc tool to the newest version")
+    .description("Updates the tool to the newest version")
     .action(async () => {
         // Temporarily use git pull, until release as a npm package
         try {

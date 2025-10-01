@@ -14,7 +14,7 @@ If you find this project helpful, please consider giving it a star on GitHub
 - 📦 **Build System** - Create `.mcpack` and `.mcaddon` files for distribution
 - 🌐 **Translation Support** - Automatic translation of language files to multiple languages
 - 🔌 **WebSocket Server** - A (soon customisable) WSS connection, to control your world with keyboard shortcuts (Disabled for now)
-- ⚙️ **ESLint Integration** - Automated code quality and formatting
+- ⚙️ **Easy ESLint Setup** - Automated code quality and formatting
 
 ## Installation
 
@@ -85,6 +85,7 @@ Creates `.mcpack` and `.mcaddon` files in the `dist/` folder for sharing or publ
 
 | Command | Description |
 |---------|-------------|
+| `mc update` | Updates the tool to the newest version |
 | `mc init` | Initialize a new project with interactive setup |
 | `mc watch` | Start file watcher for automatic syncing |
 | `mc build` | Build distributable `.mcpack`/`.mcaddon` files |
