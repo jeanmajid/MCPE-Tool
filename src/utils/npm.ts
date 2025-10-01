@@ -71,7 +71,8 @@ export async function installPackage(packageName: string | string[], cwd = "."):
             process.exit(1);
         }
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
-        exec(`npm install ${packages}`, { cwd }, (error, stdout, stderr) => {
+        // the current version of the @minecraft packages is broken, use this while its not fixed
+        exec(`npm install --force ${packages}`, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 Logger.error(`Error installing package ${packageName}: ${error.message}`);
                 resolve(false);
