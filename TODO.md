@@ -3,7 +3,7 @@
 This is the projects todo list and shows which features are currently being worked on. Open an [issue](https://github.com/jeanmajid/MCPE-Tool/issues) to suggest your own changes.
 
 ## Release
-- Release as a npm package aswell
+- Release as a npm package aswell (only after making the module system tho)
 
 ### Core Features
 - Make cleanup always run
@@ -21,13 +21,10 @@ This is the projects todo list and shows which features are currently being work
 
 ### Modules
 - Make "external modules" - user defined ones with their own process for easier management. Their cwd could be in the target folder
-- WSS module support custom actions, based on a file and custom key combinations. Also make it support key combinations instead of just keys ()
+- WSS module support custom actions, based on a file and custom key combinations.
 
 #### Module Ideas
 - Import module - Make `index.js` have a custom format allowing for globs: `import("./commands/**")`
 - Preprocessor macros - Extension for MC tool with `#define` support
 - TypeScript rewrite - First output raw TS in temp folder, then convert. Move tsconfig outside and do transformations first
 - Robust npm - Check version each time
-
-
-WS and NPM
