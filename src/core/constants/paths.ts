@@ -51,3 +51,5 @@ export const IGNORE_PATHS = [
 export const EXTERNAL_PATHS = {
     TRANSLATE_PYTHON: path.join(PROJECT_PATH, "external/translate/translateProject.py")
 };
+
+export const CACHE_PATH = path.join(PROJECT_PATH, "cache");
