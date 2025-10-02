@@ -99,7 +99,9 @@ echo.
 echo For more information, check the README.md file.
 echo.
 echo Press any key to exit...
-pause >nul
+
+echo %* | findstr /i "\-y" >nul
+if errorlevel 1 pause >nul
 
 goto :eof
 

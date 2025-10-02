@@ -12,8 +12,7 @@ Command.command("update")
 
             process.chdir(PROJECT_PATH);
             execSync("git pull origin main", { stdio: "inherit" });
-            execSync("npm install", { stdio: "inherit" });
-            execSync("npm run build", { stdio: "inherit" });
+            execSync("install.bat -y", { stdio: "inherit" });
 
             Logger.success("Update completed!");
         } catch (error) {
