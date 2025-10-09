@@ -117,14 +117,22 @@ export class Watcher {
         Logger.info("Watching for file changes...");
 
         if (!DEBUG) {
-            // Arrow functions to bind the this context
-            process.on("exit", () => this.stopWatching());
-            process.on("SIGINT", () => this.stopWatching());
-            process.on("uncaughtException", () => this.stopWatching());
+            const shutDown = async () => {
+                await this.stopWatching();
+            };
+            // any one of these will hopefully catch closing of the program :)
+            process.on("exit", shutDown);
+            process.on("SIGINT", shutDown);
+            process.on("SIGUSR1", shutDown);
+            process.on("SIGUSR2", shutDown);
+            process.on("SIGTERM", shutDown);
+            process.on("SIGHUP", shutDown);
+            process.on("SIGBREAK", shutDown);
+            process.on("beforeExit", shutDown);
         }
     }
 
-    stopWatching(): void {
+    async stopWatching(): Promise<void> {
         if (this.cleanUpIsRunning) {
             return;
         }
@@ -141,7 +149,7 @@ export class Watcher {
             Logger.error(`Error stopping the watcher: ${error}`);
         }
 
-        this.cleanUp();
+        await this.cleanUp();
     }
 
     private async cleanUp(): Promise<void> {
