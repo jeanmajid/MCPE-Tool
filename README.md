@@ -8,13 +8,10 @@ If you find this project helpful, please consider giving it a star on GitHub
 
 ## Features
 
-- 🚀 **Quick Project Initialization** - Set up new Minecraft add-on projects with interactive prompts
-- 👀 **Real-time File Watching** - Automatically sync changes to Minecraft development folders with almost no delay
-- 🔧 **Module System** - Extensible architecture with built-in modules for TypeScript, npm management
-- 📦 **Build System** - Create `.mcpack` and `.mcaddon` files for distribution
-- 🌐 **Translation Support** - Automatic translation of language files to multiple languages
-- 🔌 **WebSocket Server** - A (soon customisable) WSS connection, to control your world with keyboard shortcuts (Disabled for now)
-- ⚙️ **Easy ESLint Setup** - Automated code quality and formatting
+- **Quick Project Initialization** - Set up new Minecraft add-on projects with interactive prompts
+- **Real-time File Watching** - Automatically sync changes to Minecraft development folders with almost no delay
+- **Module System** - Extensible architecture with built-in modules for TypeScript, npm management
+- **Build System** - Create `.mcpack` and `.mcaddon` files for distribution
 
 ## Installation
 
