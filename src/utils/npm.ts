@@ -3,9 +3,8 @@ import { PROJECT_PATH } from "../core/constants/paths.js";
 import { Logger } from "../core/logger/logger.js";
 import { exec } from "child_process";
 import { HAS_INTERNET } from "../core/constants/wifi.js";
+import { validPackageNames } from "./../core/constants/validMcpePackages.js";
 import path from "path";
-
-export type validPackageNames = "@minecraft/server" | "@minecraft/server-ui";
 
 /**
  * Fetches the versions of a given package from the npm registry.
@@ -34,20 +33,34 @@ export async function getPackageVersions(packageName: string): Promise<string[] 
  * @returns A promise that resolves to an object containing the latest version and package name.
  */
 export async function getLatestPackageVersion(
-    packageName: validPackageNames
+    packageName: validPackageNames,
+    nameFilter?: (name: string) => boolean
 ): Promise<{ version: string; package: validPackageNames } | undefined> {
-    const versions = await getPackageVersions(packageName);
+    let versions = await getPackageVersions(packageName);
     if (!versions) {
         return undefined;
     }
 
-    const stableVersions = versions.filter((version) => version.includes("stable"));
-    const latest = stableVersions[stableVersions.length - 1];
+    if (nameFilter) {
+        versions = versions.filter(nameFilter);
+    }
+    const latest = versions[versions.length - 1];
 
     return {
         version: latest.split(".").splice(0, 3).join("."),
         package: (packageName + "@" + latest) as validPackageNames
     };
+}
+
+/**
+ * Retrieves the latest version of a mcpe package.
+ * @param packageName - The name of the package.
+ * @returns A promise that resolves to an object containing the latest version and package name.
+ */
+export async function getLatestStablePackageVersion(
+    packageName: validPackageNames
+): Promise<{ version: string; package: validPackageNames } | undefined> {
+    return getLatestPackageVersion(packageName, (version) => version.includes("stable"));
 }
 
 /**

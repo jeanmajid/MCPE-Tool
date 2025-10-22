@@ -1,25 +1,19 @@
+import { validPackageNames } from "./../core/constants/validMcpePackages.js";
 import { ChildProcess } from "child_process";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { BaseModule } from "../core/modules/baseModule.js";
 import {
-    getLatestPackageVersion,
+    getLatestStablePackageVersion,
     getInstalledPackageVersion,
-    validPackageNames,
     initialiseNpm,
-    installPackage
+    installPackage,
+    getLatestPackageVersion
 } from "../utils/npm.js";
 import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
 import { HAS_INTERNET } from "../core/constants/wifi.js";
-
-const VALID_MCPE_PACKAGES = [
-    "@minecraft/server",
-    "@minecraft/server-ui",
-    "@minecraft/server-net",
-    "@minecraft/server-admin",
-    "@minecraft/server-gametest",
-    "@minecraft/debug-utilities"
-];
+import { ConfigManager } from "../core/config/configManager.js";
+import { VALID_MCPE_PACKAGES } from "../core/constants/validMcpePackages.js";
 
 class NpmModule extends BaseModule {
     name: string = "npm";
@@ -47,6 +41,8 @@ class NpmModule extends BaseModule {
             return;
         }
 
+        const config = ConfigManager.readConfig();
+
         for (const dependency of manifest.dependencies) {
             if (dependency.uuid) {
                 continue;
@@ -55,11 +51,17 @@ class NpmModule extends BaseModule {
                 await this.tryFixStableVersion(dependency);
                 continue;
             }
+
             if (!dependency.module_name || !VALID_MCPE_PACKAGES.includes(dependency.module_name)) {
                 Logger.error(`[NPM MODULE] Unsupported package: ${dependency.module_name}`);
                 continue;
             }
-            const latest = await getLatestPackageVersion(dependency.module_name);
+            let latest: Awaited<ReturnType<typeof getLatestPackageVersion>>;
+            if (config.output === "preview") {
+                latest = await getLatestPackageVersion(dependency.module_name);
+            } else {
+                latest = await getLatestStablePackageVersion(dependency.module_name);
+            }
 
             if (!latest) {
                 Logger.error(
