@@ -16,6 +16,8 @@ call node --version
 
 echo.
 
+:check_typescript
+
 REM Check if TypeScript is installed
 echo Checking for TypeScript...
 where tsc > nul 2>&1 || (
@@ -128,4 +130,4 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 echo TypeScript installed successfully.
-goto :eof
+goto :check_typescript
