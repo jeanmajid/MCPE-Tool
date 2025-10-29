@@ -4,17 +4,8 @@ export class SchemaGenerator {
     static generateFromFile(filePath, interfaceName, outputPath) {
         const fileContent = fs.readFileSync(filePath, "utf-8");
 
-        const interfaceRegex = new RegExp(
-            `export interface ${interfaceName}\\s*{([^}]*(?:{[^}]*}[^}]*)*)}`,
-            "s"
-        );
+        const interfaceBody = this.extractInterfaceBody(fileContent, interfaceName);
 
-        const match = fileContent.match(interfaceRegex);
-        if (!match) {
-            throw new Error(`Interface ${interfaceName} not found`);
-        }
-
-        const interfaceBody = match[1];
         const properties = this.parseProperties(interfaceBody);
 
         const schema = {
@@ -28,7 +19,7 @@ export class SchemaGenerator {
         };
 
         if (outputPath) {
-            fs.writeFileSync(outputPath, JSON.stringify(schema, null, 2));
+            fs.writeFileSync(outputPath, JSON.stringify(schema, null, 4));
             console.log(`Schema generated: ${outputPath}`);
         }
 
@@ -183,10 +174,41 @@ export class SchemaGenerator {
             .filter(([, propInfo]) => !propInfo.optional)
             .map(([propName]) => propName);
     }
+
+    static extractInterfaceBody(fileContent, interfaceName) {
+        const interfaceStart = fileContent.indexOf(`export interface ${interfaceName}`);
+        if (interfaceStart === -1) {
+            throw new Error(`Interface ${interfaceName} not found`);
+        }
+
+        const braceStart = fileContent.indexOf("{", interfaceStart);
+        if (braceStart === -1) {
+            throw new Error(`Interface ${interfaceName} has no body`);
+        }
+
+        let index = braceStart + 1;
+        let braceCount = 1;
+
+        while (index < fileContent.length && braceCount > 0) {
+            const char = fileContent[index];
+            if (char === "{") {
+                braceCount++;
+            } else if (char === "}") {
+                braceCount--;
+            }
+            index++;
+        }
+
+        if (braceCount !== 0) {
+            throw new Error(`Interface ${interfaceName} body is not balanced`);
+        }
+
+        return fileContent.slice(braceStart + 1, index - 1);
+    }
 }
 
 SchemaGenerator.generateFromFile(
     "src/core/config/configManager.ts",
     "Config",
-    "dist/core/config/mcConfigSchema.json"
+    "public/mcConfigSchema.json"
 );

@@ -6,7 +6,6 @@ This is the projects todo list and shows which features are currently being work
 - Release as a npm package aswell (only after making the module system tho)
 
 ### Core Features
-- Make cleanup always run
 - Precoded paths for the commands and modules
 
 ### Configuration
@@ -23,7 +22,7 @@ This is the projects todo list and shows which features are currently being work
 - Make "external modules" - user defined ones with their own process for easier management. Their cwd could be in the target folder
 - WSS module support custom actions, based on a file and custom key combinations.
 
-#### Module Ideas
+### Module Ideas
 - Import module - Make `index.js` have a custom format allowing for globs: `import("./commands/**")`
 - Preprocessor macros - Extension for MC tool with `#define` support
 - TypeScript rewrite - First output raw TS in temp folder, then convert. Move tsconfig outside and do transformations first

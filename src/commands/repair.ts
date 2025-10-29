@@ -35,6 +35,15 @@ Command.command("repair")
             changesMade.push("Added an description");
         }
 
+        if (
+            config["$schema"] !==
+            "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json"
+        ) {
+            config["$schema"] =
+                "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json";
+            changesMade.push("Updated schema path");
+        }
+
         const removePaths = [
             path.join(BEHAVIOUR_PACK_PATH, "node_modules"),
             path.join(BEHAVIOUR_PACK_PATH, "package-lock.json"),

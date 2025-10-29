@@ -83,10 +83,13 @@ export class Watcher {
             return;
         }
 
+        const config = ConfigManager.readConfig();
+
         this.watcher = chokidar.watch(watchFolders, {
             ignored: (filePath: string) => {
                 return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
-            }
+            },
+            awaitWriteFinish: config.awaitWriteFinish ?? false
         });
 
         const handleFileEvent = async (filePath: string, event: string): Promise<void> => {
@@ -117,7 +120,7 @@ export class Watcher {
         Logger.info("Watching for file changes...");
 
         if (!DEBUG) {
-            const shutDown = async () => {
+            const shutDown = async (): Promise<void> => {
                 await this.stopWatching();
             };
             // any one of these will hopefully catch closing of the program :)

@@ -1,6 +1,7 @@
 import fs from "fs";
 
 export interface Config {
+    $schema: string;
     /** The name of the project */
     name: string;
     /** The description of the project */
@@ -9,12 +10,19 @@ export interface Config {
     modules: string[];
     /** The ID of the project */
     id: string;
-    /** The Path to the Resource Pack (optional) */
+    /** The Path to the Resource Pack */
     resourcePackPath?: string;
-    /** The Path to the Behaviour Pack (optional) */
+    /** The Path to the Behaviour Pack */
     behaviourPackPath?: string;
     /** Output target environment */
-    output?: "preview" | "stable";
+    output?: "stable" | "preview" | "stable_uwp" | "preview_uwp";
+    /** Wait for file write completion before transfer */
+    awaitWriteFinish?: {
+        /** Time in ms for file size to remain constant before considering it finished */
+        stabilityThreshold: number;
+        /** Interval in ms to check file size */
+        pollInterval: number;
+    };
     /** Remote deployment configuration */
     remote?: {
         /** Remote host address */

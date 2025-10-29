@@ -6,8 +6,7 @@ import { ConfigManager } from "../core/config/configManager.js";
 import { Logger } from "../core/logger/logger.js";
 import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
 import path from "path";
-import { PROJECT_PATH, PROJECT_PATH_SRC } from "../core/constants/paths.js";
-import { pathToFileURL } from "url";
+import { PROJECT_PATH } from "../core/constants/paths.js";
 import { installPackage } from "../utils/npm.js";
 
 Command.command("init")
@@ -135,9 +134,8 @@ Command.command("init")
             "./config.json",
             JSON.stringify(
                 {
-                    $schema: pathToFileURL(
-                        path.join(PROJECT_PATH_SRC, "core", "config", "mcConfigSchema.json")
-                    ),
+                    $schema:
+                        "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json",
                     name: answers.projectName,
                     description: answers.projectDescription,
                     modules: ["npm"],
