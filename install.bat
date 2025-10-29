@@ -50,6 +50,12 @@ echo Building Project
 echo ========================================
 echo.
 
+if exist "dist" (
+    echo Cleaning previous build...
+    rmdir /s /q "dist"
+    echo Previous build cleaned.
+)
+
 REM Build the project
 echo Building TypeScript project...
 call npm run build
@@ -58,14 +64,6 @@ if %errorLevel% neq 0 (
     pause
     exit /b 1
 )
-
-echo.
-echo ========================================
-echo Generating Config Schema
-echo ========================================
-echo.
-
-call npm run schema
 
 echo.
 echo ========================================
