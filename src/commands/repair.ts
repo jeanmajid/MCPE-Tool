@@ -6,6 +6,7 @@ import { existsSync } from "fs";
 import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
 import path from "path";
 import { removeSync } from "../utils/files.js";
+import { MC_CONFIG_PATH } from "../core/constants/public.js";
 
 Command.command("repair")
     .description(
@@ -35,12 +36,8 @@ Command.command("repair")
             changesMade.push("Added an description");
         }
 
-        if (
-            config["$schema"] !==
-            "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json"
-        ) {
-            config["$schema"] =
-                "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json";
+        if (config["$schema"] !== MC_CONFIG_PATH) {
+            config["$schema"] = MC_CONFIG_PATH;
             changesMade.push("Updated schema path");
         }
 

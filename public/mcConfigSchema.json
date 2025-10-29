@@ -39,8 +39,10 @@
             "description": "Output target environment",
             "type": "string",
             "enum": [
+                "stable",
                 "preview",
-                "stable"
+                "stable_uwp",
+                "preview_uwp"
             ]
         },
         "awaitWriteFinish": {

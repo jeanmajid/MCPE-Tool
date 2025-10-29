@@ -8,6 +8,7 @@ import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
 import path from "path";
 import { PROJECT_PATH } from "../core/constants/paths.js";
 import { installPackage } from "../utils/npm.js";
+import { MC_CONFIG_PATH } from "../core/constants/public.js";
 
 Command.command("init")
     .description("Initialize the project with interactive prompts")
@@ -134,8 +135,7 @@ Command.command("init")
             "./config.json",
             JSON.stringify(
                 {
-                    $schema:
-                        "https://raw.githubusercontent.com/jeanmajid/MCPE-Tool/tree/main/public/mcConfigSchema.json",
+                    $schema: MC_CONFIG_PATH,
                     name: answers.projectName,
                     description: answers.projectDescription,
                     modules: ["npm"],
