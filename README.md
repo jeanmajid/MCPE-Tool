@@ -149,8 +149,8 @@ Projects are configured via `config.json`:
 - `id` - Unique project identifier
 - `behaviourPackPath` - Path to behavior pack folder
 - `resourcePackPath` - Path to resource pack folder
-- `output` - Target Minecraft version (`"stable"` or `"preview"`)
-- `remote` - Remote deployment configuration (Will probably be removed in future)
+- `awaitWriteFinish` - Options to wait on a files write to transfer (only use if you have issues)
+- `output` - Target Minecraft version (`"stable"` or `"preview"` or any uwp version)
 
 ## Translation Support
 
@@ -160,7 +160,7 @@ Automatically translate your add-on to multiple languages:
 2. Run `mc translate`
 3. Translated files will be generated for all supported languages
 
-**Note:** The translation feature currently utilizes the Argos translation library and most definitely does not provide production-quality translations. For professional or commercial projects, manual review and refinement of translated content is recommended.
+**Note:** The translation feature currently utilizes the Argos translation library and most definitely does not provide production-quality translations. I wouldn't really recommend to use this, its more of a fun feature. Wait until google translate api's are implemented
 
 ## Development
 
@@ -169,8 +169,6 @@ Automatically translate your add-on to multiple languages:
 ```bash
 npm run build        # Build TypeScript
 npm run dev          # Watch mode for development
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
 ```
 
 ### Creating Custom Modules
@@ -239,7 +237,7 @@ Command.subCommand("sub")
 
 **Important** To make your command work, the file name needs to be the same as the command name.
 
-## WebSocket Debug Server
+## WebSocket Debug Server (currently disabled)
 
 Start a WebSocket server for real-time debugging:
 
