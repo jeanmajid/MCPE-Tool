@@ -15,6 +15,15 @@ If you find this project helpful, please consider giving it a star on GitHub
 
 ## Installation
 
+## NPM
+
+Just run this command
+```batch
+npm i -g @jeanmajid/mcpe-tool
+```
+
+## Manuall Installation
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (LTS version recommended)
@@ -28,7 +37,7 @@ If you find this project helpful, please consider giving it a star on GitHub
 install.bat
 ```
 
-### Manual Install
+### Non Quick Install
 
 ```bash
 # Clone the repository
