@@ -169,6 +169,8 @@ Automatically translate your add-on to multiple languages:
 ```bash
 npm run build        # Build TypeScript
 npm run dev          # Watch mode for development
+npm run link         # Link your local instance to be usable as a mc command globally
+npm run schema       # Generate the json schema for the config
 ```
 
 ### Creating Custom Modules
