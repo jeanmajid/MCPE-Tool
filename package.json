@@ -1,49 +1,44 @@
 {
-  "name": "mcpe-tool",
-  "version": "1.0.2",
-  "type": "module",
-  "description": "",
-  "main": "dist/core/api/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/core/api/index.js",
-      "require": "./dist/core/api/index.js",
-      "types": "./src/core/api/index.ts"
+    "name": "@jeanmajid/mcpe-tool",
+    "version": "1.0.2",
+    "type": "module",
+    "description": "command line tool for Minecraft Bedrock Edition addon development",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeanmajid/MCPE-Tool"
+    },
+    "main": "dist/core/api/index.js",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "start": "node dist/main.js",
+        "link": "npm link",
+        "build:link": "npm run build && npm link",
+        "lint": "eslint src/**/*.{js,ts}",
+        "lint:fix": "eslint src/**/*.{js,ts} --fix",
+        "schema": "node external/scripts/schema.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bin": {
+        "mc": "./dist/main.js"
+    },
+    "dependencies": {
+        "archiver": "^7.0.1",
+        "chokidar": "^4.0.3",
+        "eslint": "^9.29.0",
+        "glob": "^11.0.3",
+        "minimatch": "^10.0.3"
+    },
+    "devDependencies": {
+        "@types/archiver": "^6.0.3",
+        "@types/node": "^22.15.29",
+        "@types/ws": "^8.18.1",
+        "@typescript-eslint/eslint-plugin": "^8.33.0",
+        "@typescript-eslint/parser": "^8.33.0",
+        "eslint-config-prettier": "^10.1.5",
+        "eslint-plugin-prettier": "^5.4.1",
+        "prettier": "^3.5.3"
     }
-  },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/main.js",
-    "link": "npm link",
-    "build:link": "npm run build && npm link",
-    "lint": "eslint src/**/*.{js,ts}",
-    "lint:fix": "eslint src/**/*.{js,ts} --fix",
-    "schema": "node external/scripts/schema.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "bin": {
-    "mc": "./dist/main.js"
-  },
-  "dependencies": {
-    "archiver": "^7.0.1",
-    "chokidar": "^4.0.3",
-    "eslint": "^9.29.0",
-    "glob": "^11.0.3",
-    "minimatch": "^10.0.3",
-    "ssh2-sftp-client": "^12.0.1"
-  },
-  "devDependencies": {
-    "@types/archiver": "^6.0.3",
-    "@types/node": "^22.15.29",
-    "@types/ssh2-sftp-client": "^9.0.4",
-    "@types/ws": "^8.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.33.0",
-    "@typescript-eslint/parser": "^8.33.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
-    "prettier": "^3.5.3"
-  }
 }

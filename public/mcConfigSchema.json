@@ -64,48 +64,6 @@
                 "pollInterval"
             ],
             "additionalProperties": false
-        },
-        "remote": {
-            "description": "Remote deployment configuration",
-            "type": "object",
-            "properties": {
-                "$schema": {
-                    "type": "string"
-                },
-                "host": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "privateKey": {
-                    "type": "string"
-                },
-                "targetPathBP": {
-                    "type": "string"
-                },
-                "targetPathRP": {
-                    "type": "string"
-                },
-                "passphrase": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "disabled": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "host",
-                "username",
-                "privateKey",
-                "targetPathBP",
-                "targetPathRP",
-                "disabled"
-            ],
-            "additionalProperties": false
         }
     },
     "required": [

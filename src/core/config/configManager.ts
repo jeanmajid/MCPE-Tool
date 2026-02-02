@@ -23,25 +23,6 @@ export interface Config {
         /** Interval in ms to check file size */
         pollInterval: number;
     };
-    /** Remote deployment configuration */
-    remote?: {
-        /** Remote host address */
-        host: string;
-        /** Username for remote connection */
-        username: string;
-        /** Path to private key file */
-        privateKey: string;
-        /** Target path for Behaviour Pack on remote */
-        targetPathBP: string;
-        /** Target path for Resource Pack on remote */
-        targetPathRP: string;
-        /** Passphrase for private key */
-        passphrase?: string;
-        /** Password for remote connection */
-        password?: string;
-        /** Whether remote deployment is disabled */
-        disabled: boolean;
-    };
 }
 
 export class ConfigManager {

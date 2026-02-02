@@ -4,8 +4,6 @@ import { FileHandler } from "./fileHandler.js";
 import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "./../constants/paths.js";
 import { minimatch } from "minimatch";
 import { LocalTransport } from "./transport/localTransport.js";
-import { SftpTransport } from "./transport/sftpTransport.js";
-import path from "path";
 import fs from "fs";
 import { Logger } from "../logger/logger.js";
 import { ConfigManager } from "../config/configManager.js";
@@ -14,57 +12,20 @@ import { ModuleManager } from "../modules/moduleManager.js";
 export class Watcher {
     private watcher: FSWatcher | null;
     private fileHandler: FileHandler;
-    private remoteTransport?: SftpTransport;
     private cleanUpIsRunning = false;
     public lastTransfer: number = -1;
 
     constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
         this.watcher = null;
-        const config = ConfigManager.readConfig();
-        if (config.remote && !config.remote.disabled) {
-            if (!config.remote.targetPathBP || !config.remote.targetPathRP) {
-                Logger.error(
-                    "Please specify the targetPathBP and targetPathRP in the remote config"
-                );
-                process.exit(0);
-            }
-            const keyPath = fs.existsSync(config.remote.privateKey)
-                ? config.remote.privateKey
-                : path.resolve(
-                      process.env.HOME || process.env.USERPROFILE || "",
-                      ".ssh",
-                      config.remote.privateKey
-                  );
-            this.remoteTransport = new SftpTransport(
-                {
-                    host: config.remote.host,
-                    username: config.remote.username,
-                    privateKey: fs.readFileSync(keyPath) || undefined,
-                    passphrase: config.remote.passphrase,
-                    password: config.remote.password
-                },
-                config.remote.targetPathBP + "/" + config.name + "BP",
-                config.remote.targetPathRP + "/" + config.name + "RP"
-            );
-            this.fileHandler = new FileHandler(
-                sourceDir,
-                this.remoteTransport.transportBP,
-                this.remoteTransport.transportRP
-            );
-        } else {
-            this.fileHandler = new FileHandler(
-                sourceDir,
-                new LocalTransport(destDirBP),
-                new LocalTransport(destDirRP)
-            );
-        }
+
+        this.fileHandler = new FileHandler(
+            sourceDir,
+            new LocalTransport(destDirBP),
+            new LocalTransport(destDirRP)
+        );
     }
 
     async startWatching(): Promise<void> {
-        if (this.remoteTransport) {
-            await this.remoteTransport.connect();
-            Logger.info("Successfully connected to remote!");
-        }
         const watchFolders: string[] = [];
 
         const bpFolder = BEHAVIOUR_PACK_PATH;
@@ -162,10 +123,6 @@ export class Watcher {
             if (module.onExit) {
                 await module.onExit();
             }
-        }
-
-        if (this.remoteTransport) {
-            await this.remoteTransport.end();
         }
 
         await this.fileHandler.removeDestinationDirectories();

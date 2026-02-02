@@ -1,0 +1,12 @@
+.vscode
+external/scripts
+node_modules
+public
+src
+test
+.gitignore
+changelog.md
+eslint.config.js
+install.bat
+package-lock.json
+tsconfig.json
