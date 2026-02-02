@@ -15,7 +15,7 @@ If you find this project helpful, please consider giving it a star on GitHub
 
 ## Installation
 
-## NPM
+### NPM
 
 Just run this command
 ```batch
