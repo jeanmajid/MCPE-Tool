@@ -4,6 +4,7 @@ This is the projects todo list and shows which features are currently being work
 
 ### Core Features
 - Precoded paths for the commands and modules
+- Add version command
 
 ### Configuration
 - Rename to `mc.config` or `mcconfig.json` or support any name
