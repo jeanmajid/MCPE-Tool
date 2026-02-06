@@ -26,7 +26,7 @@ Command.command("update")
                 Logger.info("Try running 'git pull' manually in the project directory");
             }
         } else {
-            Logger.info("Updating from npm...");
+            Logger.info("Updating from npm..."); // TODO: message does not get displayed, bcs npm eats the terminal
             execSync("npm update -g @jeanmajid/mcpe-tool", { stdio: "inherit" });
         }
     });
