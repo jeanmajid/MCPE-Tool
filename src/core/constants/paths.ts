@@ -1,4 +1,4 @@
-import { ConfigManager } from "./../config/configManager.js";
+import { ConfigManager } from "../config/configManager.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import os from "os";

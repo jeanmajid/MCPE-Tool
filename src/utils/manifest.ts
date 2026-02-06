@@ -1,5 +1,5 @@
 import fs from "fs";
-import { validPackageNames } from "./../core/constants/validMcpePackages.js";
+import { validPackageNames } from "../core/constants/validMcpePackages.js";
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../core/constants/paths.js";
 
 interface ManifestModule {

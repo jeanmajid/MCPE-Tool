@@ -1,7 +1,7 @@
-import { DEBUG } from "./../constants/dev.js";
+import { DEBUG } from "../constants/dev.js";
 import chokidar, { FSWatcher } from "chokidar";
 import { FileHandler } from "./fileHandler.js";
-import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "./../constants/paths.js";
+import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../constants/paths.js";
 import { minimatch } from "minimatch";
 import { LocalTransport } from "./transport/localTransport.js";
 import fs from "fs";

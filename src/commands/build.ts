@@ -1,4 +1,4 @@
-import { Command } from "./../core/cli/command.js";
+import { Command } from "../core/cli/command.js";
 import {
     BEHAVIOUR_PACK_PATH,
     IGNORE_PATHS,

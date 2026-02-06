@@ -1,4 +1,4 @@
-import { validPackageNames } from "./../core/constants/validMcpePackages.js";
+import { validPackageNames } from "../core/constants/validMcpePackages.js";
 import { ChildProcess } from "child_process";
 import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
