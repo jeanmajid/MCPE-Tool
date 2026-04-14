@@ -53,17 +53,6 @@ export async function getLatestPackageVersion(
 }
 
 /**
- * Retrieves the latest version of a mcpe package.
- * @param packageName - The name of the package.
- * @returns A promise that resolves to an object containing the latest version and package name.
- */
-export async function getLatestStablePackageVersion(
-    packageName: validPackageNames
-): Promise<{ version: string; package: validPackageNames } | undefined> {
-    return getLatestPackageVersion(packageName, (version) => version.includes("stable"));
-}
-
-/**
  * Retrieves the version of an installed package.
  * @param packageName - The name of the package.
  * @returns The version of the package.

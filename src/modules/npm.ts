@@ -4,7 +4,6 @@ import { Logger } from "../core/logger/logger.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { BaseModule } from "../core/modules/baseModule.js";
 import {
-    getLatestStablePackageVersion,
     getInstalledPackageVersion,
     initialiseNpm,
     installPackage,
@@ -58,9 +57,13 @@ class NpmModule extends BaseModule {
             }
             let latest: Awaited<ReturnType<typeof getLatestPackageVersion>>;
             if (config.output === "preview") {
-                latest = await getLatestPackageVersion(dependency.module_name);
+                latest = await getLatestPackageVersion(dependency.module_name, (name) =>
+                    name.includes("preview")
+                );
             } else {
-                latest = await getLatestStablePackageVersion(dependency.module_name);
+                latest = await getLatestPackageVersion(dependency.module_name, (name) =>
+                    name.includes("stable")
+                );
             }
 
             if (!latest) {
