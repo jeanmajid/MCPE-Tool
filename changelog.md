@@ -10,3 +10,5 @@
 - "stable_uwp" and "preview_uwp" can be used if your still on uwp
 # 1.0.3
 - Mc update command now supports npm
+# 1.0.4
+- fix: npm module now correctly gets preview versions
