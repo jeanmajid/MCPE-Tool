@@ -2,6 +2,9 @@
 
 This is the projects todo list and shows which features are currently being worked on. Open an [issue](https://github.com/jeanmajid/MCPE-Tool/issues) to suggest your own changes.
 
+### Commands
+- Setup command that handles the setup of a few things like eslint/oxlint or ts. Also take out the eslint out of the init script
+
 ### Core Features
 - Precoded paths for the commands and modules
 - Add version command
