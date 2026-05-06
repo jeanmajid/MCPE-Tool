@@ -46,7 +46,6 @@ Command.command("init")
                 default: (): boolean => false,
             },
             { type: "input", name: "author", message: "Project Author", default: (): string => "" },
-            { type: "confirm", name: "eslint", message: "Eslint?", default: (): boolean => false },
         ]);
         Logger.info(`Initializing project: ${answers.projectName}`);
         const generatorRP = new ManifestGenerator(
@@ -93,32 +92,6 @@ Command.command("init")
             }
 
             fs.writeFileSync("RP/manifest.json", generatorRP.generateString());
-        }
-
-        if (answers.eslint) {
-            const eslintPackages = [
-                "eslint-config-prettier",
-                "eslint-plugin-prettier",
-                "prettier",
-                "@typescript-eslint/eslint-plugin",
-                "@typescript-eslint/parser",
-                "eslint",
-            ];
-
-            copyFileSync(path.join(PROJECT_PATH, "eslint.config.js"), "./eslint.config.js");
-            if (!existsSync("./.vscode")) {
-                mkdirSync("./.vscode");
-            }
-            copyFileSync(
-                path.join(PROJECT_PATH, ".vscode/settings.json"),
-                "./.vscode/settings.json"
-            );
-
-            await installPackage(eslintPackages);
-
-            const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-            packageJson.type = "module";
-            fs.writeFileSync("./package.json", JSON.stringify(packageJson, null, 4));
         }
 
         Logger.info("Creating config file...");
