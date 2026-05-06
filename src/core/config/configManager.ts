@@ -13,7 +13,7 @@ export interface Config {
     /** The Path to the Resource Pack */
     resourcePackPath?: string;
     /** The Path to the Behaviour Pack */
-    behaviourPackPath?: string;
+    behaviorPackPath?: string;
     /** Output target environment */
     output?: "stable" | "preview" | "stable_uwp" | "preview_uwp";
     /** Wait for file write completion before transfer */

@@ -55,7 +55,7 @@ export const OUTPUT_RESOURCE_PACK_PATH = path.join(
 );
 
 export const PROJECT_PATH_SRC = path.join(PROJECT_PATH, "dist");
-export const BEHAVIOUR_PACK_PATH = config.behaviourPackPath || path.join(".", "BP");
+export const BEHAVIOUR_PACK_PATH = config.behaviorPackPath || path.join(".", "BP");
 export const RESOURCE_PACK_PATH = config.resourcePackPath || path.join(".", "RP");
 
 export const IGNORE_PATHS = [
@@ -65,6 +65,7 @@ export const IGNORE_PATHS = [
     "**/.vscode/**",
     "**/.gitignore",
     "**/package.json",
+    "**/pnpm-lock.yaml",
     "**/package-lock.json",
 ];
 

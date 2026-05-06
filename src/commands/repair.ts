@@ -37,6 +37,14 @@ Command.command("repair")
             changesMade.push("Added an description");
         }
 
+        if (
+            typeof (config as { behaviourPackPath?: string })["behaviourPackPath"] === "string" &&
+            !config.behaviorPackPath
+        ) {
+            config.behaviorPackPath = (config as { behaviourPackPath?: string }).behaviourPackPath;
+            changesMade.push("Migrated behaviourPackPath option to behaviorPackPath");
+        }
+
         if (config["$schema"] !== MC_CONFIG_PATH) {
             config["$schema"] = MC_CONFIG_PATH;
             changesMade.push("Updated schema path");
@@ -57,7 +65,7 @@ Command.command("repair")
 
         ConfigManager.writeConfig(config);
         if (changesMade.length > 0) {
-            Logger.success("Succesfully repaired the config!");
+            Logger.success("Successfully repaired the config!");
             Logger.info("Changes made:");
             for (const change of changesMade) {
                 Logger.info("- " + change);
