@@ -33,6 +33,8 @@ export class LocalTransport implements Transport {
 
     public async deleteFile(fileRelative: string): Promise<void> {
         const pathTo = path.join(this.destPath, fileRelative);
-        await rm(pathTo, { recursive: true });
+        if (fs.existsSync(pathTo)) {
+            await rm(pathTo, { recursive: true });
+        }
     }
 }
