@@ -1,15 +1,12 @@
-import fs, { copyFileSync, existsSync, mkdirSync } from "fs";
-import path from "path";
+import fs from "node:fs";
 
 import { Command } from "../core/cli/command.js";
 import { Questioner } from "../core/cli/questioner.js";
 import { ConfigManager } from "../core/config/configManager.js";
-import { PROJECT_PATH } from "../core/constants/paths.js";
 import { MC_CONFIG_PATH } from "../core/constants/public.js";
 import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
 import { Logger } from "../core/logger/logger.js";
 import { generateUniqueId } from "../utils/id.js";
-import { installPackage } from "../utils/npm.js";
 
 Command.command("init")
     .description("Initialize the project with interactive prompts")
