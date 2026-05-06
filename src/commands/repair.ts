@@ -41,8 +41,8 @@ Command.command("repair")
             typeof (config as { behaviourPackPath?: string })["behaviourPackPath"] === "string" &&
             !config.behaviorPackPath
         ) {
-            delete (config as { behaviourPackPath?: string })["behaviourPackPath"];
             config.behaviorPackPath = (config as { behaviourPackPath?: string }).behaviourPackPath;
+            delete (config as { behaviourPackPath?: string })["behaviourPackPath"];
             changesMade.push("Migrated behaviourPackPath option to behaviorPackPath");
         }
 
