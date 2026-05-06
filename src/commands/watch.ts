@@ -1,12 +1,13 @@
+import { existsSync } from "fs";
+
 import { Command } from "../core/cli/command.js";
-import { Watcher } from "../core/filesystem/watcher.js";
+import { Questioner } from "../core/cli/questioner.js";
 import { ConfigManager } from "../core/config/configManager.js";
 import { OUTPUT_BEHAVIOUR_PACK_PATH, OUTPUT_RESOURCE_PACK_PATH } from "../core/constants/paths.js";
-import { ModuleManager } from "../core/modules/moduleManager.js";
-import { Logger } from "../core/logger/logger.js";
-import { Questioner } from "../core/cli/questioner.js";
+import { Watcher } from "../core/filesystem/watcher.js";
 import { Color } from "../core/logger/color.js";
-import { existsSync } from "fs";
+import { Logger } from "../core/logger/logger.js";
+import { ModuleManager } from "../core/modules/moduleManager.js";
 
 Command.command("watch")
     .description("Watch the current directory and copy files to the destination")

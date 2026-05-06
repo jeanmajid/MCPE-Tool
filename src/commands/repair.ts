@@ -1,12 +1,13 @@
-import { generateUniqueId } from "../utils/id.js";
-import { Logger } from "../core/logger/logger.js";
+import { existsSync } from "fs";
+import path from "path";
+
 import { Command } from "../core/cli/command.js";
 import { ConfigManager } from "../core/config/configManager.js";
-import { existsSync } from "fs";
 import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
-import path from "path";
-import { removeSync } from "../utils/files.js";
 import { MC_CONFIG_PATH } from "../core/constants/public.js";
+import { Logger } from "../core/logger/logger.js";
+import { removeSync } from "../utils/files.js";
+import { generateUniqueId } from "../utils/id.js";
 
 Command.command("repair")
     .description(
@@ -44,13 +45,13 @@ Command.command("repair")
         const removePaths = [
             path.join(BEHAVIOUR_PACK_PATH, "node_modules"),
             path.join(BEHAVIOUR_PACK_PATH, "package-lock.json"),
-            path.join(BEHAVIOUR_PACK_PATH, "package.json")
+            path.join(BEHAVIOUR_PACK_PATH, "package.json"),
         ];
 
-        for (const path of removePaths) {
-            if (existsSync(path)) {
-                removeSync(path);
-                changesMade.push(`Deleted ${path}`);
+        for (const removePath of removePaths) {
+            if (existsSync(removePath)) {
+                removeSync(removePath);
+                changesMade.push(`Deleted ${removePath}`);
             }
         }
 

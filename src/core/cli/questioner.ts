@@ -1,4 +1,5 @@
 import readline from "readline";
+
 import { Color } from "../logger/color.js";
 
 interface Question {
@@ -18,19 +19,16 @@ export class Questioner {
      * @param questions - An array of question objects.
      * @returns A promise that resolves to an object containing the user's answers.
      */
-    static async prompt(questions: Question[] = []): Promise<Answers> {
+    public static async prompt(questions: Question[] = []): Promise<Answers> {
         const answers: Answers = {};
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
         for (const question of questions) {
             console.log(Color.blue(question.message));
             const defaultValue =
                 typeof question.default === "function" ? question.default() : question.default;
-            const answer = await new Promise<string>((resolve) => {
-                rl.question(Color.green("(" + defaultValue + ")" + " "), (ans) => {
+            const answer = await new Promise<string>(resolve => {
+                rl.question(Color.green("(" + defaultValue + ")" + " "), ans => {
                     resolve(ans);
                 });
             });
@@ -65,15 +63,12 @@ export class Questioner {
      * }
      * ```
      */
-    static async promptConfirm(question: string, color = Color.blue): Promise<boolean> {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
+    public static async promptConfirm(question: string, color = Color.blue): Promise<boolean> {
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
         console.log(color(question));
-        const answer = await new Promise<string>((resolve) => {
-            rl.question(Color.green("(NO)" + " "), (ans) => {
+        const answer = await new Promise<string>(resolve => {
+            rl.question(Color.green("(NO)" + " "), ans => {
                 resolve(ans);
             });
         });

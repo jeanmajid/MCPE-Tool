@@ -1,8 +1,9 @@
-import fs from "fs";
 import { spawn } from "child_process";
-import { Logger } from "../core/logger/logger.js";
+import fs from "fs";
+
 import { Command } from "../core/cli/command.js";
 import { EXTERNAL_PATHS } from "../core/constants/paths.js";
+import { Logger } from "../core/logger/logger.js";
 
 Command.command("translate")
     .description("translates into all available languages")
@@ -15,18 +16,18 @@ Command.command("translate")
         Logger.info("Starting to translate all lang keys...");
         const script = spawn("python", ["-u", EXTERNAL_PATHS.TRANSLATE_PYTHON], {
             cwd: ".",
-            env: { ...process.env, PYTHONIOENCODING: "utf-8" }
+            env: { ...process.env, PYTHONIOENCODING: "utf-8" },
         });
-        script.stdout.on("data", (data) => {
+        script.stdout.on("data", data => {
             Logger.info(data.toString());
         });
-        script.stderr.on("data", (data) => {
+        script.stderr.on("data", data => {
             if (data.toString().includes("FutureWarning")) {
                 return;
             }
             Logger.error(data.toString());
         });
-        script.on("close", (code) => {
+        script.on("close", code => {
             Logger.info(`Translation script exited with code ${code}`);
         });
     });

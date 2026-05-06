@@ -18,6 +18,7 @@ If you find this project helpful, please consider giving it a star on GitHub
 ### NPM
 
 Just run this command
+
 ```batch
 npm i -g @jeanmajid/mcpe-tool
 ```
@@ -33,6 +34,7 @@ npm i -g @jeanmajid/mcpe-tool
 
 1. Clone or download the repository
 2. Run the installation script:
+
 ```batch
 install.bat
 ```
@@ -66,6 +68,7 @@ mc init
 ```
 
 This will guide you through creating a new Minecraft add-on project with:
+
 - Behavior Pack and/or Resource Pack setup
 - Manifest file generation
 - Basic project structure
@@ -89,19 +92,19 @@ Creates `.mcpack` and `.mcaddon` files in the `dist/` folder for sharing or publ
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `mc update` | Updates the tool to the newest version |
-| `mc init` | Initialize a new project with interactive setup |
-| `mc watch` | Start file watcher for automatic syncing |
-| `mc build` | Build distributable `.mcpack`/`.mcaddon` files |
-| `mc module add <name>` | Add a module to your project |
-| `mc module remove <name>` | Remove a module from your project |
-| `mc module list` | List all available modules |
-| `mc translate` | Translate language files to multiple languages |
-| `mc wss` | Start WebSocket server |
-| `mc repair` | Fix and update project configuration |
-| `mc help` | Show available commands |
+| Command                   | Description                                     |
+| ------------------------- | ----------------------------------------------- |
+| `mc update`               | Updates the tool to the newest version          |
+| `mc init`                 | Initialize a new project with interactive setup |
+| `mc watch`                | Start file watcher for automatic syncing        |
+| `mc build`                | Build distributable `.mcpack`/`.mcaddon` files  |
+| `mc module add <name>`    | Add a module to your project                    |
+| `mc module remove <name>` | Remove a module from your project               |
+| `mc module list`          | List all available modules                      |
+| `mc translate`            | Translate language files to multiple languages  |
+| `mc wss`                  | Start WebSocket server                          |
+| `mc repair`               | Fix and update project configuration            |
+| `mc help`                 | Show available commands                         |
 
 ## Modules
 
@@ -200,15 +203,11 @@ class SampleModule extends BaseModule {
     }
 
     handleFile(filePath: string): FileHandlerResult {
-        return {
-            fileData: "this file was redacted",
-            newFilePath: filePath.replace(".hide.", ".")
-        };
+        return { fileData: "this file was redacted", newFilePath: filePath.replace(".hide.", ".") };
     }
 }
 
 ModuleManager.registerModule(new SampleModule());
-
 ```
 
 **Note:** To register custom modules, create a customModules folder in src (src/customModules) and write your module in there.
@@ -232,7 +231,6 @@ Command.subCommand("sub")
     .action(async (args, flags) => {
         Logger.info("Ran your test sub command");
     });
-
 ```
 
 **Note:** To register custom commands, create a customCommands folder in src (src/customCommands) and write your custom command code in there.

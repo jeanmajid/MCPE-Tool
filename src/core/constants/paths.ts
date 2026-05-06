@@ -1,7 +1,8 @@
-import { ConfigManager } from "../config/configManager.js";
-import { fileURLToPath } from "url";
-import path from "path";
 import os from "os";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { ConfigManager } from "../config/configManager.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,9 +65,9 @@ export const IGNORE_PATHS = [
     "**/.vscode/**",
     "**/.gitignore",
     "**/package.json",
-    "**/package-lock.json"
+    "**/package-lock.json",
 ];
 
 export const EXTERNAL_PATHS = {
-    TRANSLATE_PYTHON: path.join(PROJECT_PATH, "external/translate/translateProject.py")
+    TRANSLATE_PYTHON: path.join(PROJECT_PATH, "external/translate/translateProject.py"),
 };

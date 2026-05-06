@@ -1,22 +1,23 @@
 import { ChildProcess, exec } from "child_process";
 import { writeFileSync, rmSync } from "fs";
+
 import { Logger } from "../core/logger/logger.js";
+import { BaseModule } from "../core/modules/baseModule.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
-import { BaseModule } from "../core/modules/baseModule.js";
 
 class TsModule extends BaseModule {
-    name: string = "ts";
-    description: string = "Enable the typescript transpiler";
-    cancelFileTransfer: boolean = true;
-    watchProcess: ChildProcess | undefined;
+    public name: string = "ts";
+    public description: string = "Enable the typescript transpiler";
+    public cancelFileTransfer: boolean = true;
+    public watchProcess: ChildProcess | undefined;
 
-    activator(filePath: string): boolean {
+    public activator(filePath: string): boolean {
         return pathHasExtension(filePath, "ts");
     }
 
-    onLaunch(bpPath?: string): Promise<void> | void {
-        exec("tsc --version", (error) => {
+    public onLaunch(bpPath?: string): Promise<void> | void {
+        exec("tsc --version", error => {
             if (error) {
                 Logger.error(
                     "TypeScript compiler not found. Please install TypeScript globally: npm install -g typescript"
@@ -32,24 +33,24 @@ class TsModule extends BaseModule {
                 moduleResolution: "Node",
                 allowSyntheticDefaultImports: true,
                 removeComments: true,
-                outDir: `${bpPath}/scripts`
+                outDir: `${bpPath}/scripts`,
             },
-            include: ["BP/scripts/**/*.ts"]
+            include: ["BP/scripts/**/*.ts"],
         };
 
         writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
 
         this.watchProcess = exec("tsc --watch");
 
-        this.watchProcess.stdout?.on("data", (data) => {
+        this.watchProcess.stdout?.on("data", data => {
             Logger.moduleLog(data);
         });
-        this.watchProcess.stderr?.on("data", (data) => {
+        this.watchProcess.stderr?.on("data", data => {
             Logger.error(data);
         });
     }
 
-    onExit(): Promise<void> | void {
+    public onExit(): Promise<void> | void {
         rmSync("./tsconfig.json");
         if (this.watchProcess) {
             this.watchProcess.kill();

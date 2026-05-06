@@ -1,13 +1,15 @@
-import { DEBUG } from "../constants/dev.js";
-import chokidar, { FSWatcher } from "chokidar";
-import { FileHandler } from "./fileHandler.js";
-import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../constants/paths.js";
-import { minimatch } from "minimatch";
-import { LocalTransport } from "./transport/localTransport.js";
 import fs from "fs";
-import { Logger } from "../logger/logger.js";
+
+import chokidar, { FSWatcher } from "chokidar";
+import { minimatch } from "minimatch";
+
 import { ConfigManager } from "../config/configManager.js";
+import { DEBUG } from "../constants/dev.js";
+import { BEHAVIOUR_PACK_PATH, IGNORE_PATHS, RESOURCE_PACK_PATH } from "../constants/paths.js";
+import { Logger } from "../logger/logger.js";
 import { ModuleManager } from "../modules/moduleManager.js";
+import { FileHandler } from "./fileHandler.js";
+import { LocalTransport } from "./transport/localTransport.js";
 
 export class Watcher {
     private watcher: FSWatcher | null;
@@ -15,7 +17,7 @@ export class Watcher {
     private cleanUpIsRunning = false;
     public lastTransfer: number = -1;
 
-    constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
+    public constructor(sourceDir: string, destDirBP: string, destDirRP: string) {
         this.watcher = null;
 
         this.fileHandler = new FileHandler(
@@ -25,7 +27,7 @@ export class Watcher {
         );
     }
 
-    async startWatching(): Promise<void> {
+    public async startWatching(): Promise<void> {
         const watchFolders: string[] = [];
 
         const bpFolder = BEHAVIOUR_PACK_PATH;
@@ -48,9 +50,9 @@ export class Watcher {
 
         this.watcher = chokidar.watch(watchFolders, {
             ignored: (filePath: string) => {
-                return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
+                return IGNORE_PATHS.some(pattern => minimatch(filePath, pattern, { dot: true }));
             },
-            awaitWriteFinish: config.awaitWriteFinish ?? false
+            awaitWriteFinish: config.awaitWriteFinish ?? false,
         });
 
         const handleFileEvent = async (filePath: string, event: string): Promise<void> => {
@@ -96,7 +98,7 @@ export class Watcher {
         }
     }
 
-    async stopWatching(): Promise<void> {
+    public async stopWatching(): Promise<void> {
         if (this.cleanUpIsRunning) {
             return;
         }
@@ -121,6 +123,7 @@ export class Watcher {
 
         for (const module of ModuleManager.modules) {
             if (module.onExit) {
+                // oxlint-disable-next-line no-await-in-loop
                 await module.onExit();
             }
         }

@@ -1,16 +1,17 @@
 import path from "path";
+
 import { loadDir } from "../../utils/files.js";
-import { FileHandler } from "../filesystem/fileHandler.js";
 import { PROJECT_PATH_SRC } from "../constants/paths.js";
+import { FileHandler } from "../filesystem/fileHandler.js";
 import { BaseModule } from "./baseModule.js";
 
 export class ModuleManager {
-    static modules: BaseModule[] = [];
+    public static modules: BaseModule[] = [];
 
-    static async loadAllModules(): Promise<void> {
+    public static async loadAllModules(): Promise<void> {
         await Promise.all([
             loadDir(path.join(PROJECT_PATH_SRC, "modules")),
-            loadDir(path.join(PROJECT_PATH_SRC, "customModules"))
+            loadDir(path.join(PROJECT_PATH_SRC, "customModules")),
         ]);
     }
 
@@ -31,7 +32,7 @@ export class ModuleManager {
      * });
      * ```
      */
-    static registerModule(module: BaseModule): void {
+    public static registerModule(module: BaseModule): void {
         if (!module.name) {
             throw new Error("No Name specified for module");
         }
@@ -51,8 +52,8 @@ export class ModuleManager {
         this.modules.push(module);
     }
 
-    static checkIfModuleExists(name: string): boolean {
-        return this.modules.some((module) => module.name === name);
+    public static checkIfModuleExists(name: string): boolean {
+        return this.modules.some(module => module.name === name);
     }
 
     /**
@@ -60,7 +61,7 @@ export class ModuleManager {
      * @param filePath - The path of the file to process
      * @param fileHandler - The file handler to use
      */
-    static async processFile(filePath: string, fileHandler: FileHandler): Promise<boolean> {
+    public static async processFile(filePath: string, fileHandler: FileHandler): Promise<boolean> {
         let value = false;
         for (const module of this.modules) {
             if (module.activator?.(filePath)) {
@@ -85,12 +86,12 @@ export class ModuleManager {
      * @param bpPath - Path to the behavior pack directory
      * @param rpPath - Path to the resource pack directory
      */
-    static async filterModules(
+    public static async filterModules(
         modulesToAdd: string[],
         bpPath: string,
         rpPath: string
     ): Promise<void> {
-        this.modules = this.modules.filter((module) => modulesToAdd.includes(module.name));
+        this.modules = this.modules.filter(module => modulesToAdd.includes(module.name));
 
         for (const module of this.modules) {
             if (module.activatorHandlerPairs) {
@@ -113,7 +114,7 @@ export class ModuleManager {
                 await module.onLaunch(bpPath, rpPath);
             }
             if (!module.activator) {
-                this.modules = this.modules.filter((m) => m.name !== module.name);
+                this.modules = this.modules.filter(m => m.name !== module.name);
             }
         }
     }

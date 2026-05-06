@@ -1,0 +1,26 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "ignorePatterns": ["*/dist/**/*", "**/*.js"],
+    "endOfLine": "crlf",
+    "tabWidth": 4,
+    "useTabs": false,
+    "printWidth": 100,
+    "semi": true,
+    "experimentalSortImports": {
+        "ignoreCase": true,
+        "order": "asc",
+        "partitionByComment": true,
+        "newlinesBetween": true,
+        "sortSideEffects": true
+    },
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "objectWrap": "collapse",
+    "quoteProps": "as-needed",
+    "bracketSameLine": true,
+    "embeddedLanguageFormatting": "auto",
+    "insertFinalNewline": true,
+    "singleAttributePerLine": true,
+    "trailingComma": "es5",
+    "singleQuote": false
+}

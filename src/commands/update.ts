@@ -1,8 +1,9 @@
-import { Logger } from "../core/logger/logger.js";
-import { Command } from "../core/cli/command.js";
-import { PROJECT_PATH } from "../core/constants/paths.js";
 import { execSync } from "child_process";
 import { existsSync } from "fs";
+
+import { Command } from "../core/cli/command.js";
+import { PROJECT_PATH } from "../core/constants/paths.js";
+import { Logger } from "../core/logger/logger.js";
 
 Command.command("update")
     .description("Updates the tool to the newest version")

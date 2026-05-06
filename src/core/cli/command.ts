@@ -1,10 +1,11 @@
-import { Logger } from "../logger/logger.js";
-import { Color } from "../logger/color.js";
-import { loadDir } from "../../utils/files.js";
-import path from "path";
-import { PROJECT_PATH_SRC } from "../constants/paths.js";
-import { pathToFileURL } from "url";
 import { existsSync } from "fs";
+import path from "path";
+import { pathToFileURL } from "url";
+
+import { loadDir } from "../../utils/files.js";
+import { PROJECT_PATH_SRC } from "../constants/paths.js";
+import { Color } from "../logger/color.js";
+import { Logger } from "../logger/logger.js";
 
 interface CommandAction {
     (args: string[], flags: string[]): Promise<void | unknown> | void | unknown;
@@ -22,16 +23,16 @@ interface CommandDefinition {
 }
 
 export class Command {
-    static commands: Record<string, CommandDefinition> = {};
-    static currentCommand: CommandDefinition | null = null;
-    static currentSubCommand: string | null = null;
+    public static commands: Record<string, CommandDefinition> = {};
+    public static currentCommand: CommandDefinition | null = null;
+    public static currentSubCommand: string | null = null;
 
     /**
      * Sets the current command name.
      * @param name - The name of the command.
      * @returns The Command class.
      */
-    static command(name: string): typeof Command {
+    public static command(name: string): typeof Command {
         Command.currentSubCommand = null;
         const command: CommandDefinition = { description: "", action: null };
         Command.commands[name] = command;
@@ -39,7 +40,7 @@ export class Command {
         return Command;
     }
 
-    static subCommand(name: string): typeof Command {
+    public static subCommand(name: string): typeof Command {
         if (Command.currentCommand) {
             Command.currentSubCommand = name;
             const subCommand: SubCommand = { description: "", action: null };
@@ -56,10 +57,10 @@ export class Command {
      * @param desc - The description of the command.
      * @returns The Command class.
      */
-    static description(desc: string): typeof Command {
+    public static description(desc: string): typeof Command {
         if (Command.currentCommand) {
-            if (Command.currentSubCommand) {
-                Command.currentCommand.subCommands![Command.currentSubCommand].description = desc;
+            if (Command.currentSubCommand && Command.currentCommand.subCommands) {
+                Command.currentCommand.subCommands[Command.currentSubCommand].description = desc;
             } else {
                 Command.currentCommand.description = desc;
             }
@@ -72,10 +73,10 @@ export class Command {
      * @param actionFunc - The action function to be executed for the command.
      * @returns The Command class.
      */
-    static action(actionFunc: CommandAction): typeof Command {
+    public static action(actionFunc: CommandAction): typeof Command {
         if (Command.currentCommand) {
-            if (Command.currentSubCommand) {
-                Command.currentCommand.subCommands![Command.currentSubCommand].action = actionFunc;
+            if (Command.currentSubCommand && Command.currentCommand.subCommands) {
+                Command.currentCommand.subCommands[Command.currentSubCommand].action = actionFunc;
             } else {
                 Command.currentCommand.action = actionFunc;
             }
@@ -91,7 +92,7 @@ export class Command {
      * @param flags - Command flags.
      * @returns A promise that resolves when the command execution is complete.
      */
-    static async execute(
+    public static async execute(
         commandName: string,
         subCommand: string | undefined = undefined,
         args: string[],
@@ -133,14 +134,14 @@ export class Command {
         }
     }
 
-    static async loadAllCommands(): Promise<void> {
+    public static async loadAllCommands(): Promise<void> {
         await Promise.all([loadDir(path.join(PROJECT_PATH_SRC, "commands")), loadDir("./plugins")]);
     }
 
     /**
      * Displays the available commands and their descriptions.
      */
-    static async help(): Promise<void> {
+    public static async help(): Promise<void> {
         await this.loadAllCommands();
         console.log(Color.blue("Available commands:"));
         for (const command in Command.commands) {
@@ -149,7 +150,7 @@ export class Command {
                 for (const subCommand in Command.commands[command].subCommands) {
                     console.log(
                         Color.yellow(
-                            `  - ${subCommand}: ${Command.commands[command].subCommands![subCommand].description}`
+                            `  - ${subCommand}: ${Command.commands[command].subCommands?.[subCommand].description}`
                         )
                     );
                 }
@@ -161,9 +162,9 @@ export class Command {
      * Parses the command line arguments and executes the corresponding command.
      * @param argv - The command line arguments.
      */
-    static parse(argv: string[]): void {
+    public static parse(argv: string[]): void {
         const flags: string[] = [];
-        let args = argv.slice(2).filter((arg) => {
+        let args = argv.slice(2).filter(arg => {
             if (arg.startsWith("-")) {
                 flags.push(arg);
                 return false;

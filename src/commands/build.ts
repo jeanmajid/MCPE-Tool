@@ -1,16 +1,18 @@
+import fs from "fs";
+
+import type { Archiver } from "archiver";
+
 import { Command } from "../core/cli/command.js";
+import { ConfigManager } from "../core/config/configManager.js";
 import {
     BEHAVIOUR_PACK_PATH,
     IGNORE_PATHS,
     OUTPUT_BEHAVIOUR_PACK_PATH,
     OUTPUT_RESOURCE_PACK_PATH,
-    RESOURCE_PACK_PATH
+    RESOURCE_PACK_PATH,
 } from "../core/constants/paths.js";
-import fs from "fs";
-import { ConfigManager } from "../core/config/configManager.js";
-import { Logger } from "../core/logger/logger.js";
-import type { Archiver } from "archiver";
 import { Watcher } from "../core/filesystem/watcher.js";
+import { Logger } from "../core/logger/logger.js";
 
 interface FileMapping {
     filePath: string;
@@ -42,7 +44,7 @@ Command.command("build")
         let stableStartTime = Date.now();
 
         while (true) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 100));
 
             if (watcher.lastTransfer === lastTransferNumber) {
                 // wait 5 seconds, bcs im too lazy rn to handle awaiting of ts module
@@ -56,12 +58,13 @@ Command.command("build")
         }
 
         const { glob } = await import("glob");
+        //const { glob } = await import("node:fs");
         const { default: archiver } = await import("archiver");
 
         fs.mkdirSync("dist", { recursive: true });
 
         function getPathsRelativeToRoot(paths: string[], rootName: string): string[] {
-            return paths.map((path) => {
+            return paths.map(path => {
                 const parts = path.split(/[/\\]/);
                 const rootIndex = parts.indexOf(rootName);
 
@@ -77,17 +80,14 @@ Command.command("build")
             Logger.info("Creating BP .mcpack file...");
 
             // Not using path.join, as glob only accepts / and not \
-            const bpFiles: string[] = glob.sync(OUTPUT_BEHAVIOUR_PACK_PATH + "/**/*", {
+            const bpFiles: string[] = await glob(OUTPUT_BEHAVIOUR_PACK_PATH + "/**/*", {
                 ignore: IGNORE_PATHS,
-                nodir: true
+                nodir: true,
             });
             const relativePaths = getPathsRelativeToRoot(bpFiles, config.name + "BP");
 
             const paths: FileMapping[] = relativePaths.map((file: string, index: number) => {
-                return {
-                    filePath: bpFiles[index],
-                    outputPath: file
-                };
+                return { filePath: bpFiles[index], outputPath: file };
             });
 
             const bpBuffer: Buffer = await zipFiles(paths, archiver);
@@ -98,17 +98,14 @@ Command.command("build")
             Logger.info("Creating RP .mcpack file...");
 
             // Not using path.join, as glob only accepts / and not \
-            const rpFiles: string[] = glob.sync(OUTPUT_RESOURCE_PACK_PATH + "/**/*", {
+            const rpFiles: string[] = await glob(OUTPUT_RESOURCE_PACK_PATH + "/**/*", {
                 ignore: IGNORE_PATHS,
-                nodir: true
+                nodir: true,
             });
             const relativePaths = getPathsRelativeToRoot(rpFiles, config.name + "RP");
 
             const paths: FileMapping[] = relativePaths.map((file: string, index: number) => {
-                return {
-                    filePath: rpFiles[index],
-                    outputPath: file
-                };
+                return { filePath: rpFiles[index], outputPath: file };
             });
 
             const rpBuffer: Buffer = await zipFiles(paths, archiver);
@@ -120,12 +117,9 @@ Command.command("build")
 
             const paths: FileMapping[] = [
                 `./dist/${config.name}BP.mcpack`,
-                `./dist/${config.name}RP.mcpack`
+                `./dist/${config.name}RP.mcpack`,
             ].map((file: string) => {
-                return {
-                    filePath: file,
-                    outputPath: file.slice(7)
-                };
+                return { filePath: file, outputPath: file.slice(7) };
             });
 
             const addonBuffer: Buffer = await zipFiles(paths, archiver);

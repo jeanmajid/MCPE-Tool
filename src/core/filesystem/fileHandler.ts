@@ -1,7 +1,8 @@
-import { Logger } from "../logger/logger.js";
 import path from "path";
-import { Transport } from "./transport/transport.js";
+
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../constants/paths.js";
+import { Logger } from "../logger/logger.js";
+import { Transport } from "./transport/transport.js";
 
 /**
  * Represents a file handler that performs file operations such as copying, deleting, and refreshing directories.
@@ -11,7 +12,7 @@ export class FileHandler {
     private transportBP: Transport;
     private transportRP: Transport;
 
-    constructor(sourceDir: string, transportBP: Transport, transportRP: Transport) {
+    public constructor(sourceDir: string, transportBP: Transport, transportRP: Transport) {
         this.sourceDir = sourceDir;
         this.transportBP = transportBP;
         this.transportRP = transportRP;
@@ -48,7 +49,7 @@ export class FileHandler {
         }
     }
 
-    async copyFile(filePath: string): Promise<void> {
+    public async copyFile(filePath: string): Promise<void> {
         const { transport, pathTo } = this.getTransportAndPath(filePath);
 
         await this.handleOperation(
@@ -58,7 +59,7 @@ export class FileHandler {
         );
     }
 
-    async writeFile(filePath: string, newFile: string): Promise<void> {
+    public async writeFile(filePath: string, newFile: string): Promise<void> {
         const { transport, pathTo } = this.getTransportAndPath(filePath);
 
         await this.handleOperation(
@@ -68,7 +69,7 @@ export class FileHandler {
         );
     }
 
-    async deleteFile(filePath: string): Promise<void> {
+    public async deleteFile(filePath: string): Promise<void> {
         const { transport, pathTo } = this.getTransportAndPath(filePath);
 
         await this.handleOperation(
@@ -78,7 +79,7 @@ export class FileHandler {
         );
     }
 
-    async removeDestinationDirectories(): Promise<void> {
+    public async removeDestinationDirectories(): Promise<void> {
         await Promise.all([this.transportBP.deleteFile("."), this.transportRP.deleteFile(".")]);
     }
 }

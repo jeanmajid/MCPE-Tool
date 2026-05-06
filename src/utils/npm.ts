@@ -1,10 +1,11 @@
-import fs from "fs";
-import { PROJECT_PATH } from "../core/constants/paths.js";
-import { Logger } from "../core/logger/logger.js";
 import { exec } from "child_process";
-import { HAS_INTERNET } from "../core/constants/wifi.js";
-import { validPackageNames } from "../core/constants/validMcpePackages.js";
+import fs from "fs";
 import path from "path";
+
+import { PROJECT_PATH } from "../core/constants/paths.js";
+import { validPackageNames } from "../core/constants/validMcpePackages.js";
+import { HAS_INTERNET } from "../core/constants/wifi.js";
+import { Logger } from "../core/logger/logger.js";
 
 /**
  * Fetches the versions of a given package from the npm registry.
@@ -48,7 +49,7 @@ export async function getLatestPackageVersion(
 
     return {
         version: latest.split(".").splice(0, 3).join("."),
-        package: (packageName + "@" + latest) as validPackageNames
+        package: (packageName + "@" + latest) as validPackageNames,
     };
 }
 
@@ -64,8 +65,8 @@ export function getInstalledPackageVersion(packageName: string, cwd = "."): stri
 }
 
 export async function installPackage(packageName: string | string[], cwd = "."): Promise<boolean> {
-    await initialiseNpm(cwd);
-    return await new Promise<boolean>((resolve) => {
+    await initializeNPM(cwd);
+    return await new Promise<boolean>(resolve => {
         if (!HAS_INTERNET) {
             Logger.error(
                 `Failed to install package ${packageName} - no internet connection available`
@@ -91,7 +92,7 @@ export async function installPackage(packageName: string | string[], cwd = "."):
     });
 }
 
-export async function initialiseNpm(cwd = "."): Promise<void> {
+export async function initializeNPM(cwd = "."): Promise<void> {
     if (!fs.existsSync(path.join(cwd, "package.json"))) {
         Logger.error("No package.json file found in the current directory.");
         await new Promise<void>((resolve, reject) => {

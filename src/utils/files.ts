@@ -23,7 +23,7 @@ export function ensureDirSync(dirPath: string): void {
 export function removeSync(targetPath: string): void {
     if (fs.existsSync(targetPath)) {
         if (fs.lstatSync(targetPath).isDirectory()) {
-            fs.readdirSync(targetPath).forEach((file) => {
+            fs.readdirSync(targetPath).forEach(file => {
                 const curPath = path.join(targetPath, file);
                 removeSync(curPath);
             });
@@ -38,9 +38,9 @@ export async function loadDir(dir: string): Promise<void> {
     if (!fs.existsSync(dir)) {
         return;
     }
-    const jsFiles = fs.readdirSync(dir).filter((f) => f.endsWith(".js"));
+    const jsFiles = fs.readdirSync(dir).filter(f => f.endsWith(".js"));
     await Promise.all(
-        jsFiles.map((fileName) => {
+        jsFiles.map(fileName => {
             const fullPath = path.join(dir, fileName);
             return import(pathToFileURL(fullPath).href);
         })

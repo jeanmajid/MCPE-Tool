@@ -1,12 +1,12 @@
 {
-    "eslint.enable": true,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "eslint.validate": ["javascript", "typescript"],
-    "eslint.format.enable": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    "eslint.enable": false,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+    "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+    "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+    "files.eol": "\n"
 }

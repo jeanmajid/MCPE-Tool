@@ -4,73 +4,35 @@
     "description": "Auto-generated schema for mc Config",
     "type": "object",
     "properties": {
-        "$schema": {
-            "type": "string"
-        },
-        "name": {
-            "description": "The name of the project",
-            "type": "string"
-        },
-        "description": {
-            "description": "The description of the project",
-            "type": "string"
-        },
+        "$schema": { "type": "string" },
+        "name": { "description": "The name of the project", "type": "string" },
+        "description": { "description": "The description of the project", "type": "string" },
         "modules": {
             "description": "The modules of the project",
             "type": "array",
-            "items": {
-                "type": "string"
-            },
+            "items": { "type": "string" },
             "uniqueItems": true
         },
-        "id": {
-            "description": "The ID of the project",
-            "type": "string"
-        },
-        "resourcePackPath": {
-            "description": "The Path to the Resource Pack",
-            "type": "string"
-        },
-        "behaviourPackPath": {
-            "description": "The Path to the Behaviour Pack",
-            "type": "string"
-        },
+        "id": { "description": "The ID of the project", "type": "string" },
+        "resourcePackPath": { "description": "The Path to the Resource Pack", "type": "string" },
+        "behaviourPackPath": { "description": "The Path to the Behaviour Pack", "type": "string" },
         "output": {
             "description": "Output target environment",
             "type": "string",
-            "enum": [
-                "stable",
-                "preview",
-                "stable_uwp",
-                "preview_uwp"
-            ]
+            "enum": ["stable", "preview", "stable_uwp", "preview_uwp"]
         },
         "awaitWriteFinish": {
             "description": "Wait for file write completion before transfer",
             "type": "object",
             "properties": {
-                "$schema": {
-                    "type": "string"
-                },
-                "stabilityThreshold": {
-                    "type": "number"
-                },
-                "pollInterval": {
-                    "type": "number"
-                }
+                "$schema": { "type": "string" },
+                "stabilityThreshold": { "type": "number" },
+                "pollInterval": { "type": "number" }
             },
-            "required": [
-                "stabilityThreshold",
-                "pollInterval"
-            ],
+            "required": ["stabilityThreshold", "pollInterval"],
             "additionalProperties": false
         }
     },
-    "required": [
-        "name",
-        "description",
-        "modules",
-        "id"
-    ],
+    "required": ["name", "description", "modules", "id"],
     "additionalProperties": false
 }

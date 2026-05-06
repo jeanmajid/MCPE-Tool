@@ -1,14 +1,15 @@
-import { Questioner } from "../core/cli/questioner.js";
 import fs, { copyFileSync, existsSync, mkdirSync } from "fs";
-import { generateUniqueId } from "../utils/id.js";
-import { Command } from "../core/cli/command.js";
-import { ConfigManager } from "../core/config/configManager.js";
-import { Logger } from "../core/logger/logger.js";
-import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
 import path from "path";
+
+import { Command } from "../core/cli/command.js";
+import { Questioner } from "../core/cli/questioner.js";
+import { ConfigManager } from "../core/config/configManager.js";
 import { PROJECT_PATH } from "../core/constants/paths.js";
-import { installPackage } from "../utils/npm.js";
 import { MC_CONFIG_PATH } from "../core/constants/public.js";
+import { ManifestGenerator } from "../core/generators/manifestGenerator.js";
+import { Logger } from "../core/logger/logger.js";
+import { generateUniqueId } from "../utils/id.js";
+import { installPackage } from "../utils/npm.js";
 
 Command.command("init")
     .description("Initialize the project with interactive prompts")
@@ -24,38 +25,28 @@ Command.command("init")
                 type: "input",
                 name: "projectName",
                 message: "Project name:",
-                default: (): string => process.cwd().split(/[/\\]/).pop() as string
+                default: (): string => process.cwd().split(/[/\\]/).pop() as string,
             },
             {
                 type: "input",
                 name: "projectDescription",
                 message: "Project description:",
-                default: (): string => ""
+                default: (): string => "",
             },
             {
                 type: "confirm",
                 name: "behaviourPack",
                 message: "Behaviour pack?",
-                default: (): boolean => true
+                default: (): boolean => true,
             },
             {
                 type: "confirm",
                 name: "resourcePack",
                 message: "Resource pack?",
-                default: (): boolean => false
+                default: (): boolean => false,
             },
-            {
-                type: "input",
-                name: "author",
-                message: "Project Author",
-                default: (): string => ""
-            },
-            {
-                type: "confirm",
-                name: "eslint",
-                message: "Eslint?",
-                default: (): boolean => false
-            }
+            { type: "input", name: "author", message: "Project Author", default: (): string => "" },
+            { type: "confirm", name: "eslint", message: "Eslint?", default: (): boolean => false },
         ]);
         Logger.info(`Initializing project: ${answers.projectName}`);
         const generatorRP = new ManifestGenerator(
@@ -111,7 +102,7 @@ Command.command("init")
                 "prettier",
                 "@typescript-eslint/eslint-plugin",
                 "@typescript-eslint/parser",
-                "eslint"
+                "eslint",
             ];
 
             copyFileSync(path.join(PROJECT_PATH, "eslint.config.js"), "./eslint.config.js");
@@ -139,7 +130,7 @@ Command.command("init")
                     name: answers.projectName,
                     description: answers.projectDescription,
                     modules: ["npm"],
-                    id: generateUniqueId()
+                    id: generateUniqueId(),
                 },
                 null,
                 4

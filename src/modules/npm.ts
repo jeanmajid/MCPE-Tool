@@ -1,32 +1,33 @@
+import { ChildProcess } from "node:child_process";
+
+import { ConfigManager } from "../core/config/configManager.js";
 import { validPackageNames } from "../core/constants/validMcpePackages.js";
-import { ChildProcess } from "child_process";
+import { VALID_MCPE_PACKAGES } from "../core/constants/validMcpePackages.js";
+import { HAS_INTERNET } from "../core/constants/wifi.js";
 import { Logger } from "../core/logger/logger.js";
-import { ModuleManager } from "../core/modules/moduleManager.js";
 import { BaseModule } from "../core/modules/baseModule.js";
+import { ModuleManager } from "../core/modules/moduleManager.js";
+import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
 import {
     getInstalledPackageVersion,
-    initialiseNpm,
+    initializeNPM,
     installPackage,
-    getLatestPackageVersion
+    getLatestPackageVersion,
 } from "../utils/npm.js";
-import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
-import { HAS_INTERNET } from "../core/constants/wifi.js";
-import { ConfigManager } from "../core/config/configManager.js";
-import { VALID_MCPE_PACKAGES } from "../core/constants/validMcpePackages.js";
 
 class NpmModule extends BaseModule {
-    name: string = "npm";
-    description: string = "Auto install npm packages";
-    watchProcess: ChildProcess | undefined;
+    public name: string = "npm";
+    public description: string = "Auto install npm packages";
+    public watchProcess: ChildProcess | undefined;
 
-    async onLaunch(): Promise<void> {
+    public async onLaunch(): Promise<void> {
         if (!HAS_INTERNET) {
             Logger.moduleLog(
                 "[NPM MODULE] Skipping npm package checks - no internet connection available"
             );
             return;
         }
-        await initialiseNpm();
+        await initializeNPM();
         Logger.moduleLog("Checking for npm package updates...");
         const manifest = readManifest("BP");
 
@@ -57,11 +58,11 @@ class NpmModule extends BaseModule {
             }
             let latest: Awaited<ReturnType<typeof getLatestPackageVersion>>;
             if (config.output === "preview") {
-                latest = await getLatestPackageVersion(dependency.module_name, (name) =>
+                latest = await getLatestPackageVersion(dependency.module_name, name =>
                     name.includes("preview")
                 );
             } else {
-                latest = await getLatestPackageVersion(dependency.module_name, (name) =>
+                latest = await getLatestPackageVersion(dependency.module_name, name =>
                     name.includes("stable")
                 );
             }
@@ -92,8 +93,8 @@ class NpmModule extends BaseModule {
         }
     }
 
-    async tryFixStableVersion(dependency: ManifestDependency): Promise<void> {
-        await initialiseNpm();
+    public async tryFixStableVersion(dependency: ManifestDependency): Promise<void> {
+        await initializeNPM();
         if (
             dependency.module_name &&
             dependency.version !==

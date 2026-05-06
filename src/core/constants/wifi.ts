@@ -10,7 +10,7 @@ function hasInternetConnection(): boolean {
         }
 
         const hasActiveConnection = netInterface.some(
-            (addr) =>
+            addr =>
                 (addr.family === "IPv4" || addr.family === "IPv6") &&
                 !addr.internal &&
                 addr.address !== "127.0.0.1" &&

@@ -36,15 +36,15 @@ interface Manifest {
  * Class representing a Manifest Generator.
  */
 export class ManifestGenerator {
-    mainUUID: string = generateUUIDv4();
-    manifest: Manifest;
+    public mainUUID: string = generateUUIDv4();
+    public manifest: Manifest;
 
     /**
      * Create a Manifest Generator.
      * @param name - The name of the manifest.
      * @param description - The description of the manifest.
      */
-    constructor(name: string, description: string = "") {
+    public constructor(name: string, description: string = "") {
         this.manifest = {
             format_version: 2,
             header: {
@@ -52,8 +52,8 @@ export class ManifestGenerator {
                 description: description,
                 uuid: this.mainUUID,
                 version: [1, 0, 0],
-                min_engine_version: [1, 21, 70]
-            }
+                min_engine_version: [1, 21, 70],
+            },
         };
     }
 
@@ -63,16 +63,16 @@ export class ManifestGenerator {
      * @param language - The language of the module.
      * @param entry - The entry point of the module.
      */
-    addModule(type: string, language: string | null = null, entry: string | null = null): void {
+    public addModule(
+        type: string,
+        language: string | null = null,
+        entry: string | null = null
+    ): void {
         if (!this.manifest.modules) {
             this.manifest.modules = [];
         }
 
-        const module: ManifestModule = {
-            type: type,
-            uuid: generateUUIDv4(),
-            version: [1, 0, 0]
-        };
+        const module: ManifestModule = { type: type, uuid: generateUUIDv4(), version: [1, 0, 0] };
 
         if (language) {
             module.language = language;
@@ -88,11 +88,9 @@ export class ManifestGenerator {
      * Add an author to the manifest.
      * @param author - The author to add.
      */
-    addAuthor(author: string): void {
+    public addAuthor(author: string): void {
         if (!this.manifest.metadata) {
-            this.manifest.metadata = {
-                authors: []
-            };
+            this.manifest.metadata = { authors: [] };
         }
 
         this.manifest.metadata.authors.push(author);
@@ -103,7 +101,7 @@ export class ManifestGenerator {
      * @param module_name - The name of the module to depend on.
      * @param version - The version of the module to depend on.
      */
-    addDependency(module_name: string, version: string): void {
+    public addDependency(module_name: string, version: string): void {
         if (!this.manifest.dependencies) {
             this.manifest.dependencies = [];
         }
@@ -115,7 +113,7 @@ export class ManifestGenerator {
      * @param uuid - The UUID of the module to depend on.
      * @param version - The version of the module to depend on.
      */
-    addDependencyUUID(uuid: string, version: string): void {
+    public addDependencyUUID(uuid: string, version: string): void {
         if (!this.manifest.dependencies) {
             this.manifest.dependencies = [];
         }
@@ -126,7 +124,7 @@ export class ManifestGenerator {
      * Generate the manifest object.
      * @returns The generated manifest object.
      */
-    generate(): Manifest {
+    public generate(): Manifest {
         return this.manifest;
     }
 
@@ -134,7 +132,7 @@ export class ManifestGenerator {
      * Generate the manifest object as a string.
      * @returns The generated manifest object as a string.
      */
-    generateString(): string {
+    public generateString(): string {
         return JSON.stringify(this.manifest, null, 4);
     }
 }
