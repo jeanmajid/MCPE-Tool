@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { pathToFileURL } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 /**
  * Ensures that the directory exists. If the directory structure does not exist, it is created.
@@ -14,24 +14,6 @@ export function ensureDirSync(dirPath: string): void {
     ensureDirSync(path.dirname(dirPath));
 
     fs.mkdirSync(dirPath);
-}
-
-/**
- * Recursively removes a file or directory.
- * @param {string} targetPath - The path of the file or directory to remove.
- */
-export function removeSync(targetPath: string): void {
-    if (fs.existsSync(targetPath)) {
-        if (fs.lstatSync(targetPath).isDirectory()) {
-            fs.readdirSync(targetPath).forEach(file => {
-                const curPath = path.join(targetPath, file);
-                removeSync(curPath);
-            });
-            fs.rmdirSync(targetPath);
-        } else {
-            fs.unlinkSync(targetPath);
-        }
-    }
 }
 
 export async function loadDir(dir: string): Promise<void> {

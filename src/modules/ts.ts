@@ -28,9 +28,9 @@ class TsModule extends BaseModule {
 
         const tsConfig = {
             compilerOptions: {
-                module: "ESNext",
-                target: "ESNext",
-                moduleResolution: "Node",
+                target: "esnext",
+                module: "esnext",
+                moduleResolution: "bundler",
                 allowSyntheticDefaultImports: true,
                 removeComments: true,
                 outDir: `${bpPath}/scripts`,

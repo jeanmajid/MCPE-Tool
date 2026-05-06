@@ -1,7 +1,8 @@
 import fs from "fs";
+import { rm } from "fs/promises";
 import path from "path";
 
-import { ensureDirSync, removeSync } from "../../../utils/files.js";
+import { ensureDirSync } from "../../../utils/files.js";
 import { Transport } from "./transport.js";
 
 export class LocalTransport implements Transport {
@@ -32,6 +33,6 @@ export class LocalTransport implements Transport {
 
     public async deleteFile(fileRelative: string): Promise<void> {
         const pathTo = path.join(this.destPath, fileRelative);
-        removeSync(pathTo);
+        await rm(pathTo, { recursive: true });
     }
 }

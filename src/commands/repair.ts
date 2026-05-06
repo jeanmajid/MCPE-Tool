@@ -1,4 +1,5 @@
 import { existsSync } from "fs";
+import { rm } from "fs/promises";
 import path from "path";
 
 import { Command } from "../core/cli/command.js";
@@ -6,7 +7,6 @@ import { ConfigManager } from "../core/config/configManager.js";
 import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
 import { MC_CONFIG_PATH } from "../core/constants/public.js";
 import { Logger } from "../core/logger/logger.js";
-import { removeSync } from "../utils/files.js";
 import { generateUniqueId } from "../utils/id.js";
 
 Command.command("repair")
@@ -50,7 +50,7 @@ Command.command("repair")
 
         for (const removePath of removePaths) {
             if (existsSync(removePath)) {
-                removeSync(removePath);
+                await rm(removePath, { recursive: true });
                 changesMade.push(`Deleted ${removePath}`);
             }
         }
