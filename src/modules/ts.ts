@@ -6,6 +6,13 @@ import { BaseModule } from "../core/modules/baseModule.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
 import { pathHasExtension } from "../utils/path.js";
 
+// TODO: Use npx tsc
+
+// TODO: Only write config if it does not exist
+
+// TODO: Provide outDir as cmd flag and remove from config
+// TODO: Add default as safety net, in case someone tries to run tsc, so it doesn't blow up their files
+
 class TsModule extends BaseModule {
     public name: string = "ts";
     public description: string = "Enable the typescript transpiler";
