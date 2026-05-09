@@ -7,10 +7,10 @@
     "author": "",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jeanmajid/MCPE-Tool"
+        "url": "git+https://github.com/jeanmajid/MCPE-Tool.git"
     },
     "bin": {
-        "mc": "./dist/main.js"
+        "mc": "dist/main.js"
     },
     "type": "module",
     "main": "dist/core/api/index.js",
@@ -38,4 +38,3 @@
         "oxlint": "^1.63.0"
     }
 }
-
