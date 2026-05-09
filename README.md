@@ -72,7 +72,6 @@ This will guide you through creating a new Minecraft add-on project with:
 - Behavior Pack and/or Resource Pack setup
 - Manifest file generation
 - Basic project structure
-- Optional ESLint configuration
 
 ### Start Development
 

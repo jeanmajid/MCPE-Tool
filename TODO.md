@@ -25,6 +25,7 @@ This is the projects todo list and shows which features are currently being work
 
 ### Modules
 
+- Make NPM and PNPM cross compatible, so projects don't have to force their users to install pnpm
 - Make "external modules" - user defined ones with their own process for easier management. Their cwd could be in the target folder
 - WSS module support custom actions, based on a file and custom key combinations.
 

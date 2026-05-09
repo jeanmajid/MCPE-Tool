@@ -64,7 +64,11 @@ export function getInstalledPackageVersion(packageName: string, cwd = "."): stri
     return dependencies[packageName];
 }
 
-export async function installPackage(packageName: string | string[], cwd = "."): Promise<boolean> {
+export async function installPackage(
+    packageName: string | string[],
+    cwd = ".",
+    packageManager = "npm"
+): Promise<boolean> {
     await initializeNPM(cwd);
     return await new Promise<boolean>(resolve => {
         if (!HAS_INTERNET) {
@@ -75,7 +79,7 @@ export async function installPackage(packageName: string | string[], cwd = "."):
         }
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         // the current version of the @minecraft packages is broken, use this while its not fixed
-        exec(`npm install --force ${packages}`, { cwd }, (error, stdout, stderr) => {
+        exec(`${packageManager} install --force ${packages}`, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 Logger.error(`Error installing package ${packageName}: ${error.message}`);
                 resolve(false);
@@ -92,24 +96,28 @@ export async function installPackage(packageName: string | string[], cwd = "."):
     });
 }
 
-export async function initializeNPM(cwd = "."): Promise<void> {
+export async function initializeNPM(cwd = ".", packageManager = "npm"): Promise<void> {
     if (!fs.existsSync(path.join(cwd, "package.json"))) {
         Logger.error("No package.json file found in the current directory.");
         await new Promise<void>((resolve, reject) => {
-            exec("npm init -y", { cwd }, (error, stdout, stderr) => {
-                if (error) {
-                    Logger.error(`Error creating package.json file: ${error.message}`);
-                    reject(error);
-                    return;
+            exec(
+                `${packageManager} init${packageManager === "pnpm" ? "" : " -y"}`,
+                { cwd },
+                (error, stdout, stderr) => {
+                    if (error) {
+                        Logger.error(`Error creating package.json file: ${error.message}`);
+                        reject(error);
+                        return;
+                    }
+                    if (stderr) {
+                        Logger.error(`Error creating package.json file: ${stderr}`);
+                        reject(new Error(stderr));
+                        return;
+                    }
+                    Logger.moduleLog("Successfully created package.json file.");
+                    resolve();
                 }
-                if (stderr) {
-                    Logger.error(`Error creating package.json file: ${stderr}`);
-                    reject(new Error(stderr));
-                    return;
-                }
-                Logger.moduleLog("Successfully created package.json file.");
-                resolve();
-            });
+            );
         });
     }
 }

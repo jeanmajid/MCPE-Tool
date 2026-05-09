@@ -19,6 +19,7 @@ class NpmModule extends BaseModule {
     public name: string = "npm";
     public description: string = "Auto install npm packages";
     public watchProcess: ChildProcess | undefined;
+    public packageManager: string = "npm";
 
     public async onLaunch(): Promise<void> {
         if (!HAS_INTERNET) {
@@ -27,7 +28,7 @@ class NpmModule extends BaseModule {
             );
             return;
         }
-        await initializeNPM();
+        await initializeNPM(".", this.packageManager);
         Logger.moduleLog("Checking for npm package updates...");
         const manifest = readManifest("BP");
 
@@ -85,7 +86,7 @@ class NpmModule extends BaseModule {
             } else {
                 dependency.version = latest.version;
                 writeManifest("BP", manifest);
-                await installPackage(latest.package);
+                await installPackage(latest.package, ".", this.packageManager);
                 Logger.moduleLog(
                     `[NPM MODULE] Updated package ${dependency.module_name} version to ${latest.version}`
                 );
@@ -94,7 +95,7 @@ class NpmModule extends BaseModule {
     }
 
     public async tryFixStableVersion(dependency: ManifestDependency): Promise<void> {
-        await initializeNPM();
+        await initializeNPM(".", this.packageManager);
         if (
             dependency.module_name &&
             dependency.version !==
@@ -104,7 +105,9 @@ class NpmModule extends BaseModule {
                 `[NPM MODULE] The package ${dependency.module_name} has a different version in the manifest than the one installed. Updating...`
             );
             await installPackage(
-                (dependency.module_name + "@" + dependency.version) as validPackageNames
+                (dependency.module_name + "@" + dependency.version) as validPackageNames,
+                ".",
+                this.packageManager
             );
             Logger.moduleLog(
                 `[NPM MODULE] Updated package ${dependency.module_name} version to ${dependency.version}`
@@ -113,4 +116,11 @@ class NpmModule extends BaseModule {
     }
 }
 
+class PnpmModule extends NpmModule {
+    public name: string = "pnpm";
+    public description: string = "Auto install npm packages via PNPM";
+    public packageManager: string = "pnpm";
+}
+
 ModuleManager.registerModule(new NpmModule());
+ModuleManager.registerModule(new PnpmModule());
