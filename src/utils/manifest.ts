@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../core/constants/paths.js";
 import { validPackageNames } from "../core/constants/validMcpePackages.js";

@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 import { loadDir } from "../../utils/files.js";
 import { PROJECT_PATH_SRC } from "../constants/paths.js";

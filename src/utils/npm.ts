@@ -1,6 +1,6 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
+import { exec } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 
 import { PROJECT_PATH } from "../core/constants/paths.js";
 import { validPackageNames } from "../core/constants/validMcpePackages.js";

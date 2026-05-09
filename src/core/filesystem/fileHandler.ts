@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../constants/paths.js";
 import { Logger } from "../logger/logger.js";

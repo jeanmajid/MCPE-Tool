@@ -1,5 +1,5 @@
-import { spawn } from "child_process";
-import fs from "fs";
+import { spawn } from "node:child_process";
+import fs from "node:fs";
 
 import { Command } from "../core/cli/command.js";
 import { EXTERNAL_PATHS } from "../core/constants/paths.js";

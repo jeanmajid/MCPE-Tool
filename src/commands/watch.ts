@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 
 import { Command } from "../core/cli/command.js";
 import { Questioner } from "../core/cli/questioner.js";

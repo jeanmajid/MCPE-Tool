@@ -35,6 +35,7 @@
         "@types/archiver": "^7.0.0",
         "@types/node": "^25.6.0",
         "oxfmt": "^0.48.0",
-        "oxlint": "^1.63.0"
+        "oxlint": "^1.63.0",
+        "typescript":"^6.0.3"
     }
 }

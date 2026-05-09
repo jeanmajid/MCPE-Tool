@@ -1,6 +1,6 @@
-import fs from "fs";
 import { rm } from "fs/promises";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 import { ensureDirSync } from "../../../utils/files.js";
 import { Transport } from "./transport.js";

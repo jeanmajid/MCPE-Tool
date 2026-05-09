@@ -1,5 +1,5 @@
+import path from "node:path";
 import os from "os";
-import path from "path";
 import { fileURLToPath } from "url";
 
 import { ConfigManager } from "../config/configManager.js";

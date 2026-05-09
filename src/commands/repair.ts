@@ -1,6 +1,6 @@
-import { existsSync } from "fs";
 import { rm } from "fs/promises";
-import path from "path";
+import { existsSync } from "node:fs";
+import path from "node:path";
 
 import { Command } from "../core/cli/command.js";
 import { ConfigManager } from "../core/config/configManager.js";

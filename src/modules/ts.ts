@@ -1,6 +1,8 @@
-import { ChildProcess, exec } from "child_process";
-import { writeFileSync, rmSync } from "fs";
+import { ChildProcess, exec } from "node:child_process";
+import { writeFileSync, existsSync } from "node:fs";
+import { join, relative } from "node:path";
 
+import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
 import { Logger } from "../core/logger/logger.js";
 import { BaseModule } from "../core/modules/baseModule.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
@@ -11,6 +13,7 @@ import { pathHasExtension } from "../utils/path.js";
 // TODO: Only write config if it does not exist
 
 // TODO: Provide outDir as cmd flag and remove from config
+
 // TODO: Add default as safety net, in case someone tries to run tsc, so it doesn't blow up their files
 
 class TsModule extends BaseModule {
@@ -24,7 +27,12 @@ class TsModule extends BaseModule {
     }
 
     public onLaunch(bpPath?: string): Promise<void> | void {
-        exec("tsc --version", error => {
+        if (!bpPath) {
+            Logger.error("Output folder for behavior pack not found");
+            process.exit(1);
+        }
+
+        exec("npm exec --no -- tsc --version", error => {
             if (error) {
                 Logger.error(
                     "TypeScript compiler not found. Please install TypeScript globally: npm install -g typescript"
@@ -33,6 +41,7 @@ class TsModule extends BaseModule {
             }
         });
 
+        const outDir = join(bpPath, "scripts");
         const tsConfig = {
             compilerOptions: {
                 target: "esnext",
@@ -40,14 +49,20 @@ class TsModule extends BaseModule {
                 moduleResolution: "bundler",
                 allowSyntheticDefaultImports: true,
                 removeComments: true,
-                outDir: `${bpPath}/scripts`,
+                outDir: "dist",
+                noEmit: true,
+                rootDir: join(relative(".", BEHAVIOUR_PACK_PATH), "scripts"),
             },
-            include: ["BP/scripts/**/*.ts"],
+            include: [join(relative(".", BEHAVIOUR_PACK_PATH), "scripts") + "/**/*.ts"],
         };
 
-        writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
+        if (!existsSync("./tsconfig.json")) {
+            writeFileSync("./tsconfig.json", JSON.stringify(tsConfig, null, 4));
+        }
 
-        this.watchProcess = exec("tsc --watch");
+        this.watchProcess = exec(
+            `npm exec --no -- tsc --watch --noEmit false --outDir "${outDir}"`
+        );
 
         this.watchProcess.stdout?.on("data", data => {
             Logger.moduleLog(data);
@@ -58,7 +73,6 @@ class TsModule extends BaseModule {
     }
 
     public onExit(): Promise<void> | void {
-        rmSync("./tsconfig.json");
         if (this.watchProcess) {
             this.watchProcess.kill();
         }

@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 
 export class SchemaGenerator {
     static generateFromFile(filePath, interfaceName, outputPath) {
