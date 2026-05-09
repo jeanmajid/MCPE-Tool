@@ -11,3 +11,5 @@ install.bat
 package-lock.json
 tsconfig.json
 TODO.md
+.oxfmtrc.json
+.oxlintrc.json
