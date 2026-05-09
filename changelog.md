@@ -19,3 +19,9 @@
 # 1.0.4
 
 - fix: npm module now correctly gets preview versions
+
+# 1.0.5
+
+- Remove automatic eslint configuration, might be added back in the future
+- Project now uses oxlint and oxfmt
+- PNPM module, which installs packages the same way the npm module does, but with PNPM
