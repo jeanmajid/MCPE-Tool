@@ -101,7 +101,7 @@ Creates `.mcpack` and `.mcaddon` files in the `dist/` folder for sharing or publ
 | `mc module remove <name>` | Remove a module from your project               |
 | `mc module list`          | List all available modules                      |
 | `mc translate`            | Translate language files to multiple languages  |
-| `mc wss`                  | Start WebSocket server                          |
+| `mc wss`                  | Start WebSocket server (disabled)               |
 | `mc repair`               | Fix and update project configuration            |
 | `mc help`                 | Show available commands                         |
 
@@ -110,22 +110,8 @@ Creates `.mcpack` and `.mcaddon` files in the `dist/` folder for sharing or publ
 MCPE-Tool uses a modular architecture to extend functionality:
 
 - **npm** - Automatically manages npm packages and dependencies
+- **pnpm** - Automatically manages npm packages and dependencies via pnpm
 - **ts** - TypeScript transpilation with live compilation
-
-## Project Structure
-
-```
-your-project/
-├── config.json          # Project configuration
-├── BP/                   # Behavior Pack
-│   ├── manifest.json
-│   └── scripts/
-│   └── ...
-├── RP/                   # Resource Pack
-│   ├── manifest.json
-│   └── ...
-└── dist/                 # Build packages
-```
 
 ## Configuration
 
@@ -149,8 +135,8 @@ Projects are configured via `config.json`:
 - `description` - Project description
 - `modules` - Array of enabled modules
 - `id` - Unique project identifier
-- `behaviourPackPath` - Path to behavior pack folder
-- `resourcePackPath` - Path to resource pack folder
+- `behaviourPackPath` - Path to behavior pack folder (defaults to BP)
+- `resourcePackPath` - Path to resource pack folder (defaults to RP)
 - `awaitWriteFinish` - Options to wait on a files write to transfer (only use if you have issues)
 - `output` - Target Minecraft version (`"stable"` or `"preview"` or any uwp version)
 
