@@ -6,10 +6,7 @@ src
 test
 .gitignore
 changelog.md
-eslint.config.js
 install.bat
 package-lock.json
 tsconfig.json
 TODO.md
-.oxfmtrc.json
-.oxlintrc.json
