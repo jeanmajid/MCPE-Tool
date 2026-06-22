@@ -85,14 +85,35 @@ export async function installPackage(
                 resolve(false);
                 return;
             }
-            if (stderr) {
-                Logger.error(`Error installing package ${packageName}: ${stderr}`);
-                resolve(false);
-                return;
-            }
             Logger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
             resolve(true);
         });
+    });
+}
+
+export async function uninstallPackage(
+    packageName: string | string[],
+    cwd = ".",
+    packageManager = "npm"
+): Promise<boolean> {
+    await initializeNPM(cwd);
+    return await new Promise<boolean>(resolve => {
+        const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
+        console.log(packages);
+        exec(
+            `${packageManager} uninstall --force ${packages}`,
+            { cwd },
+            (error, stdout, stderr) => {
+                console.log(stdout);
+                if (error) {
+                    Logger.error(`Error uninstalling package ${packageName}: ${error.message}`);
+                    resolve(false);
+                    return;
+                }
+                Logger.moduleLog(`Successfully uninstalled package ${packageName}: ${stdout}`);
+                resolve(true);
+            }
+        );
     });
 }
 

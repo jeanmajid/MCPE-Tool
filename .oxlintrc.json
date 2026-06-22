@@ -1,6 +1,6 @@
 {
     "$schema": "./node_modules/oxlint/configuration_schema.json",
-    "plugins": ["unicorn", "typescript", "oxc"],
+    "plugins": ["unicorn", "typescript", "oxc", "import"],
     "categories": {},
     "rules": {
         "import/first": "error",
@@ -11,7 +11,6 @@
         "import/no-cycle": "error",
         "explicit-function-return-type": "error",
         "unicorn/no-new-array": "off",
-        // Defaults
         "for-direction": "warn",
         "no-async-promise-executor": "warn",
         "no-caller": "warn",
@@ -111,7 +110,6 @@
         "typescript/consistent-type-assertions": "warn",
         "typescript/adjacent-overload-signatures": "warn",
         "typescript/explicit-member-accessibility": ["warn", { "accessibility": "explicit" }],
-        // Additional balanced strict rules:
         "import/no-default-export": "warn",
         "prefer-const": "warn",
         "no-shadow": "warn",
