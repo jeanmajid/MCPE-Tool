@@ -25,3 +25,7 @@
 - Remove automatic eslint configuration, might be added back in the future
 - Project now uses oxlint and oxfmt
 - PNPM module, which installs packages the same way the npm module does, but with PNPM
+
+# 1.0.6
+
+- Setup command to setup oxlint and remove existing eslint setup
