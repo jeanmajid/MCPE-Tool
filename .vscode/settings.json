@@ -8,6 +8,5 @@
     "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
     "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
     "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-    "cSpell.words": ["behaviour", "mcaddon", "mcpack", "MCPE", "mojang"],
     "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
 }
