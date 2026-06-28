@@ -10,7 +10,7 @@
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "removeComments": true,
+        "removeComments": false,
         "types": ["@types/node"]
     },
     "include": ["src/**/*"],

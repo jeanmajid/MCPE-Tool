@@ -1,23 +1,23 @@
-/* SPDX-License-Identifier: GPL-3.0-or-later
+/* SPDX-License-Identifier: LGPL-3.0-or-later
  * ============================================================================
- * MC Tool
- * Copyright (C) 2024-2026 jeanmajid and contributors
- * https://github.com/jeanmajid/MCPE-Tool
+ *  MC Tool - Minecraft Bedrock addon development tool
+ *  Copyright (C) 2025-2026 jeanmajid and contributors
+ *  https://github.com/jeanmajid/MCPE-Tool
  * ============================================================================
  *
  * This file is part of MC Tool.
  *
  * MC Tool is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * MC Tool is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with MC Tool. If not, see <https://www.gnu.org/licenses/>.
  */
 
@@ -25,26 +25,26 @@ import { appendFileSync, readdirSync, readFileSync, statSync, writeFileSync } fr
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const licenseText = `/* SPDX-License-Identifier: GPL-3.0-or-later
+const licenseText = `/* SPDX-License-Identifier: LGPL-3.0-or-later
  * ============================================================================
- * MC Tool
- * Copyright (C) 2024-2026 jeanmajid and contributors
- * https://github.com/jeanmajid/MCPE-Tool
+ *  MC Tool - Minecraft Bedrock addon development tool
+ *  Copyright (C) 2025-2026 jeanmajid and contributors
+ *  https://github.com/jeanmajid/MCPE-Tool
  * ============================================================================
  *
  * This file is part of MC Tool.
  *
  * MC Tool is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * MC Tool is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with MC Tool. If not, see <https://www.gnu.org/licenses/>.
  */`
 
@@ -104,7 +104,7 @@ function processFile(path) {
  * @returns {string}
  */
 function cleanOldLicenseText(fileContents) {
-    if (!fileContents.startsWith("/* SPDX-License-Identifier: GPL-3.0-or-later")) {
+    if (!fileContents.startsWith("/* SPDX-License-Identifier: LGPL-3.0-or-later")) {
         return fileContents;
     }
 

@@ -40,3 +40,7 @@
 
 - The default action and the help command now also display the output of version at the start
 - Change to GPL license
+
+# 1.0.9
+
+- Change to LGPL license as I want to support closed source plugins
