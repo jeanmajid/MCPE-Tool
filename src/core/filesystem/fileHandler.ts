@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: LGPL-3.0-or-later
  * ============================================================================
  *  MC Tool - Minecraft Bedrock addon development tool
- *  Copyright (C) 2025-2026 jeanmajid and contributors
+ *  Copyright (C) 2024-2026 jeanmajid and contributors
  *  https://github.com/jeanmajid/MCPE-Tool
  * ============================================================================
  *
