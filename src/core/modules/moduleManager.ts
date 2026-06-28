@@ -53,7 +53,7 @@ export class ModuleManager {
     }
 
     public static checkIfModuleExists(name: string): boolean {
-        return this.modules.some(module => module.name === name);
+        return this.modules.some((module) => module.name === name);
     }
 
     /**
@@ -91,7 +91,7 @@ export class ModuleManager {
         bpPath: string,
         rpPath: string
     ): Promise<void> {
-        this.modules = this.modules.filter(module => modulesToAdd.includes(module.name));
+        this.modules = this.modules.filter((module) => modulesToAdd.includes(module.name));
 
         for (const module of this.modules) {
             if (module.activatorHandlerPairs) {
@@ -114,7 +114,7 @@ export class ModuleManager {
                 await module.onLaunch(bpPath, rpPath);
             }
             if (!module.activator) {
-                this.modules = this.modules.filter(m => m.name !== module.name);
+                this.modules = this.modules.filter((m) => m.name !== module.name);
             }
         }
     }

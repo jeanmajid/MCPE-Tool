@@ -164,7 +164,7 @@ export class Command {
      */
     public static parse(argv: string[]): void {
         const flags: string[] = [];
-        let args = argv.slice(2).filter(arg => {
+        let args = argv.slice(2).filter((arg) => {
             if (arg.startsWith("-")) {
                 flags.push(arg);
                 return false;

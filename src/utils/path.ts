@@ -15,7 +15,7 @@ export function pathHasExtension(filePath: string, extension: string): boolean {
  * @returns True if the file path ends with any of the extensions
  */
 export function pathHasAnyExtension(filePath: string, ...extensions: string[]): boolean {
-    return extensions.some(ext => filePath.endsWith(ext));
+    return extensions.some((ext) => filePath.endsWith(ext));
 }
 
 /**

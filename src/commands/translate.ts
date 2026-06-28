@@ -18,16 +18,16 @@ Command.command("translate")
             cwd: ".",
             env: { ...process.env, PYTHONIOENCODING: "utf-8" },
         });
-        script.stdout.on("data", data => {
+        script.stdout.on("data", (data) => {
             Logger.info(data.toString());
         });
-        script.stderr.on("data", data => {
+        script.stderr.on("data", (data) => {
             if (data.toString().includes("FutureWarning")) {
                 return;
             }
             Logger.error(data.toString());
         });
-        script.on("close", code => {
+        script.on("close", (code) => {
             Logger.info(`Translation script exited with code ${code}`);
         });
     });

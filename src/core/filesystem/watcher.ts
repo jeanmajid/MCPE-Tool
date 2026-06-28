@@ -50,7 +50,7 @@ export class Watcher {
 
         this.watcher = chokidar.watch(watchFolders, {
             ignored: (filePath: string) => {
-                return IGNORE_PATHS.some(pattern => minimatch(filePath, pattern, { dot: true }));
+                return IGNORE_PATHS.some((pattern) => minimatch(filePath, pattern, { dot: true }));
             },
             awaitWriteFinish: config.awaitWriteFinish ?? false,
         });

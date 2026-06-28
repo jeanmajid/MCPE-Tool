@@ -27,8 +27,8 @@ export class Questioner {
             console.log(Color.blue(question.message));
             const defaultValue =
                 typeof question.default === "function" ? question.default() : question.default;
-            const answer = await new Promise<string>(resolve => {
-                rl.question(Color.green("(" + defaultValue + ")" + " "), ans => {
+            const answer = await new Promise<string>((resolve) => {
+                rl.question(Color.green("(" + defaultValue + ")" + " "), (ans) => {
                     resolve(ans);
                 });
             });
@@ -67,8 +67,8 @@ export class Questioner {
         const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
         console.log(color(question));
-        const answer = await new Promise<string>(resolve => {
-            rl.question(Color.green("(NO)" + " "), ans => {
+        const answer = await new Promise<string>((resolve) => {
+            rl.question(Color.green("(NO)" + " "), (ans) => {
                 resolve(ans);
             });
         });

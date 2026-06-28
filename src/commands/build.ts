@@ -44,7 +44,7 @@ Command.command("build")
         let stableStartTime = Date.now();
 
         while (true) {
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise((resolve) => setTimeout(resolve, 100));
 
             if (watcher.lastTransfer === lastTransferNumber) {
                 // wait 5 seconds, bcs im too lazy rn to handle awaiting of ts module
@@ -64,7 +64,7 @@ Command.command("build")
         fs.mkdirSync("dist", { recursive: true });
 
         function getPathsRelativeToRoot(paths: string[], rootName: string): string[] {
-            return paths.map(path => {
+            return paths.map((path) => {
                 const parts = path.split(/[/\\]/);
                 const rootIndex = parts.indexOf(rootName);
 

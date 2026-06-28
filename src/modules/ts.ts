@@ -24,7 +24,7 @@ class TsModule extends BaseModule {
             process.exit(1);
         }
 
-        exec("npm exec --no -- tsc --version", error => {
+        exec("npm exec --no -- tsc --version", (error) => {
             if (error) {
                 Logger.error(
                     "TypeScript compiler not found. Please install TypeScript globally: npm install -g typescript"
@@ -56,10 +56,10 @@ class TsModule extends BaseModule {
             `npm exec --no -- tsc --watch --noEmit false --outDir "${outDir}"`
         );
 
-        this.watchProcess.stdout?.on("data", data => {
+        this.watchProcess.stdout?.on("data", (data) => {
             Logger.moduleLog(data);
         });
-        this.watchProcess.stderr?.on("data", data => {
+        this.watchProcess.stderr?.on("data", (data) => {
             Logger.error(data);
         });
     }

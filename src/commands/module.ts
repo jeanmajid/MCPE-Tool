@@ -7,7 +7,7 @@ Command.command("module").description("Manage modules");
 
 Command.subCommand("add")
     .description("Add a module to the watcher")
-    .action(async args => {
+    .action(async (args) => {
         const config = ConfigManager.readConfig();
 
         if (!config.name || !config.id) {
@@ -41,7 +41,7 @@ Command.subCommand("add")
 
 Command.subCommand("remove")
     .description("Remove a module from the watcher")
-    .action(async args => {
+    .action(async (args) => {
         const config = ConfigManager.readConfig();
 
         if (!config.id) {
@@ -60,7 +60,7 @@ Command.subCommand("remove")
             Logger.error(`Module ${args[0]} is not in the list.`);
             return;
         }
-        config.modules = config.modules.filter(m => m !== args[0]);
+        config.modules = config.modules.filter((m) => m !== args[0]);
         ConfigManager.writeConfig(config);
         Logger.info(`Removed module ${args[0]}`);
     });

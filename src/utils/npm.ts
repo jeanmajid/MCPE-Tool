@@ -70,7 +70,7 @@ export async function installPackage(
     packageManager = "npm"
 ): Promise<boolean> {
     await initializeNPM(cwd);
-    return await new Promise<boolean>(resolve => {
+    return await new Promise<boolean>((resolve) => {
         if (!HAS_INTERNET) {
             Logger.error(
                 `Failed to install package ${packageName} - no internet connection available`
@@ -97,7 +97,7 @@ export async function uninstallPackage(
     packageManager = "npm"
 ): Promise<boolean> {
     await initializeNPM(cwd);
-    return await new Promise<boolean>(resolve => {
+    return await new Promise<boolean>((resolve) => {
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         console.log(packages);
         exec(

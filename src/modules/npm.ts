@@ -61,12 +61,12 @@ class NpmModule extends BaseModule {
             if (config.output === "preview") {
                 latest = await getLatestPackageVersion(
                     dependency.module_name,
-                    name => name.includes("preview") && name.includes("beta")
+                    (name) => name.includes("preview") && name.includes("beta")
                 );
             } else {
                 latest = await getLatestPackageVersion(
                     dependency.module_name,
-                    name => name.includes("stable") && name.includes("beta")
+                    (name) => name.includes("stable") && name.includes("beta")
                 );
             }
 

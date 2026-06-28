@@ -13,7 +13,7 @@
         "newlinesBetween": true,
         "sortSideEffects": true
     },
-    "arrowParens": "avoid",
+    "arrowParens": "always",
     "bracketSpacing": true,
     "objectWrap": "collapse",
     "quoteProps": "as-needed",

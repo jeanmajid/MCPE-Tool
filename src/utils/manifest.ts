@@ -1,5 +1,7 @@
 import fs from "node:fs";
 
+import { parse, stringify } from "comment-json";
+
 import { BEHAVIOUR_PACK_PATH, RESOURCE_PACK_PATH } from "../core/constants/paths.js";
 import { validPackageNames } from "../core/constants/validMcpePackages.js";
 
@@ -55,12 +57,12 @@ export function readManifest(type: "RP"): ManifestRP | undefined;
 export function readManifest(type: "BP"): ManifestBP | undefined;
 export function readManifest(type: "BP" | "RP"): ManifestBP | ManifestRP | undefined {
     try {
-        return JSON.parse(
+        return parse(
             fs.readFileSync(
                 `${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`,
                 "utf8"
             )
-        );
+        ) as unknown as ManifestBP | ManifestRP;
     } catch {
         return undefined;
     }
@@ -76,6 +78,6 @@ export function writeManifest(type: "RP", manifest: ManifestRP): void;
 export function writeManifest(type: "BP" | "RP", manifest: ManifestBP | ManifestRP): void {
     fs.writeFileSync(
         `${type === "BP" ? BEHAVIOUR_PACK_PATH : RESOURCE_PACK_PATH}/manifest.json`,
-        JSON.stringify(manifest, null, 4)
+        stringify(manifest, null, 4)
     );
 }
