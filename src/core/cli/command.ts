@@ -180,6 +180,7 @@ export class Command {
             args = args.slice(1);
         }
         if (!commandName || commandName === "help") {
+            Command.execute("version", undefined, [], []);
             Command.help();
         } else {
             Command.execute(commandName, subCommand, args, flags);
