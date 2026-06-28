@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 import { Command } from "../core/cli/command.js";
 import { PROJECT_PATH } from "../core/constants/paths.js";
@@ -9,7 +10,7 @@ Command.command("update")
     .description("Updates the tool to the newest version")
     .action(async () => {
         // We are just checking if the src folder exists, bcs people that install it from npm don't have it
-        const isInstalledFromSource = existsSync("./src");
+        const isInstalledFromSource = existsSync(join(PROJECT_PATH, "/src"));
 
         if (isInstalledFromSource) {
             try {
