@@ -29,3 +29,9 @@
 # 1.0.6
 
 - Setup command to setup oxlint and remove existing eslint setup
+
+# 1.0.7
+
+- Fixed update command
+- Manifest can now have comments and mc tool will still work fine
+- Version command

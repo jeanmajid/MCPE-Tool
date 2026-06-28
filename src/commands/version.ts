@@ -11,7 +11,7 @@ Command.command("version")
 
 Minecraft Bedrock Addon Development Tool
 
-Version : ${PROJECT_VERSION}
-Author: jeanmajid
+Version: ${PROJECT_VERSION}
+Author : jeanmajid
 `);
     });
