@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /* SPDX-License-Identifier: LGPL-3.0-or-later
  * ============================================================================
  *  MC Tool - Minecraft Bedrock addon development tool

@@ -44,3 +44,7 @@
 # 1.0.9
 
 - Change to LGPL license as I want to support closed source plugins
+
+# 1.0.10
+
+- Hotfix: fixed mc tool, it was broken
