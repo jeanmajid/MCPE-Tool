@@ -166,6 +166,24 @@ export async function initializeNPM(cwd = ".", packageManager = "npm"): Promise<
     }
 }
 
+export async function npmI(cwd = ".", packageManager = "npm"): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+        exec(`${packageManager} i`, { cwd }, (error, stdout, stderr) => {
+            if (error) {
+                Logger.error(`Error installing packages: ${error.message}`);
+                reject(error);
+                return;
+            }
+            if (stderr) {
+                Logger.error(`Error installing packages: ${stderr}`);
+                reject(new Error(stderr));
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
 // This function is unused currently
 /**
  * Dynamically imports a package, installing it first if it's not already installed.

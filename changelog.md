@@ -48,3 +48,8 @@
 # 1.0.10
 
 - Hotfix: fixed mc tool, it was broken
+
+# 1.0.11
+
+- default to npm if pnpm not exist
+- make package installation more robust

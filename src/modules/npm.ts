@@ -30,19 +30,24 @@ import { HAS_INTERNET } from "../core/constants/wifi.js";
 import { Logger } from "../core/logger/logger.js";
 import { BaseModule } from "../core/modules/baseModule.js";
 import { ModuleManager } from "../core/modules/moduleManager.js";
+import { hasCli } from "../utils/cli.js";
 import { ManifestDependency, readManifest, writeManifest } from "../utils/manifest.js";
 import {
     getInstalledPackageVersion,
     initializeNPM,
     installPackage,
     getLatestPackageVersion,
+    npmI,
 } from "../utils/npm.js";
+
+type PackageManager = "npm" | "pnpm";
 
 class NpmModule extends BaseModule {
     public name: string = "npm";
     public description: string = "Auto install npm packages";
     public watchProcess: ChildProcess | undefined;
-    public packageManager: string = "npm";
+    // future improvment: make PackageManger an actual class with the methods so its abstracted away. I also don't want to overcomplicate things, so this might never happen
+    public packageManager: PackageManager = "npm";
 
     public async onLaunch(): Promise<void> {
         if (!HAS_INTERNET) {
@@ -51,6 +56,11 @@ class NpmModule extends BaseModule {
             );
             return;
         }
+
+        if (this.packageManager === "pnpm" && !hasCli("pnpm")) {
+            this.packageManager = "npm";
+        }
+
         await initializeNPM(".", this.packageManager);
         Logger.moduleLog("Checking for npm package updates...");
         const manifest = readManifest("BP");
@@ -117,6 +127,8 @@ class NpmModule extends BaseModule {
                 );
             }
         }
+
+        await npmI(".", this.packageManager);
     }
 
     public async tryFixStableVersion(dependency: ManifestDependency): Promise<void> {
@@ -144,7 +156,7 @@ class NpmModule extends BaseModule {
 class PnpmModule extends NpmModule {
     public name: string = "pnpm";
     public description: string = "Auto install npm packages via PNPM";
-    public packageManager: string = "pnpm";
+    public packageManager: PackageManager = "pnpm";
 }
 
 ModuleManager.registerModule(new NpmModule());
