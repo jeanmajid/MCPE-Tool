@@ -53,3 +53,7 @@
 
 - default to npm if pnpm not exist
 - make package installation more robust
+
+# 1.0.12
+
+- Hotfix: added -f to npm i, bcs the package dependencies for script api can be not nice sometimes
