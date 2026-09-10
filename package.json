@@ -28,7 +28,6 @@
         "archiver": "^7.0.1",
         "chokidar": "^5.0.0",
         "comment-json": "^5.0.0",
-        "eslint": "^10.3.0",
         "glob": "^13.0.6",
         "minimatch": "^10.2.5"
     },
@@ -40,4 +39,3 @@
         "typescript": "^6.0.3"
     }
 }
-
