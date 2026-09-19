@@ -23,7 +23,7 @@
 
 import { ChildProcess, exec } from "node:child_process";
 import { writeFileSync, existsSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative } from "node:path/posix";
 
 import { BEHAVIOUR_PACK_PATH } from "../core/constants/paths.js";
 import { Logger } from "../core/logger/logger.js";
