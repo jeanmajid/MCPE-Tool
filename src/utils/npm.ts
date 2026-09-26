@@ -102,7 +102,7 @@ export async function installPackage(
         }
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         // the current version of the @minecraft packages is broken, use this while its not fixed
-        exec(`${packageManager} install --force ${packages}`, { cwd }, (error, stdout, stderr) => {
+        exec(`${packageManager} install ${packages}`, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 Logger.error(`Error installing package ${packageName}: ${error.message}`);
                 resolve(false);
@@ -123,20 +123,16 @@ export async function uninstallPackage(
     return await new Promise<boolean>((resolve) => {
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         console.log(packages);
-        exec(
-            `${packageManager} uninstall --force ${packages}`,
-            { cwd },
-            (error, stdout, stderr) => {
-                console.log(stdout);
-                if (error) {
-                    Logger.error(`Error uninstalling package ${packageName}: ${error.message}`);
-                    resolve(false);
-                    return;
-                }
-                Logger.moduleLog(`Successfully uninstalled package ${packageName}: ${stdout}`);
-                resolve(true);
+        exec(`${packageManager} uninstall ${packages}`, { cwd }, (error, stdout, stderr) => {
+            console.log(stdout);
+            if (error) {
+                Logger.error(`Error uninstalling package ${packageName}: ${error.message}`);
+                resolve(false);
+                return;
             }
-        );
+            Logger.moduleLog(`Successfully uninstalled package ${packageName}: ${stdout}`);
+            resolve(true);
+        });
     });
 }
 

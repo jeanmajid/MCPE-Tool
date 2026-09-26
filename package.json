@@ -1,6 +1,6 @@
 {
     "name": "@jeanmajid/mcpe-tool",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "description": "command line tool for Minecraft Bedrock Edition addon development",
     "keywords": [],
     "license": "LGPL-3.0-or-later",
@@ -39,3 +39,4 @@
         "typescript": "^6.0.3"
     }
 }
+
