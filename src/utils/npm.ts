@@ -168,7 +168,7 @@ export async function initializeNPM(cwd = ".", packageManager = "npm"): Promise<
 
 export async function npmI(cwd = ".", packageManager = "npm"): Promise<void> {
     await new Promise<void>((resolve, reject) => {
-        exec(`${packageManager} i -f`, { cwd }, (error, stdout, stderr) => {
+        exec(`${packageManager} i`, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 Logger.error(`Error installing packages: ${error.message}`);
                 reject(error);
