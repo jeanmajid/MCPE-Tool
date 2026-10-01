@@ -1,3 +1,11 @@
+# 1.0.14
+
+- Hotfix: Made pnpm no init with meta data in the package.json, so projects stay cross compatible between npm and pnpm
+
+# 1.0.13
+
+- Hotfix: Removed -f bcs pnpm doesn't like it
+
 # 1.0.12
 
 - Hotfix: added -f to npm i, bcs the package dependencies for script api can be not nice sometimes

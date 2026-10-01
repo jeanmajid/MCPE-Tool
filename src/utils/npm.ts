@@ -92,7 +92,7 @@ export async function installPackage(
     cwd = ".",
     packageManager = "npm"
 ): Promise<boolean> {
-    await initializeNPM(cwd);
+    await initializeNPM(cwd, packageManager);
     return await new Promise<boolean>((resolve) => {
         if (!HAS_INTERNET) {
             Logger.error(
@@ -119,7 +119,7 @@ export async function uninstallPackage(
     cwd = ".",
     packageManager = "npm"
 ): Promise<boolean> {
-    await initializeNPM(cwd);
+    await initializeNPM(cwd, packageManager);
     return await new Promise<boolean>((resolve) => {
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         console.log(packages);
@@ -140,24 +140,21 @@ export async function initializeNPM(cwd = ".", packageManager = "npm"): Promise<
     if (!fs.existsSync(path.join(cwd, "package.json"))) {
         Logger.error("No package.json file found in the current directory.");
         await new Promise<void>((resolve, reject) => {
-            exec(
-                `${packageManager} init${packageManager === "pnpm" ? "" : " -y"}`,
-                { cwd },
-                (error, stdout, stderr) => {
-                    if (error) {
-                        Logger.error(`Error creating package.json file: ${error.message}`);
-                        reject(error);
-                        return;
-                    }
-                    if (stderr) {
-                        Logger.error(`Error creating package.json file: ${stderr}`);
-                        reject(new Error(stderr));
-                        return;
-                    }
-                    Logger.moduleLog("Successfully created package.json file.");
-                    resolve();
+            const initFlags = packageManager === "pnpm" ? " --no-init-package-manager" : " -y";
+            exec(`${packageManager} init${initFlags}`, { cwd }, (error, stdout, stderr) => {
+                if (error) {
+                    Logger.error(`Error creating package.json file: ${error.message}`);
+                    reject(error);
+                    return;
                 }
-            );
+                if (stderr) {
+                    Logger.error(`Error creating package.json file: ${stderr}`);
+                    reject(new Error(stderr));
+                    return;
+                }
+                Logger.moduleLog("Successfully created package.json file.");
+                resolve();
+            });
         });
     }
 }
