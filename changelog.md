@@ -1,3 +1,7 @@
+# 1.0.15
+
+- Hotfix: Pnpm doesn't allow for -f, but npm needs its. Perplexing situation
+
 # 1.0.14
 
 - Hotfix: Made pnpm no init with meta data in the package.json, so projects stay cross compatible between npm and pnpm

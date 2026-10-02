@@ -102,15 +102,19 @@ export async function installPackage(
         }
         const packages = typeof packageName === "string" ? packageName : packageName.join(" ");
         // the current version of the @minecraft packages is broken, use this while its not fixed
-        exec(`${packageManager} install ${packages}`, { cwd }, (error, stdout, stderr) => {
-            if (error) {
-                Logger.error(`Error installing package ${packageName}: ${error.message}`);
-                resolve(false);
-                return;
+        exec(
+            `${packageManager} install${forceFlagIfNpm(packageManager)} ${packages}`,
+            { cwd },
+            (error, stdout, stderr) => {
+                if (error) {
+                    Logger.error(`Error installing package ${packageName}: ${error.message}`);
+                    resolve(false);
+                    return;
+                }
+                Logger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
+                resolve(true);
             }
-            Logger.moduleLog(`Successfully installed package ${packageName}: ${stdout}`);
-            resolve(true);
-        });
+        );
     });
 }
 
@@ -161,15 +165,23 @@ export async function initializeNPM(cwd = ".", packageManager = "npm"): Promise<
 
 export async function npmI(cwd = ".", packageManager = "npm"): Promise<void> {
     await new Promise<void>((resolve, reject) => {
-        exec(`${packageManager} i`, { cwd }, (error, stdout, stderr) => {
-            if (error) {
-                Logger.error(`Error installing packages: ${error.message}`);
-                reject(error);
-                return;
+        exec(
+            `${packageManager} i${forceFlagIfNpm(packageManager)}`,
+            { cwd },
+            (error, stdout, stderr) => {
+                if (error) {
+                    Logger.error(`Error installing packages: ${error.message}`);
+                    reject(error);
+                    return;
+                }
+                resolve();
             }
-            resolve();
-        });
+        );
     });
+}
+
+function forceFlagIfNpm(packageManager: string): string {
+    return packageManager === "npm" ? " -f" : "";
 }
 
 // This function is unused currently

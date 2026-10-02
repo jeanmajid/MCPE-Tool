@@ -2,6 +2,8 @@
 
 This is the projects todo list and shows which features are currently being worked on. Open an [issue](https://github.com/jeanmajid/MCPE-Tool/issues) to suggest your own changes.
 
+FULL REWRITE PLEASE
+
 ### Core Features
 
 - Precoded paths for the commands and modules
