@@ -1,3 +1,7 @@
+# 1.0.16
+
+- Hotfix: Push .vscode as its used
+
 # 1.0.15
 
 - Hotfix: Pnpm doesn't allow for -f, but npm needs its. Perplexing situation
